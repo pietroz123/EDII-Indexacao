@@ -179,6 +179,7 @@ int main(){
 	}
 	criar_iprimary(iprimary, &nregistros);  //todo
     
+    //!DELETAR
     printf("Teste no main\n");
     for (int i = 0; i < nregistros; i++) {
         printf("RRN: %d ||| PK: %s\n", iprimary[i].rrn, iprimary[i].pk);
@@ -419,10 +420,8 @@ void criar_iprimary(Ip *indice_primario, int* nregistros) {
     for (int i = 0; i < *nregistros; i++) {
         indice_primario[i].rrn = 192 * i;
         Produto J = recuperar_registro(i);
-        printf("%s @ %s @ %s @ %s @ %s @ %s @ %s\n", J.nome, J.marca, J.data, J.ano, J.preco, J.desconto, J.categoria);
 
         J.pk[0] = '\0';
-
         strncat(J.pk, J.nome, 2);           // N1N2
         strncat(J.pk, J.marca, 2);          // M1M2
         char *dAux;                         // DDMM
@@ -431,14 +430,13 @@ void criar_iprimary(Ip *indice_primario, int* nregistros) {
         dAux = strtok(NULL, "/");           // MM
         strncat(J.pk, dAux, 2);
         strncat(J.pk, J.ano, 2);            // AL
+        
+        exibeProduto(J); //!DELETAR
 
-        
-        
-        printf("PRIMARY KEYYY: %s\n", J.pk);
-        // exibeProduto(J);
         strcpy(indice_primario[i].pk, J.pk);
     }
 
+    //!DELETAR
     for (int i = 0; i < *nregistros; i++) {
         printf("RRN: %d ||| PK: %s\n", indice_primario[i].rrn, indice_primario[i].pk);
     }
