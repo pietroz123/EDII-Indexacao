@@ -365,9 +365,8 @@ Produto recuperar_registro(int rrn)
 	strcpy(j.desconto,p);
 	p = strtok(NULL,"@");
 	strcpy(j.categoria,p);
-    //!
-	gerarChave(&j); //todo
-    exibeProduto(j);
+	gerarChave(&j);
+    exibeProduto(j); //!DELETAR
 	return j;
 }
 
@@ -432,6 +431,15 @@ void criar_iprimary(Ip *indice_primario, int* nregistros) {
 
 void criar_iproduct(Is *indice_produto, int* nregistros) {
 
+    for (int i = 0; i < *nregistros; i++) {
+        Produto J = recuperar_registro(i);
+        strcpy(indice_produto[i].string, J.nome);
+        strcpy(indice_produto[i].pk, J.pk);
+    }
 
+    //!DELETAR
+    for (int i = 0; i < *nregistros; i++) {
+        printf("NOME OU MODELO: %s ||| PK: %s\n", indice_produto[i].string, indice_produto[i].pk);
+    }
 
 }
