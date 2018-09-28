@@ -9,9 +9,6 @@
  * Aluno: Pietro Zuntini Bonfim
  * ========================================================================== */
 
-//!  implicit declaration of function 'gerarChave' [-Wimplicit-function-declaration] gerarChave(&j);
-//!  undefined reference to `gerarChave'
-
 //todo: INSERIR_NOVO_PRODUTO            1
 //todo: REMOVER_PRODUTO                 2
 //todo: MODIFICAR_DESCONTO              3
@@ -177,7 +174,7 @@ int main(){
 		perror(MEMORIA_INSUFICIENTE);
 		exit(1);
 	}
-	criar_iprimary(iprimary, &nregistros);  //todo
+	criar_iprimary(iprimary, &nregistros);
     
     //!DELETAR
     printf("Teste no main\n");
@@ -332,11 +329,14 @@ int carregar_arquivo()
 
 
 void gerarChave(Produto *P) {
-    strncat(P->pk, P->nome, 2);     // N1N2
+    P->pk[0] = '\0';                // Garante que os dados serão concatenados corretamente na chave primária
+    strncat(P->pk, P->nome, 2);     // N1N2 
     strncat(P->pk, P->marca, 2);    // M1M2
 
     char *dAux;                     // DDMM
-    dAux = strtok(P->data, "/");    // DD
+    char dataAux[11];               // Cria uma string dataAux para não perder o valor da data original com o strtok
+    strcpy(dataAux, P->data);
+    dAux = strtok(dataAux, "/");    // DD
     strncat(P->pk, dAux, 2);
     dAux = strtok(NULL, "/");       // MM
     strncat(P->pk, dAux, 2);
@@ -366,7 +366,8 @@ Produto recuperar_registro(int rrn)
 	p = strtok(NULL,"@");
 	strcpy(j.categoria,p);
     //!
-	// gerarChave(&j); //todo
+	gerarChave(&j); //todo
+    exibeProduto(j);
 	return j;
 }
 
@@ -420,19 +421,6 @@ void criar_iprimary(Ip *indice_primario, int* nregistros) {
     for (int i = 0; i < *nregistros; i++) {
         indice_primario[i].rrn = 192 * i;
         Produto J = recuperar_registro(i);
-
-        J.pk[0] = '\0';
-        strncat(J.pk, J.nome, 2);           // N1N2
-        strncat(J.pk, J.marca, 2);          // M1M2
-        char *dAux;                         // DDMM
-        dAux = strtok(J.data, "/");         // DD
-        strncat(J.pk, dAux, 2);
-        dAux = strtok(NULL, "/");           // MM
-        strncat(J.pk, dAux, 2);
-        strncat(J.pk, J.ano, 2);            // AL
-        
-        exibeProduto(J); //!DELETAR
-
         strcpy(indice_primario[i].pk, J.pk);
     }
 
