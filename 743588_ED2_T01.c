@@ -177,11 +177,11 @@ int main(){
 	}
 	criar_iprimary(iprimary, &nregistros);
     
-    //!DELETAR
-    printf("Teste no main\n");
-    for (int i = 0; i < nregistros; i++) {
-        printf("RRN: %d ||| PK: %s\n", iprimary[i].rrn, iprimary[i].pk);
-    }
+    // //!DELETAR
+    // printf("Teste no main\n");
+    // for (int i = 0; i < nregistros; i++) {
+    //     printf("RRN: %d ||| PK: %s\n", iprimary[i].rrn, iprimary[i].pk);
+    // }
 
 	/*Alocar e criar índices secundários*/ //todo
 
@@ -193,11 +193,11 @@ int main(){
     }
     criar_iproduct(iproduct, &nregistros);
 
-    // //!DELETAR
-    // printf("Teste no main\n");
-    // for (int i = 0; i < nregistros; i++) {
-    //     printf("NOME: %s ||| PK: %s\n", iproduct[i].string, iproduct[i].pk);
-    // }
+    //!DELETAR
+    printf("Teste no main\n");
+    for (int i = 0; i < nregistros; i++) {
+        printf("NOME: %s ||| PK: %s\n", iproduct[i].string, iproduct[i].pk);
+    }
 
     // ibrand
     Is *ibrand = (Is*) malloc(MAX_REGISTROS * sizeof(Is));
@@ -440,6 +440,9 @@ void imprimirSecundario(Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice, in
 int comparacao_iprimary_PK(const void *a, const void *b) {
     return strcmp((*(Ip*)a).pk, (*(Ip*)b).pk);
 }
+int comparacao_iproduct_NOME(const void *a, const void *b) {
+    return strcmp((*(Is*)a).string, (*(Is*)b).string);
+}
 
 void criar_iprimary(Ip *indice_primario, int* nregistros) {
 
@@ -449,18 +452,8 @@ void criar_iprimary(Ip *indice_primario, int* nregistros) {
         strcpy(indice_primario[i].pk, J.pk);
     }
 
-    //!DELETAR
-    for (int i = 0; i < *nregistros; i++) {
-        printf("RRN: %d ||| PK: %s\n", indice_primario[i].rrn, indice_primario[i].pk);
-    }
-
+    /* Ordenado pela chave primária */
     qsort(indice_primario, *nregistros, sizeof(Ip), comparacao_iprimary_PK);
-
-    //!DELETAR
-    printf("ORDENANDO....\n");
-    for (int i = 0; i < *nregistros; i++) {
-        printf("RRN: %d ||| PK: %s\n", indice_primario[i].rrn, indice_primario[i].pk);
-    }
 
 }
 
@@ -472,18 +465,19 @@ void criar_iproduct(Is *indice_produto, int* nregistros) {
         strcpy(indice_produto[i].string, J.nome);
     }
 
-    // //!DELETAR
-    // for (int i = 0; i < *nregistros; i++) {
-    //     printf("NOME OU MODELO: %s ||| PK: %s\n", indice_produto[i].string, indice_produto[i].pk);
-    // }
+    //!DELETAR
+    for (int i = 0; i < *nregistros; i++) {
+        printf("NOME OU MODELO: %s ||| PK: %s\n", indice_produto[i].string, indice_produto[i].pk);
+    }
 
-    // qsort(indice_produto, *nregistros, sizeof(Is), comparacao);
+    // todo => verificar caso de empate: ordenado pelo nome do produto ou modelo e em caso de empate, pelo código
+    qsort(indice_produto, *nregistros, sizeof(Is), comparacao_iproduct_NOME);
 
-    // //!DELETAR
-    // printf("ORDENANDO....\n");
-    // for (int i = 0; i < *nregistros; i++) {
-    //     printf("NOME OU MODELO: %s ||| PK: %s\n", indice_produto[i].string, indice_produto[i].pk);
-    // }
+    //!DELETAR
+    printf("ORDENANDO....\n");
+    for (int i = 0; i < *nregistros; i++) {
+        printf("NOME OU MODELO: %s ||| PK: %s\n", indice_produto[i].string, indice_produto[i].pk);
+    }
 
 }
 
