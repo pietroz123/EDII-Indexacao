@@ -3,13 +3,10 @@
 
 int main() {
 
-    char str1[10] = {"pietro"};
-    char pk[2];
+    char *str1 = {"zeze"};
+    char *str2 = {"pietro"};
 
-    printf("str1: %s\n", str1);
-
-    strncat(pk, str1, 2);
-    printf("pk: %s\n", pk);
+    printf("%d", strcmp(str1, str2));
 
 
     return 0;
