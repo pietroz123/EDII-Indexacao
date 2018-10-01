@@ -139,7 +139,7 @@ Produto recuperar_registro(int rrn);
 /* (Re)faz o índice respectivo */
 void criar_iprimary(Ip *indice_primario, int* nregistros);
 void criar_iproduct(Is *indice_produto, int* nregistros);       //todo
-// void criar_ibrand(Is *indice_marca, int* nregistros);        //todo
+void criar_ibrand(Is *indice_marca, int* nregistros);        //todo
 // void criar_icategory(Ir *indice_categoria, int* nregistros); //todo
 // void criar_iprice(Isf *indice_preco, int* nregistros);       //todo
 
@@ -176,11 +176,11 @@ int main(){
 	}
 	criar_iprimary(iprimary, &nregistros);
     
-    //!DELETAR
-    printf("Teste no main\n");
-    for (int i = 0; i < nregistros; i++) {
-        printf("RRN: %d ||| PK: %s\n", iprimary[i].rrn, iprimary[i].pk);
-    }
+    // //!DELETAR
+    // printf("Teste no main\n");
+    // for (int i = 0; i < nregistros; i++) {
+    //     printf("RRN: %d ||| PK: %s\n", iprimary[i].rrn, iprimary[i].pk);
+    // }
 
 	/*Alocar e criar índices secundários*/ //todo
 
@@ -191,6 +191,26 @@ int main(){
         exit(1);
     }
     criar_iproduct(iproduct, &nregistros);
+
+    // //!DELETAR
+    // printf("Teste no main\n");
+    // for (int i = 0; i < nregistros; i++) {
+    //     printf("NOME: %s ||| PK: %s\n", iproduct[i].string, iproduct[i].pk);
+    // }
+
+    // ibrand
+    Is *ibrand = (Is*) malloc(MAX_REGISTROS * sizeof(Is));
+    if (!ibrand) {
+        perror(MEMORIA_INSUFICIENTE);
+        exit(1);
+    }
+    criar_ibrand(ibrand, &nregistros);
+
+    //!DELETAR
+    printf("Teste no main\n");
+    for (int i = 0; i < nregistros; i++) {
+        printf("MARCA: %s ||| PK: %s\n", ibrand[i].string, ibrand[i].pk);
+    }
 
 
 	/* Execução do programa */
@@ -366,7 +386,7 @@ Produto recuperar_registro(int rrn)
 	p = strtok(NULL,"@");
 	strcpy(j.categoria,p);
 	gerarChave(&j);
-    exibeProduto(j); //!DELETAR
+    // exibeProduto(j); //!DELETAR
 	return j;
 }
 
@@ -423,23 +443,38 @@ void criar_iprimary(Ip *indice_primario, int* nregistros) {
         strcpy(indice_primario[i].pk, J.pk);
     }
 
-    //!DELETAR
-    for (int i = 0; i < *nregistros; i++) {
-        printf("RRN: %d ||| PK: %s\n", indice_primario[i].rrn, indice_primario[i].pk);
-    }
+    // //!DELETAR
+    // for (int i = 0; i < *nregistros; i++) {
+    //     printf("RRN: %d ||| PK: %s\n", indice_primario[i].rrn, indice_primario[i].pk);
+    // }
 }
 
 void criar_iproduct(Is *indice_produto, int* nregistros) {
 
     for (int i = 0; i < *nregistros; i++) {
         Produto J = recuperar_registro(i);
-        strcpy(indice_produto[i].string, J.nome);
         strcpy(indice_produto[i].pk, J.pk);
+        strcpy(indice_produto[i].string, J.nome);
+    }
+
+    // //!DELETAR
+    // for (int i = 0; i < *nregistros; i++) {
+    //     printf("NOME OU MODELO: %s ||| PK: %s\n", indice_produto[i].string, indice_produto[i].pk);
+    // }
+
+}
+
+void criar_ibrand(Is *indice_marca, int* nregistros) {
+
+    for (int i = 0; i < *nregistros; i++) {
+        Produto J = recuperar_registro(i);
+        strcpy(indice_marca[i].string, J.marca);
+        strcpy(indice_marca[i].pk, J.pk);
     }
 
     //!DELETAR
     for (int i = 0; i < *nregistros; i++) {
-        printf("NOME OU MODELO: %s ||| PK: %s\n", indice_produto[i].string, indice_produto[i].pk);
+        printf("MARCA: %s ||| PK: %s\n", indice_marca[i].string, indice_marca[i].pk);
     }
 
 }
