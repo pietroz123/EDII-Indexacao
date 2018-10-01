@@ -207,11 +207,11 @@ int main(){
     }
     criar_ibrand(ibrand, &nregistros);
 
-    //!DELETAR
-    printf("Teste no main\n");
-    for (int i = 0; i < nregistros; i++) {
-        printf("MARCA: %s ||| PK: %s\n", ibrand[i].string, ibrand[i].pk);
-    }
+    // //!DELETAR
+    // printf("Teste no main\n");
+    // for (int i = 0; i < nregistros; i++) {
+    //     printf("MARCA: %s ||| PK: %s\n", ibrand[i].string, ibrand[i].pk);
+    // }
 
 
 	/* Execução do programa */
@@ -434,9 +434,6 @@ void imprimirSecundario(Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice, in
         CRIAÇÃO DOS ÍNDICES
 ***********************************/
 
-// int comparacaoCrescente(const void *a, const void *b) {
-//     return strcmp(a, b);
-// }
 int comparacao_iprimary_PK(const void *a, const void *b) {
     return strcmp((*(Ip*)a).pk, (*(Ip*)b).pk);
 }
@@ -468,7 +465,7 @@ void criar_iproduct(Is *indice_produto, int* nregistros) {
         strcpy(indice_produto[i].string, J.nome);
     }
 
-    // todo => verificar caso de empate: ordenado pelo nome do produto ou modelo e em caso de empate, pelo código
+    /* Ordenado pelo nome do produto ou modelo e, em caso de empate, pelo código */
     qsort(indice_produto, *nregistros, sizeof(Is), comparacao_iproduct_NOME);
 
 }
@@ -481,17 +478,7 @@ void criar_ibrand(Is *indice_marca, int* nregistros) {
         strcpy(indice_marca[i].pk, J.pk);
     }
 
-    //!DELETAR
-    for (int i = 0; i < *nregistros; i++) {
-        printf("MARCA: %s ||| PK: %s\n", indice_marca[i].string, indice_marca[i].pk);
-    }
-
+    /* Ordenado pela marca e, em caso empate, pelo código */
     qsort(indice_marca, *nregistros, sizeof(Is), comparacao_ibrand_MARCA);
-
-    //!DELETAR
-    printf("ORDENANDO....\n");
-    for (int i = 0; i < *nregistros; i++) {
-        printf("MARCA: %s ||| PK: %s\n", indice_marca[i].string, indice_marca[i].pk);
-    }
 
 }
