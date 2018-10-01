@@ -387,7 +387,6 @@ Produto recuperar_registro(int rrn)
 	p = strtok(NULL,"@");
 	strcpy(j.categoria,p);
 	gerarChave(&j);
-    // exibeProduto(j); //!DELETAR
 	return j;
 }
 
@@ -438,14 +437,8 @@ void imprimirSecundario(Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice, in
 // int comparacaoCrescente(const void *a, const void *b) {
 //     return strcmp(a, b);
 // }
-int comparacaoCrescente(const void *a, const void *b) {
-    if (*(char*)a == *(char*)b)
-        return 0;
-    else
-        if (*(char*)a > *(char*)b)
-            return 1;
-        else
-            return -1;
+int comparacao_iprimary_PK(const void *a, const void *b) {
+    return strcmp((*(Ip*)a).pk, (*(Ip*)b).pk);
 }
 
 void criar_iprimary(Ip *indice_primario, int* nregistros) {
@@ -461,13 +454,14 @@ void criar_iprimary(Ip *indice_primario, int* nregistros) {
         printf("RRN: %d ||| PK: %s\n", indice_primario[i].rrn, indice_primario[i].pk);
     }
 
-    qsort(indice_primario, *nregistros, sizeof(Ip), comparacaoCrescente);
+    qsort(indice_primario, *nregistros, sizeof(Ip), comparacao_iprimary_PK);
 
     //!DELETAR
     printf("ORDENANDO....\n");
     for (int i = 0; i < *nregistros; i++) {
         printf("RRN: %d ||| PK: %s\n", indice_primario[i].rrn, indice_primario[i].pk);
     }
+
 }
 
 void criar_iproduct(Is *indice_produto, int* nregistros) {
@@ -483,14 +477,13 @@ void criar_iproduct(Is *indice_produto, int* nregistros) {
     //     printf("NOME OU MODELO: %s ||| PK: %s\n", indice_produto[i].string, indice_produto[i].pk);
     // }
 
-    // qsort(indice_produto, *nregistros, sizeof(Is), comparacaoCrescente);
+    // qsort(indice_produto, *nregistros, sizeof(Is), comparacao);
 
     // //!DELETAR
     // printf("ORDENANDO....\n");
     // for (int i = 0; i < *nregistros; i++) {
     //     printf("NOME OU MODELO: %s ||| PK: %s\n", indice_produto[i].string, indice_produto[i].pk);
     // }
-
 
 }
 
