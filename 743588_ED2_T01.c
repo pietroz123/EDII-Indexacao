@@ -151,7 +151,12 @@ void imprimirSecundario(Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice, in
 
 
 /****** INTERAÇÃO COM O USUÁRIO ******/
-void inserir();
+void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice);
+
+
+
+/****** FUNÇÕES AUXILIARES ******/
+int nREG();
 
 
 /* ==========================================================================
@@ -226,7 +231,10 @@ int main(){
 		{
 			case INSERIR_NOVO_PRODUTO: // 1 //todo
 				/*cadastro*/
-                inserir();
+                inserir(iprimary, iproduct, ibrand, icategory, iprice);
+                for (int i = 0; i < nREG(); i++)
+                    printf("%d %s\n", iprimary[i].rrn, iprimary[i].pk);
+
 			break;
 
 			case REMOVER_PRODUTO: // 2 //todo
@@ -308,7 +316,7 @@ void exibeProduto(Produto P) {
     printf("PRIMARY KEY: %s\n", P.pk);
 }
 //Teste
-int nregistros() {
+int nREG() {
     return strlen(ARQUIVO) / TAM_REGISTRO;
 }
 
@@ -537,15 +545,22 @@ void ler_entrada(char* registro, Produto *novo) {
     for (int i = 0; i < necessarios; i++)
         strcat(registro, "#");
 }
-void inserir() {
+void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice) {
 
     char temp[193];
     Produto I;
 
     // Lê os dados e os coloca na string temp
     ler_entrada(temp, &I);
+    strcat(ARQUIVO, temp);
 
     gerarChave(&I);
-    strcat(ARQUIVO, temp);
+    int nreg = nREG();
+    printf("NREG = %d\n", nreg);
+    exibeProduto(I);
+
+    // Cria o índice primário
+    strcpy(iprimary[nreg-1].pk, I.pk);
+    iprimary[nreg-1].rrn = 192 * nreg;
 
 }
