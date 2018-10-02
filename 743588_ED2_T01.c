@@ -307,6 +307,18 @@ void exibeProduto(Produto P) {
     printf("Categoria: %s\n", P.categoria);
     printf("PRIMARY KEY: %s\n", P.pk);
 }
+//Teste
+int nregistros() {
+    return strlen(ARQUIVO) / TAM_REGISTRO;
+}
+
+
+int carregar_arquivo()
+{
+    printf("carrega arquivo\n");
+	scanf("%[^\n]s", ARQUIVO); //? O Tiago usa %[^\n]\n: o que isso significa?
+	return strlen(ARQUIVO) / TAM_REGISTRO;
+}
 
 
 /* Exibe o Produto */
@@ -352,15 +364,6 @@ int exibir_registro(int rrn, char com_desconto)
 
 	return 1;
 }
-
-
-int carregar_arquivo()
-{
-    printf("carrega arquivo\n");
-	scanf("%[^\n]s", ARQUIVO); //? O Tiago usa %[^\n]\n: o que isso significa?
-	return strlen(ARQUIVO) / TAM_REGISTRO;
-}
-
 
 void gerarChave(Produto *P) {
     P->pk[0] = '\0';                // Garante que os dados serão concatenados corretamente na chave primária
