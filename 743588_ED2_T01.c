@@ -139,9 +139,9 @@ Produto recuperar_registro(int rrn);
 /* (Re)faz o índice respectivo */
 //todo: ordenar os índices
 void criar_iprimary(Ip *indice_primario, int* nregistros);
-void criar_iproduct(Is *indice_produto, int* nregistros);       //todo
-void criar_ibrand(Is *indice_marca, int* nregistros);        //todo
-// void criar_icategory(Ir *indice_categoria, int* nregistros); //todo
+void criar_iproduct(Is *indice_produto, int* nregistros);
+void criar_ibrand(Is *indice_marca, int* nregistros);
+void criar_icategory(Ir *indice_categoria, int* nregistros); //todo
 // void criar_iprice(Isf *indice_preco, int* nregistros);       //todo
 
 /* Realiza os scanfs na struct Produto */
@@ -150,6 +150,8 @@ void ler_entrada(char* registro, Produto *novo);
 /* Rotina para impressao de indice secundario */
 void imprimirSecundario(Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice, int nregistros, int ncat);
 
+/****** INTERAÇÃO COM O USUÁRIO ******/
+void inserir(Produto P);
 
 /* ==========================================================================
  * ============================ FUNÇÃO PRINCIPAL ============================
@@ -157,6 +159,7 @@ void imprimirSecundario(Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice, in
 int main(){
     /* Arquivo */
 	int carregarArquivo = 0, nregistros = 0, ncat = 0;
+    Produto I;
     
     //!DElETAR
     printf("Deseja carregar um arquivo?\n");
@@ -183,9 +186,9 @@ int main(){
     //     printf("RRN: %d ||| PK: %s\n", iprimary[i].rrn, iprimary[i].pk);
     // }
 
-	/*Alocar e criar índices secundários*/ //todo
+	/* Alocar e criar índices secundários */ //todo
 
-    // iproduct
+    /****** iproduct ******/
     Is *iproduct = (Is*) malloc(MAX_REGISTROS * sizeof(Is));
     if (!iproduct) {
         perror(MEMORIA_INSUFICIENTE);
@@ -199,7 +202,7 @@ int main(){
     //     printf("NOME: %s ||| PK: %s\n", iproduct[i].string, iproduct[i].pk);
     // }
 
-    // ibrand
+    /****** ibrand ******/
     Is *ibrand = (Is*) malloc(MAX_REGISTROS * sizeof(Is));
     if (!ibrand) {
         perror(MEMORIA_INSUFICIENTE);
@@ -213,6 +216,10 @@ int main(){
     //     printf("MARCA: %s ||| PK: %s\n", ibrand[i].string, ibrand[i].pk);
     // }
 
+    /****** icategory ******/
+    
+
+    /****** iprice ******/
 
 	/* Execução do programa */
 	int opcao = 0;
@@ -224,6 +231,21 @@ int main(){
 		{
 			case INSERIR_NOVO_PRODUTO: // 1 //todo
 				/*cadastro*/
+                scanf("%[^\n]s", I.nome);
+                getchar();
+                scanf("%[^\n]s", I.marca);
+                getchar();
+                scanf("%[^\n]s", I.data);
+                getchar();
+                scanf("%[^\n]s", I.ano);
+                getchar();
+                scanf("%[^\n]s", I.preco);
+                getchar();
+                scanf("%[^\n]s", I.desconto);
+                getchar();
+                scanf("%[^\n]s", I.categoria);
+                getchar();
+                inserir(I);
 			break;
 			case REMOVER_PRODUTO: // 2 //todo
 				/*alterar desconto*/
@@ -480,5 +502,24 @@ void criar_ibrand(Is *indice_marca, int* nregistros) {
 
     /* Ordenado pela marca e, em caso empate, pelo código */
     qsort(indice_marca, *nregistros, sizeof(Is), comparacao_ibrand_MARCA);
+
+}
+
+void criar_icategory(Ir *indice_categoria, int* nregistros) {
+
+
+
+}
+
+
+
+/**********************************
+    INTERAÇÃO COM O USUÁRIO
+***********************************/
+
+void inserir(Produto P) {
+
+    gerarChave(&P);
+    exibeProduto(P);
 
 }
