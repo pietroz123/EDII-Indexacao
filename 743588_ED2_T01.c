@@ -142,7 +142,7 @@ void criar_iprimary(Ip *indice_primario, int* nregistros);
 void criar_iproduct(Is *indice_produto, int* nregistros);
 void criar_ibrand(Is *indice_marca, int* nregistros);
 void criar_icategory(Ir *indice_categoria, int* nregistros); //todo
-// void criar_iprice(Isf *indice_preco, int* nregistros);       //todo
+void criar_iprice(Isf *indice_preco, int* nregistros);       //todo
 
 /* Realiza os scanfs na struct Produto */
 void ler_entrada(char* registro, Produto *novo);
@@ -167,9 +167,8 @@ int main(){
 	scanf("%d%*c", &carregarArquivo); /* 1 (sim) | 0 (nao) */
     if (carregarArquivo)
 		nregistros = carregar_arquivo();
-    
-    //!DELETAR
-    //T:
+
+    //!DELETAR 
     printf("nregistros: %d\n", nregistros);
 
 	/* Índice primário */
@@ -179,12 +178,7 @@ int main(){
 		exit(1);
 	}
 	criar_iprimary(iprimary, &nregistros);
-    
-    // //!DELETAR
-    // printf("Teste no main\n");
-    // for (int i = 0; i < nregistros; i++) {
-    //     printf("RRN: %d ||| PK: %s\n", iprimary[i].rrn, iprimary[i].pk);
-    // }
+
 
 	/* Alocar e criar índices secundários */ //todo
 
@@ -196,12 +190,6 @@ int main(){
     }
     criar_iproduct(iproduct, &nregistros);
 
-    // //!DELETAR
-    // printf("Teste no main\n");
-    // for (int i = 0; i < nregistros; i++) {
-    //     printf("NOME: %s ||| PK: %s\n", iproduct[i].string, iproduct[i].pk);
-    // }
-
     /****** ibrand ******/
     Is *ibrand = (Is*) malloc(MAX_REGISTROS * sizeof(Is));
     if (!ibrand) {
@@ -210,16 +198,22 @@ int main(){
     }
     criar_ibrand(ibrand, &nregistros);
 
-    // //!DELETAR
-    // printf("Teste no main\n");
-    // for (int i = 0; i < nregistros; i++) {
-    //     printf("MARCA: %s ||| PK: %s\n", ibrand[i].string, ibrand[i].pk);
-    // }
+    /****** icategory ******/ //todo
+    Ir *icategory = (Ir*) malloc(MAX_REGISTROS * sizeof(Ir));
+    if (!icategory) {
+        perror(MEMORIA_INSUFICIENTE);
+        exit(1);
+    }
+    criar_icategory(icategory, &nregistros);
 
-    /****** icategory ******/
-    
+    /****** iprice ******/ //todo
+    Isf *iprice = (Isf*) malloc(MAX_REGISTROS * sizeof(Isf));
+    if (!iprice) {
+        perror(MEMORIA_INSUFICIENTE);
+        exit(1);
+    }
+    criar_iprice(iprice, &nregistros);
 
-    /****** iprice ******/
 
 	/* Execução do programa */
 	int opcao = 0;
@@ -247,6 +241,7 @@ int main(){
                 getchar();
                 inserir(I);
 			break;
+
 			case REMOVER_PRODUTO: // 2 //todo
 				/*alterar desconto*/
 				printf(INICIO_ALTERACAO);
@@ -257,7 +252,8 @@ int main(){
 					printf(FALHA);
 				*/
 			break;
-			case MODIFICAR_DESCONTO: // 3 //todo
+			
+            case MODIFICAR_DESCONTO: // 3 //todo
 				/*excluir produto*/
 				printf(INICIO_EXCLUSAO);
 				/*
@@ -267,7 +263,8 @@ int main(){
 					printf(FALHA);
 				*/
 			break;
-			case BUSCAR_PRODUTOS: // 4 //todo
+			
+            case BUSCAR_PRODUTOS: // 4 //todo
 				/*busca*/
 				printf(INICIO_BUSCA );
                 
@@ -276,27 +273,34 @@ int main(){
                 printf("%s", aux.nome);
 
 			break;
-			case LISTAR_PRODUTOS: // 5 //todo
+			
+            case LISTAR_PRODUTOS: // 5 //todo
 				/*listagens*/
 				printf(INICIO_LISTAGEM);
 			break;
-			case LIBERAR_ESPACO: // 6 //todo
+			
+            case LIBERAR_ESPACO: // 6 //todo
 				/*libera espaço*/
 			break;
-			case IMPRIMIR_DADOS: // 7
+			
+            case IMPRIMIR_DADOS: // 7
 				/*imprime o arquivo de dados*/
 				printf(INICIO_ARQUIVO);
 				printf("%s\n", ARQUIVO);
 			break;
-			case IMPRIMIR_INDICES_SECUNDARIOS: // 8 //todo
+			
+            case IMPRIMIR_INDICES_SECUNDARIOS: // 8 //todo
 				/*imprime os índices secundários*/
-				// imprimirSecundario(iproduct, ibrand, icategory, iprice, nregistros, ncat);
+                nregistros = strlen(ARQUIVO) / TAM_REGISTRO;
+				imprimirSecundario(iproduct, ibrand, icategory, iprice, nregistros, ncat);
 			break;
-			case FINALIZAR: // 9 //todo
+			
+            case FINALIZAR: // 9 //todo
 	      		/*Liberar memória e finalizar o programa */
 				return 0;
 			break;
-			default:
+			
+            default:
 				printf(OPCAO_INVALIDA);
 			break;
 		}
@@ -511,6 +515,11 @@ void criar_icategory(Ir *indice_categoria, int* nregistros) {
 
 }
 
+void criar_iprice(Isf *indice_preco, int* nregistros) {
+
+
+
+}
 
 
 /**********************************
