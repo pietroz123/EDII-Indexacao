@@ -15,7 +15,6 @@
 //todo: BUSCAR_PRODUTOS                 4
 //todo: LISTAR_PRODUTOS                 5
 //todo: LIBERAR_ESPACO                  6
-//todo: IMPRIMIR_DADOS                  7
 //todo: IMPRIMIR_INDICES_SECUNDARIOS    8
 //todo: FINALIZAR                       9
 
@@ -145,13 +144,15 @@ void criar_icategory(Ir *indice_categoria, int* nregistros); //todo
 void criar_iprice(Isf *indice_preco, int* nregistros);       //todo
 
 /* Realiza os scanfs na struct Produto */
-void ler_entrada(char* registro, Produto *novo);
+void ler_entrada(char* registro, Produto *novo); //todo
 
 /* Rotina para impressao de indice secundario */
 void imprimirSecundario(Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice, int nregistros, int ncat);
 
+
 /****** INTERAÇÃO COM O USUÁRIO ******/
-void inserir(Produto P);
+void inserir();
+
 
 /* ==========================================================================
  * ============================ FUNÇÃO PRINCIPAL ============================
@@ -225,21 +226,7 @@ int main(){
 		{
 			case INSERIR_NOVO_PRODUTO: // 1 //todo
 				/*cadastro*/
-                scanf("%[^\n]s", I.nome);
-                getchar();
-                scanf("%[^\n]s", I.marca);
-                getchar();
-                scanf("%[^\n]s", I.data);
-                getchar();
-                scanf("%[^\n]s", I.ano);
-                getchar();
-                scanf("%[^\n]s", I.preco);
-                getchar();
-                scanf("%[^\n]s", I.desconto);
-                getchar();
-                scanf("%[^\n]s", I.categoria);
-                getchar();
-                inserir(I);
+                inserir();
 			break;
 
 			case REMOVER_PRODUTO: // 2 //todo
@@ -511,7 +498,7 @@ void criar_ibrand(Is *indice_marca, int* nregistros) {
 
 void criar_icategory(Ir *indice_categoria, int* nregistros) {
 
-
+    ll *aux;
 
 }
 
@@ -526,15 +513,36 @@ void criar_iprice(Isf *indice_preco, int* nregistros) {
     INTERAÇÃO COM O USUÁRIO
 ***********************************/
 
-void inserir(Produto P) {
-
-    gerarChave(&P);
-    char temp[193];
-    sprintf(temp, "%s@%s@%s@%s@%s@%s@%s@", P.nome, P.marca, P.data, P.ano, P.preco, P.desconto, P.categoria);
-    int necessarios = 192 - strlen(temp);
+void ler_entrada(char* registro, Produto *novo) {
+    scanf("%[^\n]s", novo->nome);
+    getchar();
+    scanf("%[^\n]s", novo->marca);
+    getchar();
+    scanf("%[^\n]s", novo->data);
+    getchar();
+    scanf("%[^\n]s", novo->ano);
+    getchar();
+    scanf("%[^\n]s", novo->preco);
+    getchar();
+    scanf("%[^\n]s", novo->desconto);
+    getchar();
+    scanf("%[^\n]s", novo->categoria);
+    getchar();
+    sprintf(registro, "%s@%s@%s@%s@%s@%s@%s@", novo->nome, novo->marca, novo->data, novo->ano, novo->preco, novo->desconto, novo->categoria);
+    int necessarios = 192 - strlen(registro);
+    // Completa os espaços restantes com '#'
     for (int i = 0; i < necessarios; i++)
-        strcat(temp, "#");
-    printf("TEMP: %s\n", temp);
+        strcat(registro, "#");
+}
+void inserir() {
+
+    char temp[193];
+    Produto I;
+
+    // Lê os dados e os coloca na string temp
+    ler_entrada(temp, &I);
+
+    gerarChave(&I);
     strcat(ARQUIVO, temp);
 
 }
