@@ -520,6 +520,12 @@ void criar_icategory(Ir *indice_categoria, int* nregistros) {
 void inserir(Produto P) {
 
     gerarChave(&P);
-    exibeProduto(P);
+    char temp[193];
+    sprintf(temp, "%s@%s@%s@%s@%s@%s@%s@", P.nome, P.marca, P.data, P.ano, P.preco, P.desconto, P.categoria);
+    int necessarios = 192 - strlen(temp);
+    for (int i = 0; i < necessarios; i++)
+        strcat(temp, "#");
+    printf("TEMP: %s\n", temp);
+    strcat(ARQUIVO, temp);
 
 }
