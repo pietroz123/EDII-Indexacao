@@ -326,7 +326,7 @@ int nREG() {
 int carregar_arquivo()
 {
     // printf("carrega arquivo\n");
-	scanf("%[^\n]s", ARQUIVO); //? O Tiago usa %[^\n]\n: o que isso significa?
+	scanf("%[^\n]s", ARQUIVO);
 	return strlen(ARQUIVO) / TAM_REGISTRO;
 }
 
@@ -526,6 +526,14 @@ void criar_iprice(Isf *indice_preco, int* nregistros) {
     INTERAÇÃO COM O USUÁRIO
 ***********************************/
 
+int existe_produto(Ip *indice_primario, Produto P) {
+    for (int i = 0; i < nREG(); i++) {
+        if (strcmp(indice_primario[i].pk, P.pk) == 0)
+            return 1;
+    }
+    return 0;
+}
+
 void ler_entrada(char* registro, Produto *novo) {
     scanf("%[^\n]s", novo->nome);
     getchar();
@@ -561,8 +569,19 @@ void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice)
     // printf("NREG = %d\n", nreg);
     // exibeProduto(I);
 
+    // Verifica se existe chave primária igual
+    if (existe_produto(iprimary, I)) {
+        printf(ERRO_PK_REPETIDA, I.pk);
+        return;
+    }
+
     // Cria o índice primário
     strcpy(iprimary[nreg-1].pk, I.pk);
     iprimary[nreg-1].rrn = 192 * nreg;
+
+    //Cria o índice do produto
+    // strcpy(iproduct[nreg-1].pk, I.pk);
+    // strcpy(iproduct[nreg-1].string, I.nome);
+    criar_iproduct(iproduct, &nreg);
 
 }
