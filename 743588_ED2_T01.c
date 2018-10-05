@@ -168,14 +168,14 @@ int main(){
     Produto I;
     
     //!DElETAR
-    printf("Deseja carregar um arquivo?\n");
+    // printf("Deseja carregar um arquivo?\n");
 
 	scanf("%d%*c", &carregarArquivo); /* 1 (sim) | 0 (nao) */
     if (carregarArquivo)
 		nregistros = carregar_arquivo();
 
     //!DELETAR 
-    printf("nregistros: %d\n", nregistros);
+    // printf("nregistros: %d\n", nregistros);
 
 	/* Índice primário */
 	Ip *iprimary = (Ip *) malloc (MAX_REGISTROS * sizeof(Ip));  //? Aloca-se 1000 espaços na memória para 1000 registros de Ip
@@ -225,15 +225,17 @@ int main(){
 	int opcao = 0;
 	while(1)
 	{   
-        printf("Digite uma opcao\n"); //!DELETAR
+        // printf("Digite uma opcao\n"); //!DELETAR
 		scanf("%d%*c", &opcao);
 		switch(opcao)
 		{
 			case INSERIR_NOVO_PRODUTO: // 1 //todo
 				/*cadastro*/
                 inserir(iprimary, iproduct, ibrand, icategory, iprice);
-                for (int i = 0; i < nREG(); i++)
-                    printf("%d %s\n", iprimary[i].rrn, iprimary[i].pk);
+
+                //!DELETAR
+                // for (int i = 0; i < nREG(); i++)
+                //     printf("%d %s\n", iprimary[i].rrn, iprimary[i].pk);
 
 			break;
 
@@ -323,7 +325,7 @@ int nREG() {
 
 int carregar_arquivo()
 {
-    printf("carrega arquivo\n");
+    // printf("carrega arquivo\n");
 	scanf("%[^\n]s", ARQUIVO); //? O Tiago usa %[^\n]\n: o que isso significa?
 	return strlen(ARQUIVO) / TAM_REGISTRO;
 }
@@ -556,8 +558,8 @@ void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice)
 
     gerarChave(&I);
     int nreg = nREG();
-    printf("NREG = %d\n", nreg);
-    exibeProduto(I);
+    // printf("NREG = %d\n", nreg);
+    // exibeProduto(I);
 
     // Cria o índice primário
     strcpy(iprimary[nreg-1].pk, I.pk);
