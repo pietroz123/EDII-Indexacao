@@ -167,7 +167,7 @@ int main(){
 	int carregarArquivo = 0, nregistros = 0, ncat = 0;
     Produto I;
     
-    //!DElETAR
+    //!DELETAR
     // printf("Deseja carregar um arquivo?\n");
 
 	scanf("%d%*c", &carregarArquivo); /* 1 (sim) | 0 (nao) */
@@ -511,7 +511,9 @@ void criar_ibrand(Is *indice_marca, int* nregistros) {
 
 void criar_icategory(Ir *indice_categoria, int* nregistros) {
 
-    ll *aux;
+    for (int i = 0; i < nregistros; i++) {
+        Produto J = recuperar_registro(i);
+    }
 
 }
 
@@ -566,8 +568,6 @@ void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice)
 
     gerarChave(&I);
     int nreg = nREG();
-    // printf("NREG = %d\n", nreg);
-    // exibeProduto(I);
 
     // Verifica se existe chave primária igual
     if (existe_produto(iprimary, I)) {
@@ -576,12 +576,12 @@ void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice)
     }
 
     // Cria o índice primário
-    strcpy(iprimary[nreg-1].pk, I.pk);
-    iprimary[nreg-1].rrn = 192 * nreg;
+    criar_iprimary(iprimary, &nreg);
 
-    //Cria o índice do produto
-    // strcpy(iproduct[nreg-1].pk, I.pk);
-    // strcpy(iproduct[nreg-1].string, I.nome);
+    // Cria o índice do produto
     criar_iproduct(iproduct, &nreg);
+
+	// Cria o indice da marca
+	criar_ibrand(ibrand, &nreg);
 
 }
