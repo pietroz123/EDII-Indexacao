@@ -325,7 +325,7 @@ int nREG() {
 
 int carregar_arquivo()
 {
-    // printf("carrega arquivo\n");
+    // printf("carrega arquivo\n"); //!DELETAR
 	scanf("%[^\n]s", ARQUIVO);
 	return strlen(ARQUIVO) / TAM_REGISTRO;
 }
@@ -511,8 +511,13 @@ void criar_ibrand(Is *indice_marca, int* nregistros) {
 
 void criar_icategory(Ir *indice_categoria, int* nregistros) {
 
-    for (int i = 0; i < nregistros; i++) {
+    for (int i = 0; i < *nregistros; i++) {
         Produto J = recuperar_registro(i);
+        
+        // Cada indice_categoria[i] tem uma categoria: indice_categoria[i].cat
+        // E uma lista para todos as chaves primárias que contém aquela categoria: indice_categoria[i].lista
+		printf("Categorias: %s", J.categoria);
+        
     }
 
 }
@@ -528,6 +533,7 @@ void criar_iprice(Isf *indice_preco, int* nregistros) {
     INTERAÇÃO COM O USUÁRIO
 ***********************************/
 
+//!DELETAR
 int existe_produto(Ip *indice_primario, Produto P) {
     for (int i = 0; i < nREG(); i++) {
         if (strcmp(indice_primario[i].pk, P.pk) == 0)
@@ -564,16 +570,9 @@ void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice)
 
     // Lê os dados e os coloca na string temp
     ler_entrada(temp, &I);
-    strcat(ARQUIVO, temp);
-
     gerarChave(&I);
     int nreg = nREG();
 
-    // Verifica se existe chave primária igual
-    if (existe_produto(iprimary, I)) {
-        printf(ERRO_PK_REPETIDA, I.pk);
-        return;
-    }
 
     // Cria o índice primário
     criar_iprimary(iprimary, &nreg);
@@ -584,4 +583,14 @@ void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice)
 	// Cria o indice da marca
 	criar_ibrand(ibrand, &nreg);
 
+	// Cria o indice da categoria
+	criar_icategory(icategory, &nreg);
+
+
+    // Verifica se existe chave primária igual
+    if (bsearch(I.pk, iprimary, nreg, sizeof(Ip), comparacao_iprimary_PK)) {
+        printf(ERRO_PK_REPETIDA, I.pk);
+        return;
+    } else
+        strcat(ARQUIVO, temp);
 }
