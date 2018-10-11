@@ -492,7 +492,7 @@ void criar_iproduct(Is *indice_produto, int* nregistros) {
     }
 
     /* Ordenado pelo nome do produto ou modelo e, em caso de empate, pelo código */
-    qsort(indice_produto, *nregistros, sizeof(Is), comparacao_iproduct_NOME);
+    qsort(indice_produto, *nregistros, sizeof(Is), comparacao_iprimary_PK); //? Achei que era pra ser comparacao_iproduct_NOME
 
 }
 
