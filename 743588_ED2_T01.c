@@ -151,7 +151,12 @@ void imprimirSecundario(Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice, in
 
 
 /****** INTERAÇÃO COM O USUÁRIO ******/
+
+// (1) INSERCAO 
 void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice);
+
+// (4) BUSCAR PRODUTOS
+Produto buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand);
 
 
 
@@ -166,16 +171,12 @@ int main(){
     /* Arquivo */
 	int carregarArquivo = 0, nregistros = 0, ncat = 0;
     Produto I;
-    
-    //!DELETAR
-    // printf("Deseja carregar um arquivo?\n");
+
 
 	scanf("%d%*c", &carregarArquivo); /* 1 (sim) | 0 (nao) */
     if (carregarArquivo)
 		nregistros = carregar_arquivo();
 
-    //!DELETAR 
-    // printf("nregistros: %d\n", nregistros);
 
 	/* Índice primário */
 	Ip *iprimary = (Ip *) malloc (MAX_REGISTROS * sizeof(Ip));  //? Aloca-se 1000 espaços na memória para 1000 registros de Ip
@@ -233,10 +234,6 @@ int main(){
 				/*cadastro*/
                 inserir(iprimary, iproduct, ibrand, icategory, iprice);
 
-                //!DELETAR
-                // for (int i = 0; i < nREG(); i++)
-                //     printf("%d %s\n", iprimary[i].rrn, iprimary[i].pk);
-
 			break;
 
 			case REMOVER_PRODUTO: // 2 //todo
@@ -263,12 +260,12 @@ int main(){
 			
             case BUSCAR_PRODUTOS: // 4 //todo
 				/*busca*/
-				printf(INICIO_BUSCA );
-                
-                //T:
-                Produto aux = recuperar_registro(0);
-                printf("%s", aux.nome);
+				printf(INICIO_BUSCA);
 
+				buscarProdutos(iprimary, iproduct, icategory, ibrand);
+
+				exibir_registro(0, 's');
+				
 			break;
 			
             case LISTAR_PRODUTOS: // 5 //todo
@@ -325,7 +322,6 @@ int nREG() {
 
 int carregar_arquivo()
 {
-    // printf("carrega arquivo\n"); //!DELETAR
 	scanf("%[^\n]s", ARQUIVO);
 	return strlen(ARQUIVO) / TAM_REGISTRO;
 }
@@ -543,14 +539,8 @@ void criar_iprice(Isf *indice_preco, int* nregistros) {
     INTERAÇÃO COM O USUÁRIO
 ***********************************/
 
-//!DELETAR
-int existe_produto(Ip *indice_primario, Produto P) {
-    for (int i = 0; i < nREG(); i++) {
-        if (strcmp(indice_primario[i].pk, P.pk) == 0)
-            return 1;
-    }
-    return 0;
-}
+
+/**** INSERCAO ****/
 
 void ler_entrada(char* registro, Produto *novo) {
     scanf("%[^\n]s", novo->nome);
@@ -603,5 +593,39 @@ void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice)
 
 	// Cria o indice da categoria
 	criar_icategory(icategory, &nreg);
+
+}
+
+
+/**** BUSCAR PRODUTOS ****/
+
+Produto buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
+
+	int opcaoBusca;
+	char chavePrimaria[TAM_PRIMARY_KEY];
+
+	scanf("%d%*c", &opcaoBusca);
+	switch (opcaoBusca) {
+
+		case 1:	// ? A PARTIR DA CHAVE PRIMARIA
+
+			fgets(chavePrimaria, TAM_PRIMARY_KEY, stdin);
+			printf("%s\n", chavePrimaria);
+		
+		break;
+
+		case 2: // ? A PARTIR DO NOME
+
+		
+
+		break;
+
+		case 3:	// ? A PARTIR DA CATEGORIA E MARCA
+
+
+
+		break;
+
+	}
 
 }
