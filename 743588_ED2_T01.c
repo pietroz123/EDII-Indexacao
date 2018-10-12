@@ -124,15 +124,13 @@ char ARQUIVO[TAM_ARQUIVO];
  * ========================= PROTÓTIPOS DAS FUNÇÕES =========================
  * ========================================================================== */
 
-/* Recebe do usuário uma string simulando o arquivo completo e retorna o número
- * de registros. */
+/* Recebe do usuário uma string simulando o arquivo completo e retorna o número de registros. */
 int carregar_arquivo();
 
 /* Exibe o Produto */
 int exibir_registro(int rrn, char com_desconto);
 
-/* Recupera do arquivo o registro com o rrn informado
- *  e retorna os dados na struct Produto */
+/* Recupera do arquivo o registro com o rrn informado e retorna os dados na struct Produto */
 Produto recuperar_registro(int rrn);
 
 /* (Re)faz o índice respectivo */
@@ -144,7 +142,7 @@ void criar_icategory(Ir *indice_categoria, int* nregistros); //todo
 void criar_iprice(Isf *indice_preco, int* nregistros);       //todo
 
 /* Realiza os scanfs na struct Produto */
-void ler_entrada(char* registro, Produto *novo); //todo
+void ler_entrada(char* registro, Produto *novo);
 
 /* Rotina para impressao de indice secundario */
 void imprimirSecundario(Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice, int nregistros, int ncat);
@@ -155,8 +153,29 @@ void imprimirSecundario(Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice, in
 // (1) INSERCAO 
 void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice);
 
+// (2) ALTERAÇÃO
+//todo
+
+// (3) REMOÇÃO
+//todo
+
 // (4) BUSCAR PRODUTOS - Busca pelo produto e retorna o RRN
 int buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand);
+
+// (5) LISTAGEM
+void listarProdutos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nregistros);
+
+// (6) LIBERAR ESPAÇO
+//todo
+
+// (7) IMPRIMIR ARQUIVO DE DADOS
+//!Já implementado
+
+// (8) IMPRIMIR INDICES SECUNDARIOS
+//!Já implementado
+
+// (9) FINALIZAR
+//todo
 
 
 
@@ -226,7 +245,6 @@ int main(){
 	int opcao = 0;
 	while(1)
 	{   
-        // printf("Digite uma opcao\n"); //!DELETAR
 		scanf("%d%*c", &opcao);
 		switch(opcao)
 		{
@@ -274,6 +292,10 @@ int main(){
             case LISTAR_PRODUTOS: // 5 //todo
 				/*listagens*/
 				printf(INICIO_LISTAGEM);
+
+                nregistros = strlen(ARQUIVO) / TAM_REGISTRO;
+                listarProdutos(iprimary, icategory, ibrand, iprice, nregistros);
+
 			break;
 			
             case LIBERAR_ESPACO: // 6 //todo
@@ -317,7 +339,7 @@ void exibeProduto(Produto P) {
     printf("Categoria: %s\n", P.categoria);
     printf("PRIMARY KEY: %s\n", P.pk);
 }
-//Teste
+
 int nREG() {
     return strlen(ARQUIVO) / TAM_REGISTRO;
 }
@@ -594,8 +616,11 @@ void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice)
 	// Cria o indice da marca
 	criar_ibrand(ibrand, &nreg);
 
-	// Cria o indice da categoria
-	criar_icategory(icategory, &nreg);
+	// // Cria o indice da categoria
+	// criar_icategory(icategory, &nreg); //todo
+
+    // // Cria o indice do preco
+    // criar_iprice(iprice, &nreg); //todo
 
 }
 
@@ -606,33 +631,77 @@ int buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
 
 	int opcaoBusca;
 	char chavePrimaria[TAM_PRIMARY_KEY];
+    char nomeProduto[TAM_NOME];
 
 	scanf("%d%*c", &opcaoBusca);
 	switch (opcaoBusca) {
 
-		case 1:	// ? A PARTIR DA CHAVE PRIMARIA
+        // Busca por chave primária
+		case 1:
 
 			fgets(chavePrimaria, TAM_PRIMARY_KEY, stdin);
-			Ip *indice = bsearch(chavePrimaria, iprimary, nREG(), sizeof(Ip), comparacao_iprimary_PK);
-			if (indice != NULL) 
-				return indice->rrn / 192; //!FLAG: dúvida sobre o RRN
+			Ip *indiceP = bsearch(chavePrimaria, iprimary, nREG(), sizeof(Ip), comparacao_iprimary_PK);
+			if (indiceP != NULL) 
+				return indiceP->rrn / 192; //!FLAG: dúvida sobre o RRN
 			else
 				return -1;
 					
 		break;
 
-		case 2: // ? A PARTIR DO NOME
+        // Busca por nome
+		case 2: //todo
 
-
+            // fgets(nomeProduto, TAM_NOME, stdin);
+            scanf("%[^\n]s", nomeProduto);
+            printf("nome digitado: %s\n", nomeProduto);
+            Is *indiceN = bsearch(nomeProduto, iproduct, nREG(), sizeof(Is), comparacao_iproduct_NOME);
+            if (indiceN != NULL)
+                printf("PK: %s\nNOME: %s\n", indiceN->pk, indiceN->string);
+            else
+                return -1;
 
 		break;
 
-		case 3:	// ? A PARTIR DA CATEGORIA E MARCA
-
-
+        // Busca por categoria e marca
+		case 3: //todo
 
 		break;
 
 	}
+
+}
+
+
+/**** LISTAGEM ****/
+
+void listarProdutos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nregistros) {
+
+    int opcaoListagem;
+	scanf("%d%*c", &opcaoListagem);
+
+
+    switch (opcaoListagem) {
+
+        // Listagem por código
+        case 1: //todo
+
+        break;
+
+        // Listagem por categoria
+        case 2: //todo
+
+        break;
+
+        // Listagem por marca
+        case 3: //todo
+
+        break;
+
+        // Listagem por preço com desconto aplicado
+        case 4: //todo
+
+        break;
+
+    }
 
 }
