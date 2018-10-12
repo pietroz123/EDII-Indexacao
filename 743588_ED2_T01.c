@@ -155,8 +155,8 @@ void imprimirSecundario(Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice, in
 // (1) INSERCAO 
 void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice);
 
-// (4) BUSCAR PRODUTOS
-Produto buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand);
+// (4) BUSCAR PRODUTOS - Busca pelo produto e retorna o RRN
+int buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand);
 
 
 
@@ -262,9 +262,12 @@ int main(){
 				/*busca*/
 				printf(INICIO_BUSCA);
 
-				buscarProdutos(iprimary, iproduct, icategory, ibrand);
-
-				exibir_registro(0, 's');
+                int resultado = buscarProdutos(iprimary, iproduct, icategory, ibrand);
+                if (resultado != -1) {
+                    exibir_registro(resultado, 's');
+                } else {
+                    printf(REGISTRO_N_ENCONTRADO);
+                }
 				
 			break;
 			
@@ -599,7 +602,7 @@ void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice)
 
 /**** BUSCAR PRODUTOS ****/
 
-Produto buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
+int buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
 
 	int opcaoBusca;
 	char chavePrimaria[TAM_PRIMARY_KEY];
@@ -611,12 +614,11 @@ Produto buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
 
 			fgets(chavePrimaria, TAM_PRIMARY_KEY, stdin);
 			Ip *indice = bsearch(chavePrimaria, iprimary, nREG(), sizeof(Ip), comparacao_iprimary_PK);
-			if (indice != NULL) {
-				printf("ACHOU PK: %s\n", indice->pk);
-			} else {
-				printf("NAO ACHOU PK: %s\n", indice->pk);
-			}
-		
+			if (indice != NULL) 
+				return indice->rrn / 192; //!FLAG: dúvida sobre o RRN
+			else
+				return -1;
+					
 		break;
 
 		case 2: // ? A PARTIR DO NOME
