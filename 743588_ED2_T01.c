@@ -610,13 +610,18 @@ Produto buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
 		case 1:	// ? A PARTIR DA CHAVE PRIMARIA
 
 			fgets(chavePrimaria, TAM_PRIMARY_KEY, stdin);
-			printf("%s\n", chavePrimaria);
+			Ip *indice = bsearch(chavePrimaria, iprimary, nREG(), sizeof(Ip), comparacao_iprimary_PK);
+			if (indice != NULL) {
+				printf("ACHOU PK: %s\n", indice->pk);
+			} else {
+				printf("NAO ACHOU PK: %s\n", indice->pk);
+			}
 		
 		break;
 
 		case 2: // ? A PARTIR DO NOME
 
-		
+
 
 		break;
 
