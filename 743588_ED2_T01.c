@@ -18,6 +18,7 @@
 //todo: IMPRIMIR_INDICES_SECUNDARIOS    8
 //todo: FINALIZAR                       9
 
+#define NREGISTROS (strlen(ARQUIVO) / TAM_REGISTRO)
 
 
 /* Bibliotecas */
@@ -318,6 +319,14 @@ int main(){
 	      		/*Liberar memória e finalizar o programa */
 				return 0;
 			break;
+
+			//!DELETAR
+			// Imprime indice primario 
+			case 10: 
+				printf("%d\n", NREGISTROS);
+				for (int i = 0; i < NREGISTROS; i++)
+					printf("%s %d\n", iprimary[i].pk, iprimary[i].rrn);
+			break;
 			
             default:
 				printf(OPCAO_INVALIDA);
@@ -494,7 +503,7 @@ int comparacao_ibrand_MARCA(const void *a, const void *b) {
 void criar_iprimary(Ip *indice_primario, int* nregistros) {
 
     for (int i = 0; i < *nregistros; i++) {
-        indice_primario[i].rrn = 192 * i;
+        indice_primario[i].rrn = i;
         Produto J = recuperar_registro(i);
         strcpy(indice_primario[i].pk, J.pk);
     }
@@ -513,7 +522,7 @@ void criar_iproduct(Is *indice_produto, int* nregistros) {
     }
 
     /* Ordenado pelo nome do produto ou modelo e, em caso de empate, pelo código */
-    qsort(indice_produto, *nregistros, sizeof(Is), comparacao_iprimary_PK); //? Achei que era pra ser comparacao_iproduct_NOME
+    qsort(indice_produto, *nregistros, sizeof(Is), comparacao_iproduct_NOME); //!Funciona no linux mas nao no windows
 
 }
 
@@ -641,9 +650,9 @@ int buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
 
 			fgets(chavePrimaria, TAM_PRIMARY_KEY, stdin);
 			Ip *indiceP = bsearch(chavePrimaria, iprimary, nREG(), sizeof(Ip), comparacao_iprimary_PK);
-			if (indiceP != NULL) 
-				return indiceP->rrn / 192; //!FLAG: dúvida sobre o RRN
-			else
+			if (indiceP != NULL) {
+				return indiceP->rrn; //!FLAG: dúvida sobre o RRN
+			} else
 				return -1;
 					
 		break;
@@ -655,9 +664,9 @@ int buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
             scanf("%[^\n]s", nomeProduto);
             printf("nome digitado: %s\n", nomeProduto);
             Is *indiceN = bsearch(nomeProduto, iproduct, nREG(), sizeof(Is), comparacao_iproduct_NOME);
-            if (indiceN != NULL)
+            if (indiceN != NULL) {
                 printf("PK: %s\nNOME: %s\n", indiceN->pk, indiceN->string);
-            else
+			} else
                 return -1;
 
 		break;
