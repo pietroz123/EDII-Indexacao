@@ -283,7 +283,7 @@ int main(){
 
                 int resultado = buscarProdutos(iprimary, iproduct, icategory, ibrand);
                 if (resultado != -1) {
-                    exibir_registro(resultado, 's');
+                    exibir_registro(resultado, 0);
                 } else {
                     printf(REGISTRO_N_ENCONTRADO);
                 }
@@ -522,7 +522,7 @@ void criar_iproduct(Is *indice_produto, int* nregistros) {
     }
 
     /* Ordenado pelo nome do produto ou modelo e, em caso de empate, pelo código */
-    qsort(indice_produto, *nregistros, sizeof(Is), comparacao_iproduct_NOME); //!Funciona no linux mas nao no windows
+    qsort(indice_produto, *nregistros, sizeof(Is), comparacao_iprimary_PK); //!Funciona no linux mas nao no windows
 
 }
 
@@ -539,6 +539,7 @@ void criar_ibrand(Is *indice_marca, int* nregistros) {
 
 }
 
+//todo
 void criar_icategory(Ir *indice_categoria, int* nregistros) {
 
     for (int i = 0; i < *nregistros; i++) {
@@ -562,6 +563,7 @@ void criar_icategory(Ir *indice_categoria, int* nregistros) {
 
 }
 
+//todo
 void criar_iprice(Isf *indice_preco, int* nregistros) {
 
 
@@ -649,9 +651,9 @@ int buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
 		case 1:
 
 			fgets(chavePrimaria, TAM_PRIMARY_KEY, stdin);
-			Ip *indiceP = bsearch(chavePrimaria, iprimary, nREG(), sizeof(Ip), comparacao_iprimary_PK);
+			Ip *indiceP = (Ip*) bsearch(chavePrimaria, iprimary, nREG(), sizeof(Ip), comparacao_iprimary_PK);
 			if (indiceP != NULL) {
-				return indiceP->rrn; //!FLAG: dúvida sobre o RRN
+				return indiceP->rrn;
 			} else
 				return -1;
 					
@@ -660,10 +662,10 @@ int buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
         // Busca por nome
 		case 2: //todo
 
-            // fgets(nomeProduto, TAM_NOME, stdin);
             scanf("%[^\n]s", nomeProduto);
+
             printf("nome digitado: %s\n", nomeProduto);
-            Is *indiceN = bsearch(nomeProduto, iproduct, nREG(), sizeof(Is), comparacao_iproduct_NOME);
+            Is *indiceN = (Is*) bsearch(nomeProduto, iproduct, nREG(), sizeof(Is), comparacao_iproduct_NOME);
             if (indiceN != NULL) {
                 printf("PK: %s\nNOME: %s\n", indiceN->pk, indiceN->string);
 			} else
@@ -693,6 +695,13 @@ void listarProdutos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nr
 
         // Listagem por código
         case 1: //todo
+
+            for (int i = 0; i < NREGISTROS; i++) {
+                int RRN = iprimary[i].rrn;
+                exibir_registro(RRN, 0);
+                if (i != NREGISTROS-1)
+                    printf("\n");
+            }
 
         break;
 
