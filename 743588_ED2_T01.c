@@ -524,7 +524,6 @@ void criar_icategory(Ir *indice_categoria, int* nregistros) {
             // printf("aux: %s\n", aux);
             aux = strtok(NULL, "|");
         }
-        free(aux);
         
         
 
