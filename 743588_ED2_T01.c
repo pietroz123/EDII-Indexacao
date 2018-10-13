@@ -120,6 +120,7 @@ typedef struct reverse_index{
 
 /*----- GLOBAL -----*/
 char ARQUIVO[TAM_ARQUIVO];
+int NCAT = 0;
 
 /* ==========================================================================
  * ========================= PROTÓTIPOS DAS FUNÇÕES =========================
@@ -312,6 +313,7 @@ int main(){
             case IMPRIMIR_INDICES_SECUNDARIOS: // 8 //todo
 				/*imprime os índices secundários*/
                 nregistros = strlen(ARQUIVO) / TAM_REGISTRO;
+				ncat = NCAT;
 				imprimirSecundario(iproduct, ibrand, icategory, iprice, nregistros, ncat);
 			break;
 			
@@ -544,6 +546,14 @@ void criar_ibrand(Is *indice_marca, int* nregistros) {
 }
 
 //todo
+int existe_categoria(Ir *icategory, char *cat, int ncat) {
+    for (int i = 0; i < ncat; i++) {
+        printf("icategory[i].cat: %s\ncat: %s\n", icategory[i].cat, cat);
+        if (strcmp(icategory[i].cat, cat) == 0)
+            return 1;
+    }
+    return 0;
+}
 void criar_icategory(Ir *indice_categoria, int* nregistros) {
 
 	// Cada indice_categoria[i] tem uma categoria: indice_categoria[i].cat
@@ -552,6 +562,8 @@ void criar_icategory(Ir *indice_categoria, int* nregistros) {
 	
 	// Contador do vetor de categorias
 	int j = 0;
+
+	ll *aux;
 
 	// Controla a iteracao entre os registros
     for (int i = 0; i < *nregistros; i++) {
@@ -562,22 +574,31 @@ void criar_icategory(Ir *indice_categoria, int* nregistros) {
         char *cat;
         cat = strtok(J.categoria, "|");
         while (cat != NULL) {
-            printf("cat: %s\n", cat);
 
-			Ir *indiceC = (Ir*) bsearch(cat, indice_categoria, NREGISTROS, sizeof(Ir), comparacao_icategory_CAT);
-			if (indiceC == NULL) { // Se nao achar a categoria no indice de categorias
-				printf("NAO ACHOU CATEGORIA\n");
+
+            char categoria[TAM_CATEGORIA];
+            strcpy(categoria, cat);
+            // printf("categoria: %s\n", categoria);
+			
+			//!MUDAR PARA BUSCA BINARIA
+            if (existe_categoria(indice_categoria, categoria, j) == 0) {
+                printf("NAO ACHOU '%s'\n", cat);
 				strcpy(indice_categoria[j].cat, cat);
-				printf("indice[j]: %s\n", indice_categoria[j].cat);
 				j++;
-			}
+            }
 
 			// Vai para a proxima categoria
             cat = strtok(NULL, "|");
         }
 
+		qsort(indice_categoria, j, sizeof(Ir), comparacao_icategory_CAT);
 
     }
+
+	for (int i = 0; i < j; i++)
+		printf("%s\n", indice_categoria[i].cat);
+
+	NCAT = j;
 
 }
 
