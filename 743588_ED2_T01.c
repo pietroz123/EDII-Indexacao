@@ -499,6 +499,10 @@ int comparacao_iproduct_NOME(const void *a, const void *b) {
 int comparacao_ibrand_MARCA(const void *a, const void *b) {
     return strcmp((*(Is*)a).string, (*(Is*)b).string);
 }
+int comparacao_icategory_CAT(const void *a, const void *b) {
+    return strcmp((*(Ir*)a).cat, (*(Ir*)b).cat);
+}
+
 
 void criar_iprimary(Ip *indice_primario, int* nregistros) {
 
@@ -522,7 +526,7 @@ void criar_iproduct(Is *indice_produto, int* nregistros) {
     }
 
     /* Ordenado pelo nome do produto ou modelo e, em caso de empate, pelo código */
-    qsort(indice_produto, *nregistros, sizeof(Is), comparacao_iprimary_PK); //!Funciona no linux mas nao no windows
+    qsort(indice_produto, *nregistros, sizeof(Is), comparacao_iproduct_NOME); //!Funciona no linux mas nao no windows
 
 }
 
@@ -542,21 +546,35 @@ void criar_ibrand(Is *indice_marca, int* nregistros) {
 //todo
 void criar_icategory(Ir *indice_categoria, int* nregistros) {
 
+	// Cada indice_categoria[i] tem uma categoria: indice_categoria[i].cat
+	// E uma lista para todos as chaves primárias que contém aquela categoria: indice_categoria[i].lista
+	// printf("Categorias: %s\n", J.categoria);
+	
+	// Contador do vetor de categorias
+	int j = 0;
+
+	// Controla a iteracao entre os registros
     for (int i = 0; i < *nregistros; i++) {
-        Produto J = recuperar_registro(i);
         
-        // Cada indice_categoria[i] tem uma categoria: indice_categoria[i].cat
-        // E uma lista para todos as chaves primárias que contém aquela categoria: indice_categoria[i].lista
-		// printf("Categorias: %s\n", J.categoria);
+		Produto J = recuperar_registro(i);
         
-        char *aux;
-        aux = strtok(J.categoria, "|");
-        while (aux != NULL) {
-            // printf("aux: %s\n", aux);
-            aux = strtok(NULL, "|");
+        
+        char *cat;
+        cat = strtok(J.categoria, "|");
+        while (cat != NULL) {
+            printf("cat: %s\n", cat);
+
+			Ir *indiceC = (Ir*) bsearch(cat, indice_categoria, NREGISTROS, sizeof(Ir), comparacao_icategory_CAT);
+			if (indiceC == NULL) { // Se nao achar a categoria no indice de categorias
+				printf("NAO ACHOU CATEGORIA\n");
+				strcpy(indice_categoria[j].cat, cat);
+				printf("indice[j]: %s\n", indice_categoria[j].cat);
+				j++;
+			}
+
+			// Vai para a proxima categoria
+            cat = strtok(NULL, "|");
         }
-        
-        
 
 
     }
@@ -627,8 +645,8 @@ void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice)
 	// Cria o indice da marca
 	criar_ibrand(ibrand, &nreg);
 
-	// // Cria o indice da categoria
-	// criar_icategory(icategory, &nreg); //todo
+	// Cria o indice da categoria
+	criar_icategory(icategory, &nreg); //todo
 
     // // Cria o indice do preco
     // criar_iprice(iprice, &nreg); //todo
