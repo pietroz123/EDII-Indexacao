@@ -694,7 +694,7 @@ void listarProdutos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nr
     switch (opcaoListagem) {
 
         // Listagem por código
-        case 1: //todo
+        case 1:
 
             for (int i = 0; i < NREGISTROS; i++) {
                 int RRN = iprimary[i].rrn;
