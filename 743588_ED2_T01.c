@@ -557,8 +557,7 @@ int existe_categoria(Ir *icategory, char *cat, int ncat) {
 void criar_icategory(Ir *indice_categoria, int* nregistros) {
 
 	// Cada indice_categoria[i] tem uma categoria: indice_categoria[i].cat
-	// E uma lista para todos as chaves primárias que contém aquela categoria: indice_categoria[i].lista
-	// printf("Categorias: %s\n", J.categoria);
+	// E uma lista ligada para todos as chaves primárias que contém aquela categoria: indice_categoria[i].lista
 	
 	// Contador do vetor de categorias
 	int j = 0;
@@ -575,7 +574,6 @@ void criar_icategory(Ir *indice_categoria, int* nregistros) {
         cat = strtok(J.categoria, "|");
         while (cat != NULL) {
 
-
             char categoria[TAM_CATEGORIA];
             strcpy(categoria, cat);
             // printf("categoria: %s\n", categoria);
@@ -585,7 +583,15 @@ void criar_icategory(Ir *indice_categoria, int* nregistros) {
                 printf("NAO ACHOU '%s'\n", cat);
 				strcpy(indice_categoria[j].cat, cat);
 				j++;
-            }
+
+				aux = indice_categoria[i].lista;
+				// while (aux->prox && strcmp(indice_categoria[i].cat, categoria) < 0) 
+				// 	aux = aux->prox;
+				// if (aux->prox && strcmp(indice_categoria[i].cat, categoria) != 0) {
+					// strcpy(indice_categoria[i].lista->pk, J.pk);
+				// }
+
+			}
 
 			// Vai para a proxima categoria
             cat = strtok(NULL, "|");
