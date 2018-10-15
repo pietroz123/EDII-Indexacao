@@ -511,7 +511,9 @@ int comparacao_ibrand_MARCA(const void *a, const void *b) {
 int comparacao_icategory_CAT(const void *a, const void *b) {
     return strcmp((*(Ir*)a).cat, (*(Ir*)b).cat);
 }
-
+int comparacao_iprice_PRECO(const void *a, const void *b) {
+    return (*(Isf*)a).price - (*(Isf*)b).price;
+}
 
 void criar_iprimary(Ip *indice_primario, int* nregistros) {
 
@@ -628,10 +630,25 @@ void criar_icategory(Ir *indice_categoria, int* nregistros) {
 
 }
 
-//todo
 void criar_iprice(Isf *indice_preco, int* nregistros) {
 
+	if (NREGISTROS == 0)
+		return;
 
+	Produto J = recuperar_registro(NREGISTROS-1);
+	
+	// printf("PK criar_iprice: %s\n", J.pk);
+	strcpy(indice_preco[NREGISTROS-1].pk, J.pk);
+
+	// Calculo do preço COM DESCONTO
+	float preco = atof(J.preco);
+	float desconto = atof(J.desconto);
+	float precoComDesconto = preco * (100 - desconto) / 100;
+	indice_preco[NREGISTROS-1].price = precoComDesconto;
+
+
+	/* Ordenado pelo primeiramente pelo preço em ordem ascendente e, em seguida, pelo código */
+	qsort(indice_preco, *nregistros, sizeof(Isf), comparacao_iprice_PRECO);
 
 }
 
@@ -695,8 +712,8 @@ void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice)
 	// // Cria o indice da categoria
 	// criar_icategory(icategory, &nreg); //todo
 
-    // // Cria o indice do preco
-    // criar_iprice(iprice, &nreg); //todo
+    // Cria o indice do preco
+    criar_iprice(iprice, &nreg); //todo
 
 }
 
