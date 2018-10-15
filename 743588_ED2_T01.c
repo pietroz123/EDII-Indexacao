@@ -666,8 +666,8 @@ void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice)
 	// Cria o indice da marca
 	criar_ibrand(ibrand, &nreg);
 
-	// Cria o indice da categoria
-	criar_icategory(icategory, &nreg); //todo
+	// // Cria o indice da categoria
+	// criar_icategory(icategory, &nreg); //todo
 
     // // Cria o indice do preco
     // criar_iprice(iprice, &nreg); //todo
@@ -702,9 +702,7 @@ int buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
 		case 2: //todo
 
             scanf("%[^\n]s", nomeProduto);
-
-            printf("nome digitado: %s\n", nomeProduto);
-
+			
 			//!MUDAR PARA BSEARCH
 			for (int i = 0; i < NREGISTROS; i++) {
 				if (strcmp(iproduct[i].string, nomeProduto) == 0) {
@@ -755,6 +753,16 @@ void listarProdutos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nr
 
         // Listagem por marca
         case 3: //todo
+
+			for (int i = 0; i < NREGISTROS; i++) {
+
+				Ip *indicePri = (Ip*) bsearch(ibrand[i].pk, iprimary, NREGISTROS, sizeof(Ip), comparacao_iprimary_PK);
+				int RRN = indicePri->rrn;
+				exibir_registro(RRN, 0);
+                if (i != NREGISTROS-1)
+                    printf("\n");
+
+			}
 
         break;
 
