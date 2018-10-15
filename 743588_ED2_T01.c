@@ -583,48 +583,32 @@ void criar_icategory(Ir *indice_categoria, int* nregistros) {
 
 	// Controla a iteracao entre os registros
     
-	printf("nregistros: %d\n", NREGISTROS);
-	Produto J;
-	if (NREGISTROS != 0) 
-		J = recuperar_registro(NREGISTROS-1);
-	exibeProduto(J);
+	Produto J = recuperar_registro(NREGISTROS-1);
 	
 	
-	// char *cat;
-	// cat = strtok(J.categoria, "|");
-	// while (cat != NULL) {
+	char *cat;
+	cat = strtok(J.categoria, "|");
+	while (cat != NULL) {
 
-	// 	char categoria[TAM_CATEGORIA];
-	// 	strcpy(categoria, cat);
-		
-	// 	//!MUDAR PARA BUSCA BINARIA
-	// 	// if (!existe_categoria(indice_categoria, categoria, j)) {
-	// 	//     printf("NAO ACHOU '%s'\n", cat);
-	// 	// 	strcpy(indice_categoria[j].cat, cat);
-	// 	// 	j++;
-	// 	// }
+		char categoria[TAM_CATEGORIA];
+		strcpy(categoria, cat);
 
-	// 	Ir *indiceCat = (Ir*) bsearch(categoria, indice_categoria, j+1, sizeof(Ir), comparacao_icategory_CAT);
-	// 	if (indiceCat != NULL) {
-	// 		printf("ACHOU cat '%s'\n", indiceCat->cat);
-	// 	} else {
-	// 		printf("NAO ACHOU cat '%s'\n", categoria);
-	// 		printf("j antes ==== %d\n", j);
-	// 		strcpy(indice_categoria[j].cat, categoria);
-	// 		j++;
-	// 		printf("j depois ==== %d\n", j);
-	// 		qsort(indice_categoria, j, sizeof(Ir), comparacao_icategory_CAT);
-	// 	}
+		Ir *indiceCat = (Ir*) bsearch(categoria, indice_categoria, NCAT, sizeof(Ir), comparacao_icategory_CAT);
+		if (indiceCat != NULL) {
+			printf("ACHOU '%s'\n", categoria);
+		} else {
+			printf("NAO ACHOU '%s'\n", categoria);
+			strcpy(indice_categoria[NCAT].cat, categoria);
+			NCAT++;
+		}
+
+		// Vai para a proxima categoria
+		cat = strtok(NULL, "|");
+	}
 
 
-
-	// 	// Vai para a proxima categoria
-	// 	cat = strtok(NULL, "|");
-	// }
-
-
-	// for (int i = 0; i < j; i++)
-	// 	printf("%s\n", indice_categoria[i].cat);
+	for (int i = 0; i < NCAT; i++)
+		printf("%s\n", indice_categoria[i].cat);
 
 	// NCAT = j;
 
@@ -711,11 +695,11 @@ void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice)
 	// Cria o indice da marca
 	criar_ibrand(ibrand, &nreg);
 
-	// // Cria o indice da categoria
-	// criar_icategory(icategory, &nreg); //todo
+	// Cria o indice da categoria
+	criar_icategory(icategory, &nreg); //todo
 
     // Cria o indice do preco
-    criar_iprice(iprice, &nreg); //todo
+    criar_iprice(iprice, &nreg);
 
 }
 
