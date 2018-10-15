@@ -562,7 +562,6 @@ void criar_icategory(Ir *indice_categoria, int* nregistros) {
 	// Contador do vetor de categorias
 	int j = 0;
 
-	ll *aux;
 
 	// Controla a iteracao entre os registros
     for (int i = 0; i < *nregistros; i++) {
@@ -578,20 +577,31 @@ void criar_icategory(Ir *indice_categoria, int* nregistros) {
             strcpy(categoria, cat);
 			
 			//!MUDAR PARA BUSCA BINARIA
-            if (!existe_categoria(indice_categoria, categoria, j)) {
-                printf("NAO ACHOU '%s'\n", cat);
-				strcpy(indice_categoria[j].cat, cat);
+            // if (!existe_categoria(indice_categoria, categoria, j)) {
+            //     printf("NAO ACHOU '%s'\n", cat);
+			// 	strcpy(indice_categoria[j].cat, cat);
+			// 	j++;
+			// }
+
+			Ir *indiceCat = (Ir*) bsearch(categoria, indice_categoria, j+1, sizeof(Ir), comparacao_icategory_CAT);
+			if (indiceCat != NULL) {
+				printf("ACHOU cat '%s'\n", indiceCat->cat);
+			} else {
+				printf("NAO ACHOU cat '%s'\n", categoria);
+				printf("j antes ==== %d\n", j);
+				strcpy(indice_categoria[j].cat, categoria);
 				j++;
+				printf("j depois ==== %d\n", j);
+				qsort(indice_categoria, j, sizeof(Ir), comparacao_icategory_CAT);
 			}
 
-			// indice_categoria[i].lista = (ll*) malloc(sizeof(ll));
-			// strcpy(indice_categoria[i].lista->pk, J.pk);
+
 
 			// Vai para a proxima categoria
             cat = strtok(NULL, "|");
         }
 
-		qsort(indice_categoria, j, sizeof(Ir), comparacao_icategory_CAT);
+		// qsort(indice_categoria, j, sizeof(Ir), comparacao_icategory_CAT);
 
     }
 
@@ -666,8 +676,8 @@ void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice)
 	// Cria o indice da marca
 	criar_ibrand(ibrand, &nreg);
 
-	// // Cria o indice da categoria
-	// criar_icategory(icategory, &nreg); //todo
+	// Cria o indice da categoria
+	criar_icategory(icategory, &nreg); //todo
 
     // // Cria o indice do preco
     // criar_iprice(iprice, &nreg); //todo
