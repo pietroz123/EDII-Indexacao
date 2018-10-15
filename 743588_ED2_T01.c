@@ -576,22 +576,16 @@ void criar_icategory(Ir *indice_categoria, int* nregistros) {
 
             char categoria[TAM_CATEGORIA];
             strcpy(categoria, cat);
-            // printf("categoria: %s\n", categoria);
 			
 			//!MUDAR PARA BUSCA BINARIA
-            if (existe_categoria(indice_categoria, categoria, j) == 0) {
+            if (!existe_categoria(indice_categoria, categoria, j)) {
                 printf("NAO ACHOU '%s'\n", cat);
 				strcpy(indice_categoria[j].cat, cat);
 				j++;
-
-				aux = indice_categoria[i].lista;
-				// while (aux->prox && strcmp(indice_categoria[i].cat, categoria) < 0) 
-				// 	aux = aux->prox;
-				// if (aux->prox && strcmp(indice_categoria[i].cat, categoria) != 0) {
-					// strcpy(indice_categoria[i].lista->pk, J.pk);
-				// }
-
 			}
+
+			// indice_categoria[i].lista = (ll*) malloc(sizeof(ll));
+			// strcpy(indice_categoria[i].lista->pk, J.pk);
 
 			// Vai para a proxima categoria
             cat = strtok(NULL, "|");
@@ -710,11 +704,15 @@ int buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
             scanf("%[^\n]s", nomeProduto);
 
             printf("nome digitado: %s\n", nomeProduto);
-            Is *indiceN = (Is*) bsearch(nomeProduto, iproduct, nREG(), sizeof(Is), comparacao_iproduct_NOME);
-            if (indiceN != NULL) {
-                printf("PK: %s\nNOME: %s\n", indiceN->pk, indiceN->string);
-			} else
-                return -1;
+
+			//!MUDAR PARA BSEARCH
+			for (int i = 0; i < NREGISTROS; i++) {
+				if (strcmp(iproduct[i].string, nomeProduto) == 0) {
+					Ip *indicePri = (Ip*) bsearch(iproduct[i].pk, iprimary, NREGISTROS, sizeof(Ip), comparacao_iprimary_PK);
+					return indicePri->rrn;
+				}
+			}
+			return -1;
 
 		break;
 
