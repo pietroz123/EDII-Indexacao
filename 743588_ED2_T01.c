@@ -675,9 +675,11 @@ void ler_entrada(char* registro, Produto *novo) {
     getchar();
     scanf("%[^\n]s", novo->categoria);
     getchar();
-    sprintf(registro, "%s@%s@%s@%s@%s@%s@%s@", novo->nome, novo->marca, novo->data, novo->ano, novo->preco, novo->desconto, novo->categoria);
+    
+	sprintf(registro, "%s@%s@%s@%s@%s@%s@%s@", novo->nome, novo->marca, novo->data, novo->ano, novo->preco, novo->desconto, novo->categoria);
+    
+	// Completa os espaços restantes com '#'
     int necessarios = 192 - strlen(registro);
-    // Completa os espaços restantes com '#'
     for (int i = 0; i < necessarios; i++)
         strcat(registro, "#");
 }
