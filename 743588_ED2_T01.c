@@ -511,6 +511,10 @@ int comparacao_iproduct_NOME(const void *a, const void *b) {
 	return strcmp((*(Is*)a).string, (*(Is*)b).string);
 }
 int comparacao_ibrand_MARCA(const void *a, const void *b) {
+	// Em caso de empate (marcas iguais), ordena pela PK
+	if (strcmp((*(Is*)a).string, (*(Is*)b).string) == 0)
+		return strcmp((*(Is*)a).pk, (*(Is*)b).pk);
+
     return strcmp((*(Is*)a).string, (*(Is*)b).string);
 }
 int comparacao_icategory_CAT(const void *a, const void *b) {
