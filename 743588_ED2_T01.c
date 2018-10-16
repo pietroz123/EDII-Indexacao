@@ -610,21 +610,28 @@ void criar_icategory(Ir *indice_categoria, int* nregistros) {
 		// Verifica se a categoria já existe
 		Ir *indiceCat = (Ir*) bsearch(categoria, indice_categoria, NCAT, sizeof(Ir), comparacao_icategory_CAT);
 		if (indiceCat != NULL) {
-			// printf("ACHOU '%s'\n", categoria);
+			printf("ACHOU '%s'\n", categoria);
+			int indiceBusca = indiceCat - indice_categoria;
+			printf("indiceBusca: %d\n", indiceBusca);
+			inserir_lista(&(indice_categoria[indiceBusca].lista), J.pk);
 		} else {
-			// printf("NAO ACHOU '%s'\n", categoria);
+			printf("NAO ACHOU '%s'\n", categoria);
 			strcpy(indice_categoria[NCAT].cat, categoria);
 			NCAT++;
+			inserir_lista(&(indice_categoria[NCAT-1].lista), J.pk);
+
+
+			/* Ordenado pelos nomes das categorias e em seguida pelo código */
+			qsort(indice_categoria, NCAT, sizeof(Ir), comparacao_icategory_CAT);
 		}
 
-		// inserir_lista(&(indice_categoria[NCAT-1].lista), J.pk);
 
 		// Vai para a proxima categoria
 		cat = strtok(NULL, "|");
 	}
 
-	/* Ordenado pelos nomes das categorias e em seguida pelo código */
-	qsort(indice_categoria, NCAT, sizeof(Ir), comparacao_icategory_CAT);
+	// /* Ordenado pelos nomes das categorias e em seguida pelo código */
+	// qsort(indice_categoria, NCAT, sizeof(Ir), comparacao_icategory_CAT);
 
 
 	for (int i = 0; i < NCAT; i++) {
