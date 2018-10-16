@@ -26,6 +26,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+#include <math.h>
 
 
 /* Tamanho dos campos dos registros */
@@ -503,7 +504,11 @@ int comparacao_iprimary_PK(const void *a, const void *b) {
     return strcmp((*(Ip*)a).pk, (*(Ip*)b).pk);
 }
 int comparacao_iproduct_NOME(const void *a, const void *b) {
-    return strcmp((*(Is*)a).string, (*(Is*)b).string);
+	// Em caso de empate (nomes iguais), ordena pela PK
+	if (strcmp((*(Is*)a).string, (*(Is*)b).string) == 0)
+		return strcmp((*(Is*)a).pk, (*(Is*)b).pk);
+    
+	return strcmp((*(Is*)a).string, (*(Is*)b).string);
 }
 int comparacao_ibrand_MARCA(const void *a, const void *b) {
     return strcmp((*(Is*)a).string, (*(Is*)b).string);
@@ -561,6 +566,7 @@ void criar_ibrand(Is *indice_marca, int* nregistros) {
 }
 
 //todo
+// Insere na lista ordenado
 void inserir_lista(ll **primeiro, char *pk) {
 
 	/* CASO LISTA VAZIA */
@@ -610,12 +616,14 @@ void criar_icategory(Ir *indice_categoria, int* nregistros) {
 		// Verifica se a categoria já existe
 		Ir *indiceCat = (Ir*) bsearch(categoria, indice_categoria, NCAT, sizeof(Ir), comparacao_icategory_CAT);
 		if (indiceCat != NULL) {
-			printf("ACHOU '%s'\n", categoria);
+			// Achou categoria
+			// printf("ACHOU '%s'\n", categoria);
 			int indiceBusca = indiceCat - indice_categoria;
-			printf("indiceBusca: %d\n", indiceBusca);
+			// printf("indiceBusca: %d\n", indiceBusca);
 			inserir_lista(&(indice_categoria[indiceBusca].lista), J.pk);
 		} else {
-			printf("NAO ACHOU '%s'\n", categoria);
+			// Não achou categoria
+			// printf("NAO ACHOU '%s'\n", categoria);
 			strcpy(indice_categoria[NCAT].cat, categoria);
 			NCAT++;
 			inserir_lista(&(indice_categoria[NCAT-1].lista), J.pk);
@@ -634,9 +642,9 @@ void criar_icategory(Ir *indice_categoria, int* nregistros) {
 	// qsort(indice_categoria, NCAT, sizeof(Ir), comparacao_icategory_CAT);
 
 
-	for (int i = 0; i < NCAT; i++) {
-		printf("%s %s\n", indice_categoria[i].cat, indice_categoria[i].lista->pk);
-	}
+	// for (int i = 0; i < NCAT; i++) {
+	// 	printf("%s %s\n", indice_categoria[i].cat, indice_categoria[i].lista->pk);
+	// }
 
 }
 
@@ -651,9 +659,15 @@ void criar_iprice(Isf *indice_preco, int* nregistros) {
 	strcpy(indice_preco[NREGISTROS-1].pk, J.pk);
 
 	// Calculo do preço COM DESCONTO
-	float preco = atof(J.preco);
-	float desconto = atof(J.desconto);
-	float precoComDesconto = preco * (100 - desconto) / 100;
+	float preco = strtof(J.preco, NULL);
+	// printf("preco: %f\n", preco);
+	float precoArr = floor(10000 * preco) / 10000; //! undefined reference to `floor'
+	// printf("preco arredondado: %f\n", precoArr);
+	
+	float desconto = strtof(J.desconto, NULL);
+	// printf("desconto: %f\n", desconto);
+	double precoComDesconto = preco * (100 - desconto) / 100;
+	// printf("precoComDesconto: %f\n", precoComDesconto);
 	indice_preco[NREGISTROS-1].price = precoComDesconto;
 
 
