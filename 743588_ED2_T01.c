@@ -26,7 +26,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
-#include <math.h>
+// #include <math.h>
 
 
 /* Tamanho dos campos dos registros */
@@ -642,9 +642,6 @@ void criar_icategory(Ir *indice_categoria, int* nregistros) {
 		cat = strtok(NULL, "|");
 	}
 
-	// /* Ordenado pelos nomes das categorias e em seguida pelo código */
-	// qsort(indice_categoria, NCAT, sizeof(Ir), comparacao_icategory_CAT);
-
 
 	// for (int i = 0; i < NCAT; i++) {
 	// 	printf("%s %s\n", indice_categoria[i].cat, indice_categoria[i].lista->pk);
@@ -665,7 +662,7 @@ void criar_iprice(Isf *indice_preco, int* nregistros) {
 	// Calculo do preço COM DESCONTO
 	float preco = strtof(J.preco, NULL);
 	// printf("preco: %f\n", preco);
-	float precoArr = floor(10000 * preco) / 10000; //! undefined reference to `floor'
+	// float precoArr = floor(10000 * preco) / 10000; //! undefined reference to `floor'
 	// printf("preco arredondado: %f\n", precoArr);
 	
 	float desconto = strtof(J.desconto, NULL);
@@ -750,11 +747,34 @@ void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice)
 
 /**** BUSCAR PRODUTOS ****/
 
+int bSearch(Is *a, int inicio, int fim, char chave[]) {
+    
+	if (fim >= 1) {
+		int meio = (inicio+fim) / 2;
+		// printf("inicio: %d | fim: %d\n", inicio, fim);
+		// printf("meio: %d\n", meio);
+		// printf("atual: %s\n", a[meio].string);
+		if (strcmp(chave, a[meio].string) == 0)
+			return meio;
+		else {
+			if (strcmp(chave, a[meio].string) < 0)
+				return bSearch(a, inicio, meio-1, chave);
+			else
+				return bSearch(a, meio+1, fim, chave);
+		}
+	}
+    return -1;
+    
+}
+
 int buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
 
 	int opcaoBusca;
 	char chavePrimaria[TAM_PRIMARY_KEY];
     char nomeProduto[TAM_NOME];
+	Ip *indicePri;
+	Is *indiceProd, *indiceMarca;
+	Ir *indiceCat;
 
 	scanf("%d%*c", &opcaoBusca);
 	switch (opcaoBusca) {
@@ -763,27 +783,26 @@ int buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
 		case 1:
 
 			fgets(chavePrimaria, TAM_PRIMARY_KEY, stdin);
-			Ip *indiceP = (Ip*) bsearch(chavePrimaria, iprimary, nREG(), sizeof(Ip), comparacao_iprimary_PK);
-			if (indiceP != NULL) {
-				return indiceP->rrn;
+			indicePri = (Ip*) bsearch(chavePrimaria, iprimary, nREG(), sizeof(Ip), comparacao_iprimary_PK);
+			if (indicePri != NULL) {
+				return indicePri->rrn;
 			} else
 				return -1;
 					
 		break;
 
         // Busca por nome
-		case 2: //todo
+		case 2:
 
             scanf("%[^\n]s", nomeProduto);
-			
-			//!MUDAR PARA BSEARCH
-			for (int i = 0; i < NREGISTROS; i++) {
-				if (strcmp(iproduct[i].string, nomeProduto) == 0) {
-					Ip *indicePri = (Ip*) bsearch(iproduct[i].pk, iprimary, NREGISTROS, sizeof(Ip), comparacao_iprimary_PK);
+
+			int indiceResultado = bSearch(iproduct, 0, NREGISTROS-1, nomeProduto);
+			if (indiceResultado != -1) {
+				printf("iproduct['%d']: %s\nPK: %s\n", indiceResultado, iproduct[indiceResultado].string, iproduct[indiceResultado].pk);
+				indicePri = (Ip*) bsearch(iproduct[indiceResultado].pk, iprimary, NREGISTROS, sizeof(Ip), comparacao_iprimary_PK);
 					return indicePri->rrn;
-				}
-			}
-			return -1;
+			} else
+				return -1;
 
 		break;
 
