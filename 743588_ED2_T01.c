@@ -606,11 +606,13 @@ void criar_icategory(Ir *indice_categoria, int* nregistros) {
 		cat = strtok(NULL, "|");
 	}
 
+	/* Ordenado pelos nomes das categorias e em seguida pelo código */
+	qsort(indice_categoria, NCAT, sizeof(Ir), comparacao_icategory_CAT);
 
-	for (int i = 0; i < NCAT; i++)
+
+	for (int i = 0; i < NCAT; i++) {
 		printf("%s\n", indice_categoria[i].cat);
-
-	// NCAT = j;
+	}
 
 }
 
