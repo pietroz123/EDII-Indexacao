@@ -563,29 +563,29 @@ void criar_ibrand(Is *indice_marca, int* nregistros) {
 //todo
 void inserir_lista(ll **primeiro, char *pk) {
 
-	// ll *novo = (ll*) malloc(sizeof(ll));
-	// strcpy(novo->pk, pk);
-	// novo->prox = *primeiro;
-	// *primeiro = novo;
-
 	/* CASO LISTA VAZIA */
-	if (*primeiro == NULL) {
+	if (*primeiro == NULL || strcmp((*primeiro)->pk, pk) > 0) {
 		ll *novo = (ll*) malloc(sizeof(ll));
 		strcpy(novo->pk, pk);
+		novo->prox = *primeiro;
 		*primeiro = novo;
 		return;
 	}
 
 	ll *aux = *primeiro;
-	while (aux->prox)
+	
+	// Percorre a lista até achar um valor maior
+	while (aux->prox && strcmp(aux->prox->pk, pk) < 0)
 		aux = aux->prox;
+
+	// Se for igual, não insere repetido
+	if (aux->prox != NULL && strcmp(aux->prox->pk, pk) == 0)
+		return;
 
 	ll *novo = (ll*) malloc(sizeof(ll));
 	strcpy(novo->pk, pk);
-
+	novo->prox = aux->prox;
 	aux->prox = novo;
-	novo->prox = NULL;
-
 
 }
 
@@ -617,7 +617,7 @@ void criar_icategory(Ir *indice_categoria, int* nregistros) {
 			NCAT++;
 		}
 
-		inserir_lista(&(indice_categoria[NCAT-1].lista), J.pk);
+		// inserir_lista(&(indice_categoria[NCAT-1].lista), J.pk);
 
 		// Vai para a proxima categoria
 		cat = strtok(NULL, "|");
