@@ -561,14 +561,34 @@ void criar_ibrand(Is *indice_marca, int* nregistros) {
 }
 
 //todo
-int existe_categoria(Ir *icategory, char *cat, int ncat) {
-    for (int i = 0; i < ncat; i++) {
-        printf("icategory[i].cat: %s\ncat: %s\n", icategory[i].cat, cat);
-        if (strcmp(icategory[i].cat, cat) == 0)
-            return 1;
-    }
-    return 0;
+void inserir_lista(ll **primeiro, char *pk) {
+
+	// ll *novo = (ll*) malloc(sizeof(ll));
+	// strcpy(novo->pk, pk);
+	// novo->prox = *primeiro;
+	// *primeiro = novo;
+
+	/* CASO LISTA VAZIA */
+	if (*primeiro == NULL) {
+		ll *novo = (ll*) malloc(sizeof(ll));
+		strcpy(novo->pk, pk);
+		*primeiro = novo;
+		return;
+	}
+
+	ll *aux = *primeiro;
+	while (aux->prox)
+		aux = aux->prox;
+
+	ll *novo = (ll*) malloc(sizeof(ll));
+	strcpy(novo->pk, pk);
+
+	aux->prox = novo;
+	novo->prox = NULL;
+
+
 }
+
 void criar_icategory(Ir *indice_categoria, int* nregistros) {
 
 	if (NREGISTROS == 0)
@@ -576,12 +596,6 @@ void criar_icategory(Ir *indice_categoria, int* nregistros) {
 
 	// Cada indice_categoria[i] tem uma categoria: indice_categoria[i].cat
 	// E uma lista ligada para todos as chaves primárias que contém aquela categoria: indice_categoria[i].lista
-	
-	// Contador do vetor de categorias
-	int j = 0;
-
-
-	// Controla a iteracao entre os registros
     
 	Produto J = recuperar_registro(NREGISTROS-1);
 	
@@ -593,14 +607,17 @@ void criar_icategory(Ir *indice_categoria, int* nregistros) {
 		char categoria[TAM_CATEGORIA];
 		strcpy(categoria, cat);
 
+		// Verifica se a categoria já existe
 		Ir *indiceCat = (Ir*) bsearch(categoria, indice_categoria, NCAT, sizeof(Ir), comparacao_icategory_CAT);
 		if (indiceCat != NULL) {
-			printf("ACHOU '%s'\n", categoria);
+			// printf("ACHOU '%s'\n", categoria);
 		} else {
-			printf("NAO ACHOU '%s'\n", categoria);
+			// printf("NAO ACHOU '%s'\n", categoria);
 			strcpy(indice_categoria[NCAT].cat, categoria);
 			NCAT++;
 		}
+
+		inserir_lista(&(indice_categoria[NCAT-1].lista), J.pk);
 
 		// Vai para a proxima categoria
 		cat = strtok(NULL, "|");
@@ -611,7 +628,7 @@ void criar_icategory(Ir *indice_categoria, int* nregistros) {
 
 
 	for (int i = 0; i < NCAT; i++) {
-		printf("%s\n", indice_categoria[i].cat);
+		printf("%s %s\n", indice_categoria[i].cat, indice_categoria[i].lista->pk);
 	}
 
 }
