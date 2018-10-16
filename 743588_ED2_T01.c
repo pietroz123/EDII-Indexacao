@@ -749,21 +749,20 @@ void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice)
 
 int bSearch(Is *a, int inicio, int fim, char chave[]) {
     
-	if (fim >= 1) {
-		int meio = (inicio+fim) / 2;
-		// printf("inicio: %d | fim: %d\n", inicio, fim);
-		// printf("meio: %d\n", meio);
-		// printf("atual: %s\n", a[meio].string);
-		if (strcmp(chave, a[meio].string) == 0)
-			return meio;
-		else {
-			if (strcmp(chave, a[meio].string) < 0)
-				return bSearch(a, inicio, meio-1, chave);
-			else
-				return bSearch(a, meio+1, fim, chave);
-		}
+	if (inicio > fim)
+		return -1;
+		
+	int meio = (inicio + fim) / 2;
+	printf("inicio: %d\nfim: %d\nmeio: %d\n", inicio, fim, meio);
+	if (strcmp(a[meio].string, chave) == 0)
+		return meio;
+	else {
+		if (strcmp(a[meio].string, chave) > 0)
+			meio = bSearch(a, inicio, meio-1, chave);
+		else
+			meio = bSearch(a, meio+1, fim, chave);
 	}
-    return -1;
+	return meio;
     
 }
 
@@ -796,9 +795,8 @@ int buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
 
             scanf("%[^\n]s", nomeProduto);
 
-			int indiceResultado = bSearch(iproduct, 0, NREGISTROS-1, nomeProduto);
+			int indiceResultado = bSearch(iproduct, 0, NREGISTROS, nomeProduto);
 			if (indiceResultado != -1) {
-				printf("iproduct['%d']: %s\nPK: %s\n", indiceResultado, iproduct[indiceResultado].string, iproduct[indiceResultado].pk);
 				indicePri = (Ip*) bsearch(iproduct[indiceResultado].pk, iprimary, NREGISTROS, sizeof(Ip), comparacao_iprimary_PK);
 					return indicePri->rrn;
 			} else
