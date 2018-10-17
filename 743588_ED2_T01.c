@@ -170,7 +170,7 @@ void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice)
 //todo
 
 // (4) BUSCAR PRODUTOS - Busca pelo produto e retorna o RRN
-int buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand);
+void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand);
 int bSearch(Is *a, int inicio, int fim, char chave[]);
 int bSearchInferior(Is *a, int inicio, int fim, char chave[]);
 int bSearchSuperior(Is *a, int inicio, int fim, char chave[]);
@@ -293,13 +293,7 @@ int main(){
             case BUSCAR_PRODUTOS: // 4 //todo
 				/*busca*/
 				printf(INICIO_BUSCA);
-
-                int resultado = buscarProdutos(iprimary, iproduct, icategory, ibrand);
-                if (resultado != -1) {
-                    exibir_registro(resultado, 0);
-                } else {
-                    printf(REGISTRO_N_ENCONTRADO);
-                }
+				buscarProdutos(iprimary, iproduct, icategory, ibrand);
 				
 			break;
 			
@@ -350,18 +344,6 @@ int main(){
 	return 0;
 }
 
-
-//!DELETAR
-void exibeProduto(Produto P) {
-    printf("Nome: %s\n", P.nome);
-    printf("Marca: %s\n", P.marca);
-    printf("Data: %s\n", P.data);
-    printf("Ano: %s\n", P.ano);
-    printf("Preco: %s\n", P.preco);
-    printf("Desconto: %s\n", P.desconto);
-    printf("Categoria: %s\n", P.categoria);
-    printf("PRIMARY KEY: %s\n", P.pk);
-}
 
 int nREG() {
     return strlen(ARQUIVO) / TAM_REGISTRO;
@@ -803,7 +785,7 @@ int bSearchSuperior(Is *a, int inicio, int fim, char chave[]) {
 }
 
 
-int buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
+void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
 
 	int opcaoBusca;
 	char chavePrimaria[TAM_PRIMARY_KEY];
@@ -821,9 +803,9 @@ int buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
 			fgets(chavePrimaria, TAM_PRIMARY_KEY, stdin);
 			indicePri = (Ip*) bsearch(chavePrimaria, iprimary, nREG(), sizeof(Ip), comparacao_iprimary_PK);
 			if (indicePri != NULL) {
-				return indicePri->rrn;
-			} else
-				return -1;
+				exibir_registro(indicePri->rrn, 0);
+			} else 
+				printf(REGISTRO_N_ENCONTRADO);
 					
 		break;
 
@@ -837,13 +819,14 @@ int buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
 
 			printf("inferior: %d\nsuperior: %d\n", indiceInferior, indiceSuperior);
 
-
-			int indiceResultado = bSearch(iproduct, 0, NREGISTROS, nomeProduto);
-			if (indiceResultado != -1) {
-				indicePri = (Ip*) bsearch(iproduct[indiceResultado].pk, iprimary, NREGISTROS, sizeof(Ip), comparacao_iprimary_PK);
-					return indicePri->rrn;
-			} else
+			if (indiceInferior == indiceSuperior) {
+				printf(REGISTRO_N_ENCONTRADO);
 				return -1;
+			}
+
+			for (int i = indiceInferior; i < indiceSuperior; i++)
+				if (strlen(iproduct[i].pk))
+					exibir_registro(i, 0);
 
 		break;
 
@@ -882,10 +865,12 @@ void listarProdutos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nr
         // Listagem por categoria
         case 2: //todo
 
+
+
         break;
 
         // Listagem por marca
-        case 3: //todo
+        case 3:
 
 			for (int i = 0; i < NREGISTROS; i++) {
 
