@@ -607,13 +607,10 @@ void criar_icategory(Ir *indice_categoria, int* nregistros) {
 		Ir *indiceCat = (Ir*) bsearch(categoria, indice_categoria, NCAT, sizeof(Ir), comparacao_icategory_CAT);
 		if (indiceCat != NULL) {
 			// Achou categoria
-			// printf("ACHOU '%s'\n", categoria);
 			int indiceBusca = indiceCat - indice_categoria;
-			// printf("indiceBusca: %d\n", indiceBusca);
 			inserir_lista(&(indice_categoria[indiceBusca].lista), J.pk);
 		} else {
 			// Não achou categoria
-			// printf("NAO ACHOU '%s'\n", categoria);
 			strcpy(indice_categoria[NCAT].cat, categoria);
 			NCAT++;
 			inserir_lista(&(indice_categoria[NCAT-1].lista), J.pk);
@@ -627,11 +624,6 @@ void criar_icategory(Ir *indice_categoria, int* nregistros) {
 		// Vai para a proxima categoria
 		cat = strtok(NULL, "|");
 	}
-
-
-	// for (int i = 0; i < NCAT; i++) {
-	// 	printf("%s %s\n", indice_categoria[i].cat, indice_categoria[i].lista->pk);
-	// }
 
 }
 
@@ -789,8 +781,11 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
 	int opcaoBusca;
 	char chavePrimaria[TAM_PRIMARY_KEY];
     char nomeProduto[TAM_NOME];
+	char marcaProduto[TAM_MARCA];
+	char categoriaProduto[TAM_CATEGORIA];
 	Ip *indicePri;
-	Is *indiceProd, *indiceMarca;
+	Is *indiceProd;
+	Is *indiceMarca;
 	Ir *indiceCat;
 
 	scanf("%d%*c", &opcaoBusca);
@@ -838,6 +833,25 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
 
         // Busca por categoria e marca
 		case 3: //todo
+
+			// Busca pelo Produto de uma marca que está em uma categoria
+
+			scanf("%[^\n]s", marcaProduto);
+			getchar();
+			// scanf("%[^\n]s", categoriaProduto);
+
+			int posicaoMarca = bSearch(ibrand, 0, NREGISTROS, marcaProduto);
+
+			if (posicaoMarca != -1) {
+				printf("ACHOU\n");
+				printf("posicao: %d\n", posicaoMarca);
+			} else {
+				printf("NAO ACHOU\n");
+			}
+
+
+
+
 
 		break;
 
