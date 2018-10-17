@@ -64,8 +64,8 @@
 
 /* Opções Menu */
 #define INSERIR_NOVO_PRODUTO            1
-#define REMOVER_PRODUTO                 2
-#define MODIFICAR_DESCONTO              3
+#define MODIFICAR_DESCONTO              2
+#define REMOVER_PRODUTO                 3
 #define BUSCAR_PRODUTOS                 4
 #define LISTAR_PRODUTOS                 5
 #define LIBERAR_ESPACO                  6
