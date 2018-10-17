@@ -264,13 +264,25 @@ int main(){
 		scanf("%d%*c", &opcao);
 		switch(opcao)
 		{
-			case INSERIR_NOVO_PRODUTO: // 1 //todo
+			case INSERIR_NOVO_PRODUTO: // 1
 				/*cadastro*/
                 inserir(iprimary, iproduct, ibrand, icategory, iprice);
 
 			break;
 
-			case REMOVER_PRODUTO: // 2 //todo
+			
+            case MODIFICAR_DESCONTO: // 2 //todo
+				/*excluir produto*/
+				printf(INICIO_EXCLUSAO);
+				/*
+				if(remover([args]))
+					printf(SUCESSO);
+				else
+					printf(FALHA);
+				*/
+			break;
+
+			case REMOVER_PRODUTO: // 3 //todo
 				/*alterar desconto*/
 				printf(INICIO_ALTERACAO);
 				/*
@@ -281,25 +293,14 @@ int main(){
 				*/
 			break;
 			
-            case MODIFICAR_DESCONTO: // 3 //todo
-				/*excluir produto*/
-				printf(INICIO_EXCLUSAO);
-				/*
-				if(remover([args]))
-					printf(SUCESSO);
-				else
-					printf(FALHA);
-				*/
-			break;
-			
-            case BUSCAR_PRODUTOS: // 4 //todo
+            case BUSCAR_PRODUTOS: // 4
 				/*busca*/
 				printf(INICIO_BUSCA);
 				buscarProdutos(iprimary, iproduct, icategory, ibrand);
 				
 			break;
 			
-            case LISTAR_PRODUTOS: // 5 //todo
+            case LISTAR_PRODUTOS: // 5
 				/*listagens*/
 				printf(INICIO_LISTAGEM);
 
@@ -789,7 +790,7 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
 			int indiceInferior = bSearchInferior(iproduct, 0, NREGISTROS, nomeProduto);
 			int indiceSuperior = bSearchSuperior(iproduct, 0, NREGISTROS, nomeProduto);
 
-			// printf("inferior: %d\nsuperior: %d\n", indiceInferior, indiceSuperior);
+			// printf("inferior: %d\nsuperior: %d\n", indiceInferior, indiceSuperior); //!
 
 			if (indiceInferior == indiceSuperior) {
 				printf(REGISTRO_N_ENCONTRADO);
