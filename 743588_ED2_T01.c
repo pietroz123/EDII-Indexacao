@@ -557,36 +557,6 @@ void criar_ibrand(Is *indice_marca, int* nregistros) {
 
 }
 
-//todo
-// Insere na lista ordenado
-void inserir_lista(ll **primeiro, char *pk) {
-
-	/* CASO LISTA VAZIA */
-	if (*primeiro == NULL || strcmp((*primeiro)->pk, pk) > 0) {
-		ll *novo = (ll*) malloc(sizeof(ll));
-		strcpy(novo->pk, pk);
-		novo->prox = *primeiro;
-		*primeiro = novo;
-		return;
-	}
-
-	ll *aux = *primeiro;
-	
-	// Percorre a lista até achar um valor maior
-	while (aux->prox && strcmp(aux->prox->pk, pk) < 0)
-		aux = aux->prox;
-
-	// Se for igual, não insere repetido
-	if (aux->prox != NULL && strcmp(aux->prox->pk, pk) == 0)
-		return;
-
-	ll *novo = (ll*) malloc(sizeof(ll));
-	strcpy(novo->pk, pk);
-	novo->prox = aux->prox;
-	aux->prox = novo;
-
-}
-
 void criar_icategory(Ir *indice_categoria, int* nregistros) {
 
 	if (NREGISTROS == 0)
@@ -847,9 +817,17 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
 			if (posicaoMarca != -1) {
 				printf("ACHOU MARCA '%s'\n", marcaProduto);
 				printf("posicao: %d\n", posicaoMarca);
+				char pkEncontrada[TAM_PRIMARY_KEY];
+				strcpy(pkEncontrada, ibrand[posicaoMarca].pk);
 				indiceCat = bsearch(categoriaProduto, icategory, NCAT, sizeof(Ir), comparacao_icategory_CAT);
 				if (indiceCat != NULL) {
 					printf("ACHOU CATEGORIA '%s'\n", categoriaProduto);
+					int resBuscaLista = buscar_lista(&(indiceCat->lista), pkEncontrada);
+					if (resBuscaLista != -1) {
+						printf("CHAVE '%s' ENCONTRADA\n", pkEncontrada);
+					} else {
+						printf("CHAVE '%s' NAO ENCONTRADA\n", pkEncontrada);
+					}
 				} else {
 					printf(REGISTRO_N_ENCONTRADO);
 					return;
@@ -1029,6 +1007,52 @@ void refaz_icategory(Ir *indice_categoria, int* nregistros) {
 
 void refaz_iprice(Isf *indice_preco, int* nregistros) {
 
+
+
+}
+
+
+/**** FUNÇÕES DA LISTA ENCADEADA ****/
+
+// Insere na lista ordenado
+void inserir_lista(ll **primeiro, char *pk) {
+
+	/* CASO LISTA VAZIA */
+	if (*primeiro == NULL || strcmp((*primeiro)->pk, pk) > 0) {
+		ll *novo = (ll*) malloc(sizeof(ll));
+		strcpy(novo->pk, pk);
+		novo->prox = *primeiro;
+		*primeiro = novo;
+		return;
+	}
+
+	ll *aux = *primeiro;
+	
+	// Percorre a lista até achar um valor maior
+	while (aux->prox && strcmp(aux->prox->pk, pk) < 0)
+		aux = aux->prox;
+
+	// Se for igual, não insere repetido
+	if (aux->prox != NULL && strcmp(aux->prox->pk, pk) == 0)
+		return;
+
+	ll *novo = (ll*) malloc(sizeof(ll));
+	strcpy(novo->pk, pk);
+	novo->prox = aux->prox;
+	aux->prox = novo;
+
+}
+
+// Busca por uma chave na lista
+int buscar_lista(ll **primeiro, char *pk) {
+
+	ll *aux = *primeiro;
+	while (aux) {
+		if (strcmp(aux->pk, pk) == 0)
+			return 1;
+		aux = aux->prox;
+	}
+	return -1;
 
 
 }
