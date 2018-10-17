@@ -162,6 +162,7 @@ void imprimirSecundario(Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice, in
 
 // (1) INSERCAO 
 void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice);
+void inserir_lista(ll **primeiro, char *pk);
 
 // (2) ALTERAÇÃO
 //todo
@@ -174,6 +175,7 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand);
 int bSearch(Is *a, int inicio, int fim, char chave[]);
 int bSearchInferior(Is *a, int inicio, int fim, char chave[]);
 int bSearchSuperior(Is *a, int inicio, int fim, char chave[]);
+int buscar_lista(ll **primeiro, char *pk);
 
 
 // (5) LISTAGEM
@@ -838,16 +840,26 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
 
 			scanf("%[^\n]s", marcaProduto);
 			getchar();
-			// scanf("%[^\n]s", categoriaProduto);
+			scanf("%[^\n]s", categoriaProduto);
 
 			int posicaoMarca = bSearch(ibrand, 0, NREGISTROS, marcaProduto);
 
 			if (posicaoMarca != -1) {
-				printf("ACHOU\n");
+				printf("ACHOU MARCA '%s'\n", marcaProduto);
 				printf("posicao: %d\n", posicaoMarca);
+				indiceCat = bsearch(categoriaProduto, icategory, NCAT, sizeof(Ir), comparacao_icategory_CAT);
+				if (indiceCat != NULL) {
+					printf("ACHOU CATEGORIA '%s'\n", categoriaProduto);
+				} else {
+					printf(REGISTRO_N_ENCONTRADO);
+					return;
+				}
 			} else {
-				printf("NAO ACHOU\n");
+				printf(REGISTRO_N_ENCONTRADO);
+				return;
 			}
+
+
 
 
 
