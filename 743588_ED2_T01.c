@@ -819,7 +819,7 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
 			int posicaoInferior = bSearchInferior(ibrand, 0, NREGISTROS, marcaProduto);
 			int posicaoSuperior = bSearchSuperior(ibrand, 0, NREGISTROS, marcaProduto);
 
-			// printf("posicaoInferior: %d\nposicaoSuperior: %d\n", posicaoInferior, posicaoSuperior);
+			// printf("posicaoInferior: %d\nposicaoSuperior: %d\n", posicaoInferior, posicaoSuperior); //!
 
 			if (posicaoInferior == posicaoSuperior) {
 				printf(REGISTRO_N_ENCONTRADO);
@@ -835,22 +835,22 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
 					int posicaoMarca = i;
 
 					if (posicaoMarca != -1) {
-						// printf("ACHOU MARCA '%s'\n", marcaProduto);
-						// printf("posicao: %d\n", posicaoMarca);
+						// printf("ACHOU MARCA '%s'\n", marcaProduto); //!
+						// printf("posicao: %d\n", posicaoMarca); //!
 						char pkEncontrada[TAM_PRIMARY_KEY];
 						strcpy(pkEncontrada, ibrand[posicaoMarca].pk);
 						indiceCat = bsearch(categoriaProduto, icategory, NCAT, sizeof(Ir), comparacao_icategory_CAT);
 						if (indiceCat != NULL) {
-							// printf("ACHOU CATEGORIA '%s'\n", categoriaProduto);
+							// printf("ACHOU CATEGORIA '%s'\n", categoriaProduto); //!
 							int resBuscaLista = buscar_lista(&(indiceCat->lista), pkEncontrada);
 							if (resBuscaLista != -1) {
-								// printf("CHAVE '%s' ENCONTRADA\n", pkEncontrada);
-								// printf("RRN: %d\n", indicePri->rrn);
+								// printf("CHAVE '%s' ENCONTRADA\n", pkEncontrada); //!
+								// printf("RRN: %d\n", indicePri->rrn); //!
 								exibir_registro(indicePri->rrn, 0);
 								if (posicaoMarca < posicaoSuperior-1)
 									printf("\n");
 							} else {
-								// printf("CHAVE '%s' NAO ENCONTRADA\n", pkEncontrada);
+								// printf("CHAVE '%s' NAO ENCONTRADA\n", pkEncontrada); //!
 							}
 						} else {
 							printf(REGISTRO_N_ENCONTRADO);
@@ -876,6 +876,10 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
 
 void listarProdutos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nregistros) {
 
+	char categoriaProduto[TAM_CATEGORIA];
+
+	Ip *indicePri;
+	Ir *indiceCat;
 
     int opcaoListagem;
 	scanf("%d%*c", &opcaoListagem);
@@ -900,9 +904,21 @@ void listarProdutos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nr
         break;
 
         // Listagem por categoria
-        case 2: //todo
+        case 2:
 
+			scanf("%[^\n]s", categoriaProduto);
 
+			indiceCat = (Ir*) bsearch(categoriaProduto, icategory, NCAT, sizeof(Ir), comparacao_icategory_CAT);
+			if (indiceCat) {
+				ll *aux = indiceCat->lista;
+				while (aux) {
+					indicePri = (Ip*) bsearch(aux->pk, iprimary, NREGISTROS, sizeof(Ip), comparacao_iprimary_PK);
+					exibir_registro(indicePri->rrn, 0);
+					if (aux->prox)
+						printf("\n");
+					aux = aux->prox;
+				}
+			}
 
         break;
 
@@ -911,7 +927,7 @@ void listarProdutos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nr
 
 			for (int i = 0; i < NREGISTROS; i++) {
 
-				Ip *indicePri = (Ip*) bsearch(ibrand[i].pk, iprimary, NREGISTROS, sizeof(Ip), comparacao_iprimary_PK);
+				indicePri = (Ip*) bsearch(ibrand[i].pk, iprimary, NREGISTROS, sizeof(Ip), comparacao_iprimary_PK);
 				int RRN = indicePri->rrn;
 				exibir_registro(RRN, 0);
                 if (i != NREGISTROS-1)
