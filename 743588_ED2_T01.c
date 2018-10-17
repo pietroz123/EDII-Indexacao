@@ -197,6 +197,11 @@ void listarProdutos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nr
 
 /****** FUNÇÕES AUXILIARES ******/
 int nREG();
+int comparacao_iprimary_PK(const void *a, const void *b);
+int comparacao_iproduct_NOME(const void *a, const void *b);
+int comparacao_ibrand_MARCA(const void *a, const void *b);
+int comparacao_icategory_CAT(const void *a, const void *b);
+int comparacao_iprice_PRECO(const void *a, const void *b);
 
 
 /* ==========================================================================
@@ -271,28 +276,44 @@ int main(){
 			break;
 
 			
-            case MODIFICAR_DESCONTO: // 2 //todo
-				/*excluir produto*/
-				printf(INICIO_EXCLUSAO);
-				/*
-				if(remover([args]))
-					printf(SUCESSO);
-				else
-					printf(FALHA);
-				*/
-			break;
-
-			case REMOVER_PRODUTO: // 3 //todo
+			case MODIFICAR_DESCONTO: // 2 //todo
 				/*alterar desconto*/
 				printf(INICIO_ALTERACAO);
-				/*
-				if(alterar([args]))
-					printf(SUCESSO);
-				else
-					printf(FALHA);
-				*/
+				
+				char pk[TAM_PRIMARY_KEY];
+				scanf("%[^\n]s", pk);
+
+				// Busca se existe a chave primária
+				Ip *indicePri = (Ip*) bsearch(pk, iprimary, NREGISTROS, sizeof(Ip), comparacao_iprimary_PK);
+				if (indicePri == NULL) {
+					printf(REGISTRO_N_ENCONTRADO);
+					break;
+				}
+
+				char novoDesconto[TAM_DESCONTO];
+				getchar();
+				scanf("%[^\n]s", novoDesconto);
+
+				// Verificar se o novo desconto é válido
+
+				// if(alterar([args]))
+				// 	printf(SUCESSO);
+				// else
+				// 	printf(FALHA);
+				
 			break;
 			
+            case REMOVER_PRODUTO: // 3 //todo
+				/*excluir produto*/
+				printf(INICIO_EXCLUSAO);
+				
+				// if(remover([args]))
+				// 	printf(SUCESSO);
+				// else
+				// 	printf(FALHA);
+				
+			break;
+
             case BUSCAR_PRODUTOS: // 4
 				/*busca*/
 				printf(INICIO_BUSCA);
