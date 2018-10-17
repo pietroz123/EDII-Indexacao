@@ -938,7 +938,17 @@ void listarProdutos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nr
         break;
 
         // Listagem por preço com desconto aplicado
-        case 4: //todo
+        case 4:
+
+			for (int i = 0; i < NREGISTROS; i++) {
+
+				indicePri = (Ip*) bsearch(iprice[i].pk, iprimary, NREGISTROS, sizeof(Ip), comparacao_iprimary_PK);
+				int RRN = indicePri->rrn;
+				exibir_registro(RRN, 1);
+				if (i != NREGISTROS-1)
+					printf("\n");
+
+			}
 
         break;
 
