@@ -821,36 +821,71 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
 
 			printf("posicaoInferior: %d\nposicaoSuperior: %d\n", posicaoInferior, posicaoSuperior);
 
-			int posicaoMarca = bSearch(ibrand, 0, NREGISTROS, marcaProduto);
-
-			if (posicaoMarca != -1) {
-				printf("ACHOU MARCA '%s'\n", marcaProduto);
-				printf("posicao: %d\n", posicaoMarca);
-				char pkEncontrada[TAM_PRIMARY_KEY];
-				strcpy(pkEncontrada, ibrand[posicaoMarca].pk);
-				indiceCat = bsearch(categoriaProduto, icategory, NCAT, sizeof(Ir), comparacao_icategory_CAT);
-				if (indiceCat != NULL) {
-					printf("ACHOU CATEGORIA '%s'\n", categoriaProduto);
-					int resBuscaLista = buscar_lista(&(indiceCat->lista), pkEncontrada);
-					if (resBuscaLista != -1) {
-						printf("CHAVE '%s' ENCONTRADA\n", pkEncontrada);
-					} else {
-						printf("CHAVE '%s' NAO ENCONTRADA\n", pkEncontrada);
-					}
-				} else {
-					printf(REGISTRO_N_ENCONTRADO);
-					return;
-				}
-			} else {
+			if (posicaoInferior == posicaoSuperior) {
 				printf(REGISTRO_N_ENCONTRADO);
 				return;
 			}
 
 
+			for (int i = posicaoInferior; i < posicaoSuperior; i++) {
 
+				indicePri = (Ip*) bsearch(ibrand[i].pk, iprimary, NREGISTROS, sizeof(Ip), comparacao_iprimary_PK);
+				if (indicePri) {
 
+					int posicaoMarca = i;
 
+					if (posicaoMarca != -1) {
+						printf("ACHOU MARCA '%s'\n", marcaProduto);
+						printf("posicao: %d\n", posicaoMarca);
+						char pkEncontrada[TAM_PRIMARY_KEY];
+						strcpy(pkEncontrada, ibrand[posicaoMarca].pk);
+						indiceCat = bsearch(categoriaProduto, icategory, NCAT, sizeof(Ir), comparacao_icategory_CAT);
+						if (indiceCat != NULL) {
+							printf("ACHOU CATEGORIA '%s'\n", categoriaProduto);
+							int resBuscaLista = buscar_lista(&(indiceCat->lista), pkEncontrada);
+							if (resBuscaLista != -1) {
+								printf("CHAVE '%s' ENCONTRADA\n", pkEncontrada);
+							} else {
+								printf("CHAVE '%s' NAO ENCONTRADA\n", pkEncontrada);
+							}
+						} else {
+							printf(REGISTRO_N_ENCONTRADO);
+							return;
+						}
+					} else {
+						printf(REGISTRO_N_ENCONTRADO);
+						return;
+					}
+				
+				}
+				
+			}
 
+			// int posicaoMarca = bSearch(ibrand, 0, NREGISTROS, marcaProduto);
+
+			// if (posicaoMarca != -1) {
+			// 	printf("ACHOU MARCA '%s'\n", marcaProduto);
+			// 	printf("posicao: %d\n", posicaoMarca);
+			// 	char pkEncontrada[TAM_PRIMARY_KEY];
+			// 	strcpy(pkEncontrada, ibrand[posicaoMarca].pk);
+			// 	indiceCat = bsearch(categoriaProduto, icategory, NCAT, sizeof(Ir), comparacao_icategory_CAT);
+			// 	if (indiceCat != NULL) {
+			// 		printf("ACHOU CATEGORIA '%s'\n", categoriaProduto);
+			// 		int resBuscaLista = buscar_lista(&(indiceCat->lista), pkEncontrada);
+			// 		if (resBuscaLista != -1) {
+			// 			printf("CHAVE '%s' ENCONTRADA\n", pkEncontrada);
+			// 		} else {
+			// 			printf("CHAVE '%s' NAO ENCONTRADA\n", pkEncontrada);
+			// 		}
+			// 	} else {
+			// 		printf(REGISTRO_N_ENCONTRADO);
+			// 		return;
+			// 	}
+			// } else {
+			// 	printf(REGISTRO_N_ENCONTRADO);
+			// 	return;
+			// }
+			
 
 		break;
 
@@ -963,59 +998,7 @@ void refaz_ibrand(Is *indice_marca, int* nregistros) {
 
 void refaz_icategory(Ir *indice_categoria, int* nregistros) {
 
-    // Cada indice_categoria[i] tem uma categoria: indice_categoria[i].cat
-	// E uma lista ligada para todos as chaves primárias que contém aquela categoria: indice_categoria[i].lista
-	
-	// Contador do vetor de categorias
-	int j = 0;
 
-
-	// Controla a iteracao entre os registros
-    for (int i = 0; i < *nregistros; i++) {
-        
-		Produto J = recuperar_registro(i);
-        
-        
-        char *cat;
-        cat = strtok(J.categoria, "|");
-        while (cat != NULL) {
-
-            char categoria[TAM_CATEGORIA];
-            strcpy(categoria, cat);
-			
-			//!MUDAR PARA BUSCA BINARIA
-            // if (!existe_categoria(indice_categoria, categoria, j)) {
-            //     printf("NAO ACHOU '%s'\n", cat);
-			// 	strcpy(indice_categoria[j].cat, cat);
-			// 	j++;
-			// }
-
-			Ir *indiceCat = (Ir*) bsearch(categoria, indice_categoria, j+1, sizeof(Ir), comparacao_icategory_CAT);
-			if (indiceCat != NULL) {
-				printf("ACHOU cat '%s'\n", indiceCat->cat);
-			} else {
-				printf("NAO ACHOU cat '%s'\n", categoria);
-				printf("j antes ==== %d\n", j);
-				strcpy(indice_categoria[j].cat, categoria);
-				j++;
-				printf("j depois ==== %d\n", j);
-				qsort(indice_categoria, j, sizeof(Ir), comparacao_icategory_CAT);
-			}
-
-
-
-			// Vai para a proxima categoria
-            cat = strtok(NULL, "|");
-        }
-
-		// qsort(indice_categoria, j, sizeof(Ir), comparacao_icategory_CAT);
-
-    }
-
-	for (int i = 0; i < j; i++)
-		printf("%s\n", indice_categoria[i].cat);
-
-	NCAT = j;
 
 }
 
