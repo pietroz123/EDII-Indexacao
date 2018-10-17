@@ -819,16 +819,25 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
 			int indiceInferior = bSearchInferior(iproduct, 0, NREGISTROS, nomeProduto);
 			int indiceSuperior = bSearchSuperior(iproduct, 0, NREGISTROS, nomeProduto);
 
-			printf("inferior: %d\nsuperior: %d\n", indiceInferior, indiceSuperior);
+			// printf("inferior: %d\nsuperior: %d\n", indiceInferior, indiceSuperior);
 
 			if (indiceInferior == indiceSuperior) {
 				printf(REGISTRO_N_ENCONTRADO);
 				return;
 			}
 
+			int contador = 0;
 			for (int i = indiceInferior; i < indiceSuperior; i++)
-				if (strlen(iproduct[i].pk))
-					exibir_registro(i, 0);
+				if (strlen(iproduct[i].pk) == 0)
+					break;
+				else
+					contador++;
+
+			for (int i = indiceInferior; i <= indiceSuperior-contador; i++) {
+				exibir_registro(i, 0);
+				if (i != indiceSuperior-contador)
+					printf("\n");
+			}
 
 		break;
 
