@@ -219,7 +219,7 @@ int main(){
 		perror(MEMORIA_INSUFICIENTE);
 		exit(1);
 	}
-	criar_iprimary(iprimary, &nregistros);
+	refaz_iprimary(iprimary, &nregistros);
 
 
 	/* Alocar e criar índices secundários */ //todo
@@ -230,7 +230,7 @@ int main(){
         perror(MEMORIA_INSUFICIENTE);
         exit(1);
     }
-    criar_iproduct(iproduct, &nregistros);
+    refaz_iproduct(iproduct, &nregistros);
 
     /****** ibrand ******/
     Is *ibrand = (Is*) malloc(MAX_REGISTROS * sizeof(Is));
@@ -238,23 +238,23 @@ int main(){
         perror(MEMORIA_INSUFICIENTE);
         exit(1);
     }
-    criar_ibrand(ibrand, &nregistros);
+    refaz_ibrand(ibrand, &nregistros);
 
-    /****** icategory ******/ //todo
+    /****** icategory ******/
     Ir *icategory = (Ir*) malloc(MAX_REGISTROS * sizeof(Ir));
     if (!icategory) {
         perror(MEMORIA_INSUFICIENTE);
         exit(1);
     }
-    criar_icategory(icategory, &nregistros);
+    // refaz_icategory(icategory, &nregistros); //todo
 
-    /****** iprice ******/ //todo
+    /****** iprice ******/
     Isf *iprice = (Isf*) malloc(MAX_REGISTROS * sizeof(Isf));
     if (!iprice) {
         perror(MEMORIA_INSUFICIENTE);
         exit(1);
     }
-    criar_iprice(iprice, &nregistros);
+    refaz_iprice(iprice, &nregistros); //todo
 
 
 	/* Execução do programa */
@@ -1021,7 +1021,28 @@ void refaz_icategory(Ir *indice_categoria, int* nregistros) {
 
 void refaz_iprice(Isf *indice_preco, int* nregistros) {
 
+	for (int i = 0; i < *nregistros; i++) {
 
+		Produto J = recuperar_registro(i);		
+
+		float preco;
+		int desconto;
+
+		strcpy(indice_preco[i].pk, J.pk);
+
+		sscanf(J.desconto, "%d", &desconto);
+		sscanf(J.preco, "%f", &preco);
+
+		// Calculo do preço COM DESCONTO
+		preco = preco * (100 - desconto);
+		preco = ((int) preco) / (float) 100;
+
+		indice_preco[i].price = preco;
+
+	}
+
+	/* Ordenado pelo preço e, em caso empate, pelo código */
+    qsort(indice_preco, *nregistros, sizeof(Isf), comparacao_iprice_PRECO);
 
 }
 
