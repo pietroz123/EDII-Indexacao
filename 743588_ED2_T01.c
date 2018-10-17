@@ -642,20 +642,19 @@ void criar_iprice(Isf *indice_preco, int* nregistros) {
 
 	Produto J = recuperar_registro(NREGISTROS-1);
 	
-	// printf("PK criar_iprice: %s\n", J.pk);
+	float preco;
+	int desconto;
+
 	strcpy(indice_preco[NREGISTROS-1].pk, J.pk);
 
+	sscanf(J.desconto, "%d", &desconto);
+	sscanf(J.preco, "%f", &preco);
+
 	// Calculo do preço COM DESCONTO
-	float preco = strtof(J.preco, NULL);
-	// printf("preco: %f\n", preco);
-	// float precoArr = floor(10000 * preco) / 10000; //! undefined reference to `floor'
-	// printf("preco arredondado: %f\n", precoArr);
-	
-	float desconto = strtof(J.desconto, NULL);
-	// printf("desconto: %f\n", desconto);
-	double precoComDesconto = preco * (100 - desconto) / 100;
-	// printf("precoComDesconto: %f\n", precoComDesconto);
-	indice_preco[NREGISTROS-1].price = precoComDesconto;
+	preco = preco * (100 - desconto);
+	preco = ((int) preco) / (float) 100;
+
+	indice_preco[NREGISTROS-1].price = preco;
 
 
 	/* Ordenado pelo primeiramente pelo preço em ordem ascendente e, em seguida, pelo código */
@@ -826,6 +825,7 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
 				return;
 			}
 
+			// Busca pelo RRN correspondente a partir da chave primária
 			for (int i = indiceInferior; i < indiceSuperior; i++) {
 				indicePri = (Ip*) bsearch(iproduct[i].pk, iprimary, NREGISTROS, sizeof(Ip), comparacao_iprimary_PK);
 				if (indicePri) {
