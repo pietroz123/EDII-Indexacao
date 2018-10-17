@@ -254,7 +254,7 @@ int main(){
         perror(MEMORIA_INSUFICIENTE);
         exit(1);
     }
-    refaz_iprice(iprice, &nregistros); //todo
+    refaz_iprice(iprice, &nregistros);
 
 
 	/* Execução do programa */
@@ -690,7 +690,7 @@ void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice)
 	criar_ibrand(ibrand, &nreg);
 
 	// Cria o indice da categoria
-	criar_icategory(icategory, &nreg); //todo
+	criar_icategory(icategory, &nreg);
 
     // Cria o indice do preco
     criar_iprice(iprice, &nreg);
