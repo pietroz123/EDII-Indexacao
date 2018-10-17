@@ -854,9 +854,14 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
 
 void listarProdutos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nregistros) {
 
+
     int opcaoListagem;
 	scanf("%d%*c", &opcaoListagem);
 
+	if (nregistros == 0) {
+		printf(ARQUIVO_VAZIO);
+		return;
+	}
 
     switch (opcaoListagem) {
 
