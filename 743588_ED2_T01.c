@@ -509,6 +509,10 @@ int comparacao_icategory_CAT(const void *a, const void *b) {
     return strcmp((*(Ir*)a).cat, (*(Ir*)b).cat);
 }
 int comparacao_iprice_PRECO(const void *a, const void *b) {
+	// Em caso de empate (preços iguais), ordena pela PK
+	if ((*(Isf*)a).price == (*(Isf*)b).price)
+		return strcmp((*(Is*)a).pk, (*(Is*)b).pk);
+
     return (*(Isf*)a).price - (*(Isf*)b).price;
 }
 
@@ -811,6 +815,11 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
 			scanf("%[^\n]s", marcaProduto);
 			getchar();
 			scanf("%[^\n]s", categoriaProduto);
+
+			int posicaoInferior = bSearchInferior(ibrand, 0, NREGISTROS, marcaProduto);
+			int posicaoSuperior = bSearchSuperior(ibrand, 0, NREGISTROS, marcaProduto);
+
+			printf("posicaoInferior: %d\nposicaoSuperior: %d\n", posicaoInferior, posicaoSuperior);
 
 			int posicaoMarca = bSearch(ibrand, 0, NREGISTROS, marcaProduto);
 
