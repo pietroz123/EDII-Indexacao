@@ -804,9 +804,11 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
 			indicePri = (Ip*) bsearch(chavePrimaria, iprimary, nREG(), sizeof(Ip), comparacao_iprimary_PK);
 			if (indicePri != NULL) {
 				exibir_registro(indicePri->rrn, 0);
-			} else 
+			} else {
 				printf(REGISTRO_N_ENCONTRADO);
-					
+				return;
+			}	
+
 		break;
 
         // Busca por nome
@@ -821,7 +823,7 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
 
 			if (indiceInferior == indiceSuperior) {
 				printf(REGISTRO_N_ENCONTRADO);
-				return -1;
+				return;
 			}
 
 			for (int i = indiceInferior; i < indiceSuperior; i++)
