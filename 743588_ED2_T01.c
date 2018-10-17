@@ -826,17 +826,12 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
 				return;
 			}
 
-			int contador = 0;
-			for (int i = indiceInferior; i < indiceSuperior; i++)
-				if (strlen(iproduct[i].pk) == 0)
-					break;
-				else
-					contador++;
-
-			for (int i = indiceInferior; i <= indiceSuperior-contador; i++) {
-				exibir_registro(i, 0);
-				if (i != indiceSuperior-contador)
-					printf("\n");
+			for (int i = indiceInferior; i < indiceSuperior; i++) {
+				indicePri = (Ip*) bsearch(iproduct[i].pk, iprimary, NREGISTROS, sizeof(Ip), comparacao_iprimary_PK);
+				if (indicePri) {
+					int RRN = indicePri->rrn;
+					exibir_registro(RRN, 0);
+				}
 			}
 
 		break;
