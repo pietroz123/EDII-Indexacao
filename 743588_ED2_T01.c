@@ -171,6 +171,10 @@ void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice)
 
 // (4) BUSCAR PRODUTOS - Busca pelo produto e retorna o RRN
 int buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand);
+int bSearch(Is *a, int inicio, int fim, char chave[]);
+int bSearchInferior(Is *a, int inicio, int fim, char chave[]);
+int bSearchSuperior(Is *a, int inicio, int fim, char chave[]);
+
 
 // (5) LISTAGEM
 void listarProdutos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nregistros);
@@ -748,12 +752,11 @@ void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice)
 /**** BUSCAR PRODUTOS ****/
 
 int bSearch(Is *a, int inicio, int fim, char chave[]) {
-    
+
 	if (inicio > fim)
 		return -1;
-		
+
 	int meio = (inicio + fim) / 2;
-	printf("inicio: %d\nfim: %d\nmeio: %d\n", inicio, fim, meio);
 	if (strcmp(a[meio].string, chave) == 0)
 		return meio;
 	else {
@@ -765,6 +768,40 @@ int bSearch(Is *a, int inicio, int fim, char chave[]) {
 	return meio;
     
 }
+
+int bSearchInferior(Is *a, int inicio, int fim, char chave[]) {
+
+	if (inicio > fim)
+		return inicio;
+
+	int meio = (inicio + fim) / 2;
+	
+	
+	if (strcmp(a[meio].string, chave) >= 0)
+		meio = bSearchInferior(a, inicio, meio-1, chave);
+	else
+		meio = bSearchInferior(a, meio+1, fim, chave);
+	
+	return meio;
+
+}
+int bSearchSuperior(Is *a, int inicio, int fim, char chave[]) {
+
+	if (inicio > fim)
+		return inicio;
+
+	int meio = (inicio + fim) / 2;
+	
+	
+	if (strcmp(a[meio].string, chave) > 0)
+		meio = bSearchSuperior(a, inicio, meio-1, chave);
+	else
+		meio = bSearchSuperior(a, meio+1, fim, chave);
+	
+	return meio;
+
+}
+
 
 int buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
 
@@ -794,6 +831,12 @@ int buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
 		case 2:
 
             scanf("%[^\n]s", nomeProduto);
+
+			int indiceInferior = bSearchInferior(iproduct, 0, NREGISTROS, nomeProduto);
+			int indiceSuperior = bSearchSuperior(iproduct, 0, NREGISTROS, nomeProduto);
+
+			printf("inferior: %d\nsuperior: %d\n", indiceInferior, indiceSuperior);
+
 
 			int indiceResultado = bSearch(iproduct, 0, NREGISTROS, nomeProduto);
 			if (indiceResultado != -1) {
