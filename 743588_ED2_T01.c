@@ -294,7 +294,11 @@ int main(){
 				getchar();
 				scanf("%[^\n]s", novoDesconto);
 
-				// Verificar se o novo desconto é válido
+				// Verificar se o novo desconto é válido	
+				if (strcmp(novoDesconto, "100") > 0 || strcmp(novoDesconto, "000") < 0) {
+					printf(CAMPO_INVALIDO);
+					break;
+				}		
 
 				// if(alterar([args]))
 				// 	printf(SUCESSO);
@@ -824,6 +828,8 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
 				if (indicePri) {
 					int RRN = indicePri->rrn;
 					exibir_registro(RRN, 0);
+					if (i < indiceSuperior-1) //! NÃO FUNCIONA AINDA O '\n'
+						printf("\n");
 				}
 			}
 
