@@ -995,6 +995,10 @@ void listarProdutos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nr
  
  
 /**** ALTERAÇÃO DO DESCONTO ****/
+
+int comparacao_iprice_PK(const void *a, const void *b) {
+	return strcmp((*(Isf*)a).pk, (*(Isf*)b).pk);
+}
  
 void alterar(int rrn, char *novoDesconto, Ip *iprimary, Isf *iprice) {
  
@@ -1022,6 +1026,25 @@ void alterar(int rrn, char *novoDesconto, Ip *iprimary, Isf *iprice) {
  
  
     // Altera em iprice
+	Produto J = recuperar_registro(rrn);
+	
+	for (int i = 0; i < NREGISTROS; i++) {
+		if (strcmp(J.pk, iprice[i].pk) == 0) {
+			float preco;
+			int desconto;
+	
+			sscanf(novoDesconto, "%d", &desconto);
+			sscanf(J.preco, "%f", &preco);
+	
+			// Calculo do preço COM DESCONTO
+			preco = preco * (100 - desconto);
+			preco = ((int) preco) / (float) 100;
+	
+			iprice[i].price = preco;
+
+			break;
+		}
+	}
  
 }
  
