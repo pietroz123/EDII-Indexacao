@@ -295,15 +295,17 @@ int main(){
 				scanf("%[^\n]s", novoDesconto);
 
 				// Verificar se o novo desconto é válido	
-				if (strcmp(novoDesconto, "100") > 0 || strcmp(novoDesconto, "000") < 0) {
+				while (strcmp(novoDesconto, "100") >= 0 || strcmp(novoDesconto, "000") <= 0) {
 					printf(CAMPO_INVALIDO);
-					break;
+					getchar();
+					scanf("%[^\n]s", novoDesconto);
 				}		
 
 				// if(alterar([args]))
 				// 	printf(SUCESSO);
 				// else
 				// 	printf(FALHA);
+
 				
 			break;
 			
