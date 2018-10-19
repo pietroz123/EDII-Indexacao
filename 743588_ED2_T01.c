@@ -166,7 +166,7 @@ void inserir_lista(ll **primeiro, char *pk);
  
 // (2) ALTERAÇÃO
 //todo
-void alterar(int rrn, char *novoDesconto, Ip *iprimary, Isf *iprice);
+void alterar(int rrn, char *novoDesconto, Isf *iprice);
  
 // (3) REMOÇÃO
 //todo
@@ -304,15 +304,8 @@ int main(){
                 }
  
  
-                alterar(indicePri->rrn, novoDesconto, iprimary, iprice);
+                alterar(indicePri->rrn, novoDesconto, iprice);
                 printf(SUCESSO);
- 
- 
-                // if(alterar([args]))
-                //     printf(SUCESSO);
-                // else
-                //     printf(FALHA);
- 
                 
             break;
             
@@ -1000,22 +993,22 @@ int comparacao_iprice_PK(const void *a, const void *b) {
 	return strcmp((*(Isf*)a).pk, (*(Isf*)b).pk);
 }
  
-void alterar(int rrn, char *novoDesconto, Ip *iprimary, Isf *iprice) {
+void alterar(int rrn, char *novoDesconto, Isf *iprice) {
  
     char *p = ARQUIVO + 192*rrn;
-    // printf("*p: %s\n", p);
+    // printf("*p: %s\n", p); //!
  
  
     int i = 0; 
     int arr = 0;
     while (*p && arr < 5) {
-        // printf("valor de p: %c\n", *p);
+        // printf("valor de p: %c\n", *p); //!
         if (*p == '@')
             arr++;
         p++;
     }
  
-    // printf("valor final de p: %c\n", *p);
+    // printf("valor final de p: %c\n", *p); //!
     
     // Altera no ARQUIVO de dados
      *p = novoDesconto[0];
@@ -1027,7 +1020,7 @@ void alterar(int rrn, char *novoDesconto, Ip *iprimary, Isf *iprice) {
  
     // Altera em iprice
 	Produto J = recuperar_registro(rrn);
-	
+
 	for (int i = 0; i < NREGISTROS; i++) {
 		if (strcmp(J.pk, iprice[i].pk) == 0) {
 			float preco;
