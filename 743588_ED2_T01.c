@@ -166,7 +166,7 @@ void inserir_lista(ll **primeiro, char *pk);
 
 // (2) ALTERAÇÃO
 //todo
-void alterar(int rrn, char *novoDesconto);
+void alterar(int rrn, char *novoDesconto, Ip *iprimary, Isf *iprice);
 
 // (3) REMOÇÃO
 //todo
@@ -199,6 +199,7 @@ void listarProdutos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nr
 /****** FUNÇÕES AUXILIARES ******/
 int nREG();
 int comparacao_iprimary_PK(const void *a, const void *b);
+int comparacao_iprimary_RRN(const void *a, const void *b);
 int comparacao_iproduct_NOME(const void *a, const void *b);
 int comparacao_ibrand_MARCA(const void *a, const void *b);
 int comparacao_icategory_CAT(const void *a, const void *b);
@@ -272,6 +273,8 @@ int main(){
 		{
 			case INSERIR_NOVO_PRODUTO: // 1
 				/*cadastro*/
+				nregistros++;
+				printf("nregistros: %d\n", nregistros);
                 inserir(iprimary, iproduct, ibrand, icategory, iprice);
 
 			break;
@@ -304,7 +307,7 @@ int main(){
 				}
 
 
-				alterar(indicePri->rrn, novoDesconto);
+				alterar(indicePri->rrn, novoDesconto, iprimary, iprice);
 				printf(SUCESSO);
 
 
@@ -525,6 +528,9 @@ void imprimirSecundario(Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice, in
 
 int comparacao_iprimary_PK(const void *a, const void *b) {
     return strcmp((*(Ip*)a).pk, (*(Ip*)b).pk);
+}
+int comparacao_iprimary_RRN(const void *a, const void *b) {
+	return (*(Ip*)a).rrn == (*(Ip*)b).rrn;
 }
 int comparacao_iproduct_NOME(const void *a, const void *b) {
 	// Em caso de empate (nomes iguais), ordena pela PK
@@ -996,7 +1002,7 @@ void listarProdutos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nr
 
 /**** ALTERAÇÃO DO DESCONTO ****/
 
-void alterar(int rrn, char *novoDesconto) {
+void alterar(int rrn, char *novoDesconto, Ip *iprimary, Isf *iprice) {
 
 	char *p = ARQUIVO + 192*rrn;
 	// printf("*p: %s\n", p);
@@ -1019,6 +1025,15 @@ void alterar(int rrn, char *novoDesconto) {
 	*p = novoDesconto[1];
 	p++;
 	*p = novoDesconto[2];
+
+
+	// Altera em iprice
+	// int *RRN = &rrn;
+	// Ip *indicePri = (Ip*) bsearch(RRN, iprimary, NREGISTROS, sizeof(Ip), comparacao_iprimary_RRN);
+	// if (indicePri != NULL)
+	// 	printf("ACHOU PK '%s'\n", indicePri->pk);
+	// else
+	// 	printf("NAO ACHOU rrn = '%d'\n", rrn);
 
 }
 
