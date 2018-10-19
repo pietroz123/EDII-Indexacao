@@ -166,6 +166,7 @@ void inserir_lista(ll **primeiro, char *pk);
 
 // (2) ALTERAÇÃO
 //todo
+void alterar(int rrn, char *novoDesconto);
 
 // (3) REMOÇÃO
 //todo
@@ -287,6 +288,7 @@ int main(){
 				Ip *indicePri = (Ip*) bsearch(pk, iprimary, NREGISTROS, sizeof(Ip), comparacao_iprimary_PK);
 				if (indicePri == NULL) {
 					printf(REGISTRO_N_ENCONTRADO);
+					printf(FALHA);
 					break;
 				}
 
@@ -299,7 +301,12 @@ int main(){
 					printf(CAMPO_INVALIDO);
 					getchar();
 					scanf("%[^\n]s", novoDesconto);
-				}		
+				}
+
+
+				alterar(indicePri->rrn, novoDesconto);
+				printf(SUCESSO);
+
 
 				// if(alterar([args]))
 				// 	printf(SUCESSO);
@@ -986,6 +993,30 @@ void listarProdutos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nr
 
 }
 
+
+/**** ALTERAÇÃO DO DESCONTO ****/
+
+void alterar(int rrn, char *novoDesconto) {
+
+	char *p = ARQUIVO + 192*rrn;
+	printf("*p: %s\n", p);
+
+
+	int i = 0; 
+	int arr = 0;
+	while (*p && arr < 6) {
+		printf("valor de p: %c\n", *p);
+		if (strcmp(p, "@") == 0)
+			arr++;
+		p++;
+	}
+
+	printf("arr: %d\n", arr);
+
+	// printf("p[i]: %s\n", (p+i));
+
+
+}
 
 
 
