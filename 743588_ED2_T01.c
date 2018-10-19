@@ -999,22 +999,26 @@ void listarProdutos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nr
 void alterar(int rrn, char *novoDesconto) {
 
 	char *p = ARQUIVO + 192*rrn;
-	printf("*p: %s\n", p);
+	// printf("*p: %s\n", p);
 
 
 	int i = 0; 
 	int arr = 0;
-	while (*p && arr < 6) {
-		printf("valor de p: %c\n", *p);
-		if (strcmp(p, "@") == 0)
+	while (*p && arr < 5) {
+		// printf("valor de p: %c\n", *p);
+		if (*p == '@')
 			arr++;
 		p++;
 	}
 
-	printf("arr: %d\n", arr);
-
-	// printf("p[i]: %s\n", (p+i));
-
+	// printf("valor final de p: %c\n", *p);
+	
+	// Altera no ARQUIVO de dados
+ 	*p = novoDesconto[0];
+	p++;
+	*p = novoDesconto[1];
+	p++;
+	*p = novoDesconto[2];
 
 }
 
