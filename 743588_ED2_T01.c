@@ -765,7 +765,7 @@ int bSearchInferior(Is *a, int inicio, int fim, char chave[]) {
 int bSearchSuperior(Is *a, int inicio, int fim, char chave[]) {
  
     if (inicio > fim)
-        return inicio;
+        return fim;
  
     int meio = (inicio + fim) / 2;
     
@@ -830,7 +830,7 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
                 if (indicePri) {
                     int RRN = indicePri->rrn;
                     exibir_registro(RRN, 0);
-                    if (i < indiceSuperior-1) //! NÃO FUNCIONA AINDA O '\n'
+                    if (i < indiceSuperior-1)
                         printf("\n");
                 }
             }
@@ -877,7 +877,7 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
                                 // printf("CHAVE '%s' ENCONTRADA\n", pkEncontrada); //!
                                 // printf("RRN: %d\n", indicePri->rrn); //!
                                 exibir_registro(indicePri->rrn, 0);
-                                if (posicaoMarca < posicaoSuperior-1)
+                                if (posicaoMarca != posicaoSuperior-1)
                                     printf("\n");
                             } else {
                                 // printf("CHAVE '%s' NAO ENCONTRADA\n", pkEncontrada); //!
