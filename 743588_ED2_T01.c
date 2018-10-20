@@ -813,20 +813,22 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
         case 2:
  
             scanf("%[^\n]s", nomeProduto);
+			getchar();
+
+			int indiceInferior;
+			int indiceSuperior;
  
-            int indiceInferior = bSearchInferior(iproduct, 0, NREGISTROS-1, nomeProduto);
-            int indiceSuperior = bSearchSuperior(iproduct, 0, NREGISTROS-1, nomeProduto);
+			int indiceBsearch = bSearch(iproduct, 0, NREGISTROS-1, nomeProduto);
+			if (indiceBsearch != -1) {
+				indiceInferior = bSearchInferior(iproduct, 0, NREGISTROS-1, nomeProduto);
+				indiceSuperior = bSearchSuperior(iproduct, 0, NREGISTROS-1, nomeProduto);
+			} else {
+				printf(REGISTRO_N_ENCONTRADO);
+				return;
+			}
 
             // printf("inferior: %d\nsuperior: %d\n", indiceInferior, indiceSuperior); //!
 
- 
-            if (indiceInferior == indiceSuperior) {
-				indicePri = (Ip*) bsearch(iprimary[indiceInferior].pk, iprimary, NREGISTROS, sizeof(Ip), comparacao_iprimary_PK);
-				if (indicePri == NULL) {
-					printf(REGISTRO_N_ENCONTRADO);
-					return;
-				}
-            }
  
             // Busca pelo RRN correspondente a partir da chave primária
             for (int i = indiceInferior; i <= indiceSuperior; i++) {
