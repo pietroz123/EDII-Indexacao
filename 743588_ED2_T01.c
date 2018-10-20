@@ -1076,7 +1076,6 @@ void refaz_icategory(Ir *indice_categoria, int* nregistros) {
 	for (int i = 0; i < *nregistros; i++) {
 
 		Produto J = recuperar_registro(i);
-		exibir_registro(i, 0);
     
 		char *cat;
 		cat = strtok(J.categoria, "|");
