@@ -197,7 +197,6 @@ void listarProdutos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nr
  
  
 /****** FUNÇÕES AUXILIARES ******/
-int nREG();
 int comparacao_iprimary_PK(const void *a, const void *b);
 int comparacao_iproduct_NOME(const void *a, const void *b);
 int comparacao_ibrand_MARCA(const void *a, const void *b);
@@ -373,11 +372,6 @@ int main(){
         }
     }
     return 0;
-}
- 
- 
-int nREG() {
-    return strlen(ARQUIVO) / TAM_REGISTRO;
 }
  
  
@@ -711,8 +705,10 @@ void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice,
     } else
         strcat(ARQUIVO, temp);
  
- 
-    int nreg = nREG();
+    // printf("*nregistros: '%d'\n", *nregistros);
+    // printf("NREGISTROS: '%d'\n", NREGISTROS);
+    int nreg = NREGISTROS;
+    // printf("nreg: '%d'\n", nreg);
  
     // Cria o índice primário
     criar_iprimary(iprimary, &nreg);
@@ -807,7 +803,7 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand, int n
         case 1:
  
             fgets(chavePrimaria, TAM_PRIMARY_KEY, stdin);
-            indicePri = (Ip*) bsearch(chavePrimaria, iprimary, nREG(), sizeof(Ip), comparacao_iprimary_PK);
+            indicePri = (Ip*) bsearch(chavePrimaria, iprimary, NREGISTROS, sizeof(Ip), comparacao_iprimary_PK);
             if (indicePri != NULL) {
                 exibir_registro(indicePri->rrn, 0);
             } else {
