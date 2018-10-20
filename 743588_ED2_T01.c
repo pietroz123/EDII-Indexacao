@@ -161,7 +161,7 @@ void imprimirSecundario(Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice, in
 /****** INTERAÇÃO COM O USUÁRIO ******/
  
 // (1) INSERCAO 
-void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice, int *nregistros);
+void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice, int nregistros);
 void inserir_lista(ll **primeiro, char *pk);
  
 // (2) ALTERAÇÃO
@@ -271,7 +271,8 @@ int main(){
         {
             case INSERIR_NOVO_PRODUTO: // 1
                 /*cadastro*/
-                inserir(iprimary, iproduct, ibrand, icategory, iprice, &nregistros);
+                nregistros = NREGISTROS;
+                inserir(iprimary, iproduct, ibrand, icategory, iprice, nregistros);
  
             break;
  
@@ -689,7 +690,7 @@ void ler_entrada(char* registro, Produto *novo) {
     for (int i = 0; i < necessarios; i++)
         strcat(registro, "#");
 }
-void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice, int *nregistros) {
+void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice, int nregistros) {
  
     char temp[193];
     Produto I;
@@ -699,31 +700,29 @@ void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice,
     gerarChave(&I);
  
     // Verifica se existe chave primária igual
-    if (bsearch(I.pk, iprimary, NREGISTROS, sizeof(Ip), comparacao_iprimary_PK)) {
+    if (bsearch(I.pk, iprimary, nregistros, sizeof(Ip), comparacao_iprimary_PK)) {
         printf(ERRO_PK_REPETIDA, I.pk);
         return;
     } else
         strcat(ARQUIVO, temp);
+    
+    nregistros++;
  
-    // printf("*nregistros: '%d'\n", *nregistros);
-    // printf("NREGISTROS: '%d'\n", NREGISTROS);
-    int nreg = NREGISTROS;
-    // printf("nreg: '%d'\n", nreg);
  
     // Cria o índice primário
-    criar_iprimary(iprimary, &nreg);
+    criar_iprimary(iprimary, &nregistros);
  
     // Cria o índice do produto
-    criar_iproduct(iproduct, &nreg);
+    criar_iproduct(iproduct, &nregistros);
  
     // Cria o indice da marca
-    criar_ibrand(ibrand, &nreg);
+    criar_ibrand(ibrand, &nregistros);
  
     // Cria o indice da categoria
-    criar_icategory(icategory, &nreg);
+    criar_icategory(icategory, &nregistros);
  
     // Cria o indice do preco
-    criar_iprice(iprice, &nreg);
+    criar_iprice(iprice, &nregistros);
  
 }
  
