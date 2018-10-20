@@ -161,7 +161,7 @@ void imprimirSecundario(Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice, in
 /****** INTERAÇÃO COM O USUÁRIO ******/
  
 // (1) INSERCAO 
-void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice, int nregistros);
+void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice, int *nRegistros);
 void inserir_lista(ll **primeiro, char *pk);
  
 // (2) ALTERAÇÃO
@@ -271,8 +271,10 @@ int main(){
         {
             case INSERIR_NOVO_PRODUTO: // 1
                 /*cadastro*/
-                nregistros = NREGISTROS;
-                inserir(iprimary, iproduct, ibrand, icategory, iprice, nregistros);
+                // printf("0: '%d'\n", nregistros);
+                // nregistros = NREGISTROS;
+                // printf("1: '%d'\n", nregistros);
+                inserir(iprimary, iproduct, ibrand, icategory, iprice, &nregistros);
  
             break;
  
@@ -690,14 +692,17 @@ void ler_entrada(char* registro, Produto *novo) {
     for (int i = 0; i < necessarios; i++)
         strcat(registro, "#");
 }
-void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice, int nregistros) {
+void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice, int *nRegistros) {
  
     char temp[193];
     Produto I;
+    int nregistros = *nRegistros;
  
     // Lê os dados e os coloca na string temp
     ler_entrada(temp, &I);
     gerarChave(&I);
+
+    // printf("2: '%d'\n", nregistros);
  
     // Verifica se existe chave primária igual
     if (bsearch(I.pk, iprimary, nregistros, sizeof(Ip), comparacao_iprimary_PK)) {
@@ -707,6 +712,9 @@ void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice,
         strcat(ARQUIVO, temp);
     
     nregistros++;
+    *nRegistros = nregistros;
+
+    // printf("3: '%d'\n", nregistros);
  
  
     // Cria o índice primário
