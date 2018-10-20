@@ -791,6 +791,8 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
     Is *indiceProd;
     Is *indiceMarca;
     Ir *indiceCat;
+
+	int indiceInferior, indiceSuperior, indiceBsearch;
  
     scanf("%d%*c", &opcaoBusca);
     switch (opcaoBusca) {
@@ -814,11 +816,8 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
  
             scanf("%[^\n]s", nomeProduto);
 			getchar();
-
-			int indiceInferior;
-			int indiceSuperior;
  
-			int indiceBsearch = bSearch(iproduct, 0, NREGISTROS-1, nomeProduto);
+			indiceBsearch = bSearch(iproduct, 0, NREGISTROS-1, nomeProduto);
 			if (indiceBsearch != -1) {
 				indiceInferior = bSearchInferior(iproduct, 0, NREGISTROS-1, nomeProduto);
 				indiceSuperior = bSearchSuperior(iproduct, 0, NREGISTROS-1, nomeProduto);
@@ -851,56 +850,38 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
             scanf("%[^\n]s", marcaProduto);
             getchar();
             scanf("%[^\n]s", categoriaProduto);
- 
-            int posicaoInferior = bSearchInferior(ibrand, 0, NREGISTROS, marcaProduto);
-            int posicaoSuperior = bSearchSuperior(ibrand, 0, NREGISTROS, marcaProduto);
- 
-            // printf("posicaoInferior: %d\nposicaoSuperior: %d\n", posicaoInferior, posicaoSuperior); //!
- 
-            if (posicaoInferior == posicaoSuperior) {
-                printf(REGISTRO_N_ENCONTRADO);
+
+
+			int indiceBsearch = bSearch(ibrand, 0, NREGISTROS-1, marcaProduto);
+			if (indiceBsearch != -1) {
+				indiceInferior = bSearchInferior(ibrand, 0, NREGISTROS, marcaProduto);
+				indiceSuperior = bSearchSuperior(ibrand, 0, NREGISTROS, marcaProduto);
+			} else {
+				printf(REGISTRO_N_ENCONTRADO);
                 return;
+			}
+
+            // printf("indiceInferior: %d\nindiceSuperior: %d\n", indiceInferior, indiceSuperior); //!
+
+			indiceCat = (Ir*) bsearch(categoriaProduto, icategory, NCAT, sizeof(Ir), comparacao_icategory_CAT);
+			if (indiceCat == NULL) {
+				printf(REGISTRO_N_ENCONTRADO);
+				return;
+			}
+ 
+			for (int i = indiceInferior; i <= indiceSuperior; i++) {
+ 
+				strcpy(chavePrimaria, ibrand[i].pk);
+				indicePri = (Ip*) bsearch(chavePrimaria, iprimary, NREGISTROS, sizeof(Ip), comparacao_iprimary_PK);
+				int resBuscaLista = buscar_lista(&(indiceCat->lista), chavePrimaria);
+				if (resBuscaLista != -1) {
+					exibir_registro(indicePri->rrn, 0);
+					if (i != indiceSuperior)
+						printf("\n");
+				}
+
             }
- 
- 
-            for (int i = posicaoInferior; i < posicaoSuperior; i++) {
- 
-                indicePri = (Ip*) bsearch(ibrand[i].pk, iprimary, NREGISTROS, sizeof(Ip), comparacao_iprimary_PK);
-                if (indicePri) {
- 
-                    int posicaoMarca = i;
- 
-                    if (posicaoMarca != -1) {
-                        // printf("ACHOU MARCA '%s'\n", marcaProduto); //!
-                        // printf("posicao: %d\n", posicaoMarca); //!
-                        char pkEncontrada[TAM_PRIMARY_KEY];
-                        strcpy(pkEncontrada, ibrand[posicaoMarca].pk);
-                        indiceCat = bsearch(categoriaProduto, icategory, NCAT, sizeof(Ir), comparacao_icategory_CAT);
-                        if (indiceCat != NULL) {
-                            // printf("ACHOU CATEGORIA '%s'\n", categoriaProduto); //!
-                            int resBuscaLista = buscar_lista(&(indiceCat->lista), pkEncontrada);
-                            if (resBuscaLista != -1) {
-                                // printf("CHAVE '%s' ENCONTRADA\n", pkEncontrada); //!
-                                // printf("RRN: %d\n", indicePri->rrn); //!
-                                exibir_registro(indicePri->rrn, 0);
-                                if (posicaoMarca != posicaoSuperior-1)
-                                    printf("\n");
-                            } else {
-                                // printf("CHAVE '%s' NAO ENCONTRADA\n", pkEncontrada); //!
-                            }
-                        } else {
-                            printf(REGISTRO_N_ENCONTRADO);
-                            return;
-                        }
-                    } else {
-                        printf(REGISTRO_N_ENCONTRADO);
-                        return;
-                    }
-                
-                }
-                
-            }
-            
+
         break;
  
     }
