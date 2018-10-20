@@ -529,8 +529,14 @@ int comparacao_icategory_CAT(const void *a, const void *b) {
 }
 int comparacao_iprice_PRECO(const void *a, const void *b) {
     // Em caso de empate (preços iguais), ordena pela PK
-    if ((*(Isf*)a).price == (*(Isf*)b).price)
-        return strcmp((*(Is*)a).pk, (*(Is*)b).pk);
+    if ((*(Isf*)a).price == (*(Isf*)b).price) {
+        if (strcmp((*(Isf*)a).pk , (*(Isf*)b).pk) == 0)
+            return 0;
+        else if (strcmp((*(Isf*)a).pk , (*(Isf*)b).pk) > 0)
+            return 1;
+        else
+            return -1;
+    }
  
     if ((*(Isf*)a).price < (*(Isf*)b).price)
         return -1;
