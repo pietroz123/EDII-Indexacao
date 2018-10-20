@@ -541,12 +541,7 @@ int comparacao_iprice_PRECO(const void *a, const void *b) {
     if ((*(Isf*)a).price == (*(Isf*)b).price)
         return strcmp((*(Is*)a).pk, (*(Is*)b).pk);
  
-	if ((*(Isf*)a).price < (*(Isf*)b).price)
-		return -1;
-	else if ((*(Isf*)a).price > (*(Isf*)b).price)
-		return 1;
-	else if ((*(Isf*)a).price == (*(Isf*)b).price)
-		return 0;
+    return (*(Isf*)a).price - (*(Isf*)b).price;
 }
  
 void criar_iprimary(Ip *indice_primario, int* nregistros) {
