@@ -887,9 +887,11 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand, int n
                 indicePri = (Ip*) bsearch(iproduct[i].pk, iprimary, nregistros, sizeof(Ip), comparacao_iprimary_PK);
                 if (indicePri) {
                     int RRN = indicePri->rrn;
-                    exibir_registro(RRN, 0);
-                    if (i != indiceSuperior)
-                        printf("\n");
+                    if (RRN != -1) {
+                        exibir_registro(RRN, 0);
+                        if (i != indiceSuperior)
+                            printf("\n");
+                    }
                 }
             }
  
