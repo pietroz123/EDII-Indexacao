@@ -643,8 +643,11 @@ void criar_iprice(Isf *indice_preco, int* nregistros) {
     sscanf(J.preco, "%f", &preco);
  
     // Calculo do preço COM DESCONTO
-    preco = preco * (100 - desconto);
-    preco = ((int) preco) / (float) 100;
+    // preco = preco * (100 - desconto);
+    // preco = ((int) preco) / (float) 100;
+    preco = (preco * (100-desconto)) / 100.0;
+    preco = preco * 100;
+    preco = ((int) preco / (float) 100);
  
     indice_preco[*nregistros-1].price = preco;
  
@@ -1019,8 +1022,11 @@ void alterar(int rrn, char *novoDesconto, Isf *iprice) {
             sscanf(J.preco, "%f", &preco);
     
             // Calculo do preço COM DESCONTO
-            preco = preco * (100 - desconto);
-            preco = ((int) preco) / (float) 100;
+            // preco = preco * (100 - desconto);
+            // preco = ((int) preco) / (float) 100;
+            preco = (preco * (100-desconto)) / 100.0;
+            preco = preco * 100;
+            preco = ((int) preco / (float) 100);
     
             iprice[i].price = preco;
  
@@ -1132,8 +1138,11 @@ void refaz_iprice(Isf *indice_preco, int* nregistros) {
         sscanf(J.preco, "%f", &preco);
  
         // Calculo do preço COM DESCONTO
-        preco = preco * (100 - desconto);
-        preco = ((int) preco) / (float) 100;
+        // preco = preco * (100 - desconto);
+        // preco = ((int) preco) / (float) 100;
+        preco = (preco * (100-desconto)) / 100.0;
+        preco = preco * 100;
+        preco = ((int) preco / (float) 100);
  
         indice_preco[i].price = preco;
  
