@@ -860,6 +860,8 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand, int n
                 return;
             }
  
+            if (indiceSuperior == nregistros)
+                indiceSuperior--;
             // printf("indiceInferior: %d\nindiceSuperior: %d\n", indiceInferior, indiceSuperior); //!
  
             indiceCat = (Ir*) bsearch(categoriaProduto, icategory, NCAT, sizeof(Ir), comparacao_icategory_CAT);
@@ -867,6 +869,7 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand, int n
                 printf(REGISTRO_N_ENCONTRADO);
                 return;
             }
+
  
             for (int i = indiceInferior; i <= indiceSuperior; i++) {
  
