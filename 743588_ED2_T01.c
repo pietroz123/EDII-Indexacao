@@ -271,9 +271,6 @@ int main(){
         {
             case INSERIR_NOVO_PRODUTO: // 1
                 /*cadastro*/
-                // printf("0: '%d'\n", nregistros);
-                // nregistros = NREGISTROS;
-                // printf("1: '%d'\n", nregistros);
                 inserir(iprimary, iproduct, ibrand, icategory, iprice, &nregistros);
  
             break;
@@ -348,7 +345,6 @@ int main(){
             
             case IMPRIMIR_INDICES_SECUNDARIOS: // 8 //todo
                 /*imprime os índices secundários*/
-                nregistros = strlen(ARQUIVO) / TAM_REGISTRO;
                 ncat = NCAT;
                 imprimirSecundario(iproduct, ibrand, icategory, iprice, nregistros, ncat);
             break;
@@ -358,13 +354,13 @@ int main(){
                 return 0;
             break;
  
-            //!DELETAR
-            // Imprime indice primario 
-            case 10: 
-                printf("%d\n", NREGISTROS);
-                for (int i = 0; i < NREGISTROS; i++)
-                    printf("%s %d\n", iprimary[i].pk, iprimary[i].rrn);
-            break;
+            // //!DELETAR
+            // // Imprime indice primario 
+            // case 10: 
+            //     printf("%d\n", NREGISTROS);
+            //     for (int i = 0; i < NREGISTROS; i++)
+            //         printf("%s %d\n", iprimary[i].pk, iprimary[i].rrn);
+            // break;
             
             default:
                 printf(OPCAO_INVALIDA);
@@ -699,7 +695,6 @@ void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice,
     ler_entrada(temp, &I);
     gerarChave(&I);
 
-    // printf("2: '%d'\n", nregistros);
  
     // Verifica se existe chave primária igual
     if (bsearch(I.pk, iprimary, nregistros, sizeof(Ip), comparacao_iprimary_PK)) {
@@ -710,8 +705,6 @@ void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice,
     
     nregistros++;
     *nRegistros = nregistros;
-
-    // printf("3: '%d'\n", nregistros);
  
  
     // Cria o índice primário
