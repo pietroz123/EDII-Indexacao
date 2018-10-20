@@ -508,24 +508,56 @@ void imprimirSecundario(Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice, in
 ***********************************/
  
 int comparacao_iprimary_PK(const void *a, const void *b) {
-    return strcmp((*(Ip*)a).pk, (*(Ip*)b).pk);
+    if (strcmp((*(Ip*)a).pk, (*(Ip*)b).pk) == 0) 
+        return 0;
+    else if (strcmp((*(Ip*)a).pk, (*(Ip*)b).pk) > 0)
+        return 1;
+    else
+        return -1;
 }
 int comparacao_iproduct_NOME(const void *a, const void *b) {
     // Em caso de empate (nomes iguais), ordena pela PK
+    if (strcmp((*(Is*)a).string, (*(Is*)b).string) == 0) {
+        if (strcmp((*(Is*)a).pk, (*(Is*)b).pk) == 0)
+            return 0;
+        else if (strcmp((*(Is*)a).pk, (*(Is*)b).pk) > 0)
+            return 1;
+        else
+            return -1;
+    }
+
     if (strcmp((*(Is*)a).string, (*(Is*)b).string) == 0)
-        return strcmp((*(Is*)a).pk, (*(Is*)b).pk);
-    
-    return strcmp((*(Is*)a).string, (*(Is*)b).string);
+        return 0;
+    else if (strcmp((*(Is*)a).string, (*(Is*)b).string) > 0)
+        return 1;
+    else
+        return -1;
 }
 int comparacao_ibrand_MARCA(const void *a, const void *b) {
     // Em caso de empate (marcas iguais), ordena pela PK
+    if (strcmp((*(Is*)a).string, (*(Is*)b).string) == 0) {
+        if (strcmp((*(Is*)a).pk, (*(Is*)b).pk) == 0)
+            return 0;
+        else if (strcmp((*(Is*)a).pk, (*(Is*)b).pk) > 0)
+            return 1;
+        else
+            return -1;
+    }
+
     if (strcmp((*(Is*)a).string, (*(Is*)b).string) == 0)
-        return strcmp((*(Is*)a).pk, (*(Is*)b).pk);
- 
-    return strcmp((*(Is*)a).string, (*(Is*)b).string);
+        return 0;
+    else if (strcmp((*(Is*)a).string, (*(Is*)b).string) > 0)
+        return 1;
+    else
+        return -1;
 }
 int comparacao_icategory_CAT(const void *a, const void *b) {
-    return strcmp((*(Ir*)a).cat, (*(Ir*)b).cat);
+    if (strcmp((*(Ir*)a).cat, (*(Ir*)b).cat) == 0)
+        return 0;
+    else if (strcmp((*(Ir*)a).cat, (*(Ir*)b).cat) > 0)
+        return 1;
+    else
+        return -1;
 }
 int comparacao_iprice_PRECO(const void *a, const void *b) {
     // Em caso de empate (preços iguais), ordena pela PK
