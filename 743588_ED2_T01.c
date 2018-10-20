@@ -208,7 +208,8 @@ int comparacao_iprice_PRECO(const void *a, const void *b);
 int main(){
     /* Arquivo */
     int carregarArquivo = 0, nregistros = 0, ncat = 0;
-    Produto I;
+    char pk[TAM_PRIMARY_KEY];
+    Ip *indicePri;
  
  
     scanf("%d%*c", &carregarArquivo); /* 1 (sim) | 0 (nao) */
@@ -278,11 +279,10 @@ int main(){
                 /*alterar desconto*/
                 printf(INICIO_ALTERACAO);
                 
-                char pk[TAM_PRIMARY_KEY];
                 scanf("%[^\n]s", pk);
  
                 // Busca se existe a chave primária
-                Ip *indicePri = (Ip*) bsearch(pk, iprimary, NREGISTROS, sizeof(Ip), comparacao_iprimary_PK);
+                indicePri = (Ip*) bsearch(pk, iprimary, NREGISTROS, sizeof(Ip), comparacao_iprimary_PK);
                 if (indicePri == NULL) {
                     printf(REGISTRO_N_ENCONTRADO);
                     printf(FALHA);
@@ -309,6 +309,19 @@ int main(){
             case REMOVER_PRODUTO: // 3 //todo
                 /*excluir produto*/
                 printf(INICIO_EXCLUSAO);
+
+                scanf("%[^\n]s", pk);
+                getchar();
+
+                // Busca se existe a chave primária
+                indicePri = (Ip*) bsearch(pk, iprimary, NREGISTROS, sizeof(Ip), comparacao_iprimary_PK);
+                if (indicePri == NULL) {
+                    printf(REGISTRO_N_ENCONTRADO);
+                    printf(FALHA);
+                    break;
+                }
+
+                printf("ACHOU REGISTRO A REMOVER\n");
                 
                 // if(remover([args]))
                 //     printf(SUCESSO);
