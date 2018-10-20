@@ -161,7 +161,7 @@ void imprimirSecundario(Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice, in
 /****** INTERAÇÃO COM O USUÁRIO ******/
  
 // (1) INSERCAO 
-void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice);
+void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice, int *nregistros);
 void inserir_lista(ll **primeiro, char *pk);
  
 // (2) ALTERAÇÃO
@@ -272,7 +272,7 @@ int main(){
         {
             case INSERIR_NOVO_PRODUTO: // 1
                 /*cadastro*/
-                inserir(iprimary, iproduct, ibrand, icategory, iprice);
+                inserir(iprimary, iproduct, ibrand, icategory, iprice, &nregistros);
  
             break;
  
@@ -695,7 +695,7 @@ void ler_entrada(char* registro, Produto *novo) {
     for (int i = 0; i < necessarios; i++)
         strcat(registro, "#");
 }
-void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice) {
+void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice, int *nregistros) {
  
     char temp[193];
     Produto I;
