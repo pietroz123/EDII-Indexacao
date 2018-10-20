@@ -168,6 +168,7 @@ void alterar(int rrn, char *novoDesconto, Isf *iprice);
  
 // (3) REMOÇÃO
 //todo
+void remover(Ip *indicePri, Ip *iprimary);
  
 // (4) BUSCAR PRODUTOS - Busca pelo produto e retorna o RRN
 void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand, int nregistros);
@@ -322,6 +323,8 @@ int main(){
                 }
 
                 printf("ACHOU REGISTRO A REMOVER\n");
+
+                remover(indicePri, iprimary);
                 
                 // if(remover([args]))
                 //     printf(SUCESSO);
@@ -1030,10 +1033,6 @@ void listarProdutos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nr
  
 /**** ALTERAÇÃO DO DESCONTO ****/
  
-int comparacao_iprice_PK(const void *a, const void *b) {
-    return strcmp((*(Isf*)a).pk, (*(Isf*)b).pk);
-}
- 
 void alterar(int rrn, char *novoDesconto, Isf *iprice) {
  
     char *p = ARQUIVO + 192*rrn;
@@ -1052,7 +1051,7 @@ void alterar(int rrn, char *novoDesconto, Isf *iprice) {
     // printf("valor final de p: %c\n", *p); //!
     
     // Altera no ARQUIVO de dados
-     *p = novoDesconto[0];
+    *p = novoDesconto[0];
     p++;
     *p = novoDesconto[1];
     p++;
@@ -1088,6 +1087,14 @@ void alterar(int rrn, char *novoDesconto, Isf *iprice) {
  
 }
  
+
+/**** REMOÇÃO ****/
+
+void remover(Ip *indicePri, Ip *iprimary) {
+
+    printf("rrn do produto: %d\n", indicePri->rrn);
+
+}
  
  
 /**** REFAZ TODOS OS INDICES ****/
