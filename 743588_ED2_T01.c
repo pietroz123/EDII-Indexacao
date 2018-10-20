@@ -855,7 +855,7 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand, int n
  
             fgets(chavePrimaria, TAM_PRIMARY_KEY, stdin);
             indicePri = (Ip*) bsearch(chavePrimaria, iprimary, NREGISTROS, sizeof(Ip), comparacao_iprimary_PK);
-            if (indicePri != NULL) {
+            if (indicePri != NULL && indicePri->rrn != -1) {
                 exibir_registro(indicePri->rrn, 0);
             } else {
                 printf(REGISTRO_N_ENCONTRADO);
