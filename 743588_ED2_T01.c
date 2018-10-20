@@ -172,7 +172,7 @@ void alterar(int rrn, char *novoDesconto, Isf *iprice);
 //todo
  
 // (4) BUSCAR PRODUTOS - Busca pelo produto e retorna o RRN
-void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand);
+void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand, int nregistros);
 int bSearch(Is *a, int inicio, int fim, char chave[]);
 int bSearchInferior(Is *a, int inicio, int fim, char chave[]);
 int bSearchSuperior(Is *a, int inicio, int fim, char chave[]);
@@ -323,7 +323,8 @@ int main(){
             case BUSCAR_PRODUTOS: // 4
                 /*busca*/
                 printf(INICIO_BUSCA);
-                buscarProdutos(iprimary, iproduct, icategory, ibrand);
+                nregistros = NREGISTROS;
+                buscarProdutos(iprimary, iproduct, icategory, ibrand, nregistros);
                 
             break;
             
@@ -785,7 +786,7 @@ int bSearchSuperior(Is *a, int inicio, int fim, char chave[]) {
 }
  
  
-void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
+void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand, int nregistros) {
  
     int opcaoBusca;
     char chavePrimaria[TAM_PRIMARY_KEY];
@@ -822,10 +823,10 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
             scanf("%[^\n]s", nomeProduto);
             getchar();
  
-            indiceBsearch = bSearch(iproduct, 0, NREGISTROS-1, nomeProduto);
+            indiceBsearch = bSearch(iproduct, 0, nregistros-1, nomeProduto);
             if (indiceBsearch != -1) {
-                indiceInferior = bSearchInferior(iproduct, 0, NREGISTROS-1, nomeProduto);
-                indiceSuperior = bSearchSuperior(iproduct, 0, NREGISTROS-1, nomeProduto);
+                indiceInferior = bSearchInferior(iproduct, 0, nregistros-1, nomeProduto);
+                indiceSuperior = bSearchSuperior(iproduct, 0, nregistros-1, nomeProduto);
             } else {
                 printf(REGISTRO_N_ENCONTRADO);
                 return;
@@ -836,7 +837,7 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
  
             // Busca pelo RRN correspondente a partir da chave primária
             for (int i = indiceInferior; i <= indiceSuperior; i++) {
-                indicePri = (Ip*) bsearch(iproduct[i].pk, iprimary, NREGISTROS, sizeof(Ip), comparacao_iprimary_PK);
+                indicePri = (Ip*) bsearch(iproduct[i].pk, iprimary, nregistros, sizeof(Ip), comparacao_iprimary_PK);
                 if (indicePri) {
                     int RRN = indicePri->rrn;
                     exibir_registro(RRN, 0);
@@ -857,10 +858,10 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
             scanf("%[^\n]s", categoriaProduto);
  
  
-            int indiceBsearch = bSearch(ibrand, 0, NREGISTROS-1, marcaProduto);
+            int indiceBsearch = bSearch(ibrand, 0, nregistros-1, marcaProduto);
             if (indiceBsearch != -1) {
-                indiceInferior = bSearchInferior(ibrand, 0, NREGISTROS, marcaProduto);
-                indiceSuperior = bSearchSuperior(ibrand, 0, NREGISTROS, marcaProduto);
+                indiceInferior = bSearchInferior(ibrand, 0, nregistros, marcaProduto);
+                indiceSuperior = bSearchSuperior(ibrand, 0, nregistros, marcaProduto);
             } else {
                 printf(REGISTRO_N_ENCONTRADO);
                 return;
@@ -877,7 +878,7 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
             for (int i = indiceInferior; i <= indiceSuperior; i++) {
  
                 strcpy(chavePrimaria, ibrand[i].pk);
-                indicePri = (Ip*) bsearch(chavePrimaria, iprimary, NREGISTROS, sizeof(Ip), comparacao_iprimary_PK);
+                indicePri = (Ip*) bsearch(chavePrimaria, iprimary, nregistros, sizeof(Ip), comparacao_iprimary_PK);
                 int resBuscaLista = buscar_lista(&(indiceCat->lista), chavePrimaria);
                 if (resBuscaLista != -1) {
                     exibir_registro(indicePri->rrn, 0);
