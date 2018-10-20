@@ -252,7 +252,7 @@ int main(){
         perror(MEMORIA_INSUFICIENTE);
         exit(1);
     }
-    // refaz_icategory(icategory, &nregistros); //todo
+    refaz_icategory(icategory, &nregistros); //todo
  
     /****** iprice ******/
     Isf *iprice = (Isf*) malloc(MAX_REGISTROS * sizeof(Isf));
@@ -1073,7 +1073,43 @@ void refaz_ibrand(Is *indice_marca, int* nregistros) {
  
 void refaz_icategory(Ir *indice_categoria, int* nregistros) {
  
- 
+	for (int i = 0; i < *nregistros; i++) {
+
+		Produto J = recuperar_registro(i);
+		exibir_registro(i, 0);
+    
+		char *cat;
+		cat = strtok(J.categoria, "|");
+		while (cat != NULL) {
+	
+			char categoria[TAM_CATEGORIA];
+			strcpy(categoria, cat);
+	
+			// Verifica se a categoria já existe
+			Ir *indiceCat = (Ir*) bsearch(categoria, indice_categoria, NCAT, sizeof(Ir), comparacao_icategory_CAT);
+			if (indiceCat != NULL) {
+				// Achou categoria
+				int indiceBusca = indiceCat - indice_categoria;
+				inserir_lista(&(indice_categoria[indiceBusca].lista), J.pk);
+			} else {
+				// Não achou categoria
+				strcpy(indice_categoria[NCAT].cat, categoria);
+				NCAT++;
+				inserir_lista(&(indice_categoria[NCAT-1].lista), J.pk);
+	
+	
+				/* Ordenado pelos nomes das categorias e em seguida pelo código */
+				qsort(indice_categoria, NCAT, sizeof(Ir), comparacao_icategory_CAT);
+			}
+	
+	
+			// Vai para a proxima categoria
+			cat = strtok(NULL, "|");
+		}
+
+
+	}
+
  
 }
  
