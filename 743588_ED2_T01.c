@@ -172,7 +172,7 @@ void alterar(int rrn, char *novoDesconto, Isf *iprice);
 //todo
  
 // (4) BUSCAR PRODUTOS - Busca pelo produto e retorna o RRN
-void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand);
+void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand, int *nregistros);
 int bSearch(Is *a, int inicio, int fim, char chave[]);
 int bSearchInferior(Is *a, int inicio, int fim, char chave[]);
 int bSearchSuperior(Is *a, int inicio, int fim, char chave[]);
@@ -323,7 +323,7 @@ int main(){
             case BUSCAR_PRODUTOS: // 4
                 /*busca*/
                 printf(INICIO_BUSCA);
-                buscarProdutos(iprimary, iproduct, icategory, ibrand);
+                buscarProdutos(iprimary, iproduct, icategory, ibrand, &nregistros);
                 
             break;
             
@@ -785,7 +785,7 @@ int bSearchSuperior(Is *a, int inicio, int fim, char chave[]) {
 }
  
  
-void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
+void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand, int *nregistros) {
  
     int opcaoBusca;
     char chavePrimaria[TAM_PRIMARY_KEY];
@@ -806,7 +806,7 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
         case 1:
  
             fgets(chavePrimaria, TAM_PRIMARY_KEY, stdin);
-            indicePri = (Ip*) bsearch(chavePrimaria, iprimary, nREG(), sizeof(Ip), comparacao_iprimary_PK);
+            indicePri = (Ip*) bsearch(chavePrimaria, iprimary, *nregistros, sizeof(Ip), comparacao_iprimary_PK);
             if (indicePri != NULL) {
                 exibir_registro(indicePri->rrn, 0);
             } else {
