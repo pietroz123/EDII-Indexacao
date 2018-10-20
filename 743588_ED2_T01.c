@@ -1006,9 +1006,11 @@ void listarProdutos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nr
  
                 indicePri = (Ip*) bsearch(ibrand[i].pk, iprimary, nregistros, sizeof(Ip), comparacao_iprimary_PK);
                 int RRN = indicePri->rrn;
-                exibir_registro(RRN, 0);
-                if (i != nregistros-1)
-                    printf("\n");
+                if (RRN != -1) {
+                    exibir_registro(RRN, 0);
+                    if (i != nregistros-1)
+                        printf("\n");
+                }
  
             }
  
