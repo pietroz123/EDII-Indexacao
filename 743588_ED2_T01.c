@@ -332,8 +332,6 @@ int main(){
             case LISTAR_PRODUTOS: // 5
                 /*listagens*/
                 printf(INICIO_LISTAGEM);
- 
-                nregistros = strlen(ARQUIVO) / TAM_REGISTRO;
                 listarProdutos(iprimary, icategory, ibrand, iprice, nregistros);
  
             break;
