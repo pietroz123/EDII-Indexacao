@@ -137,7 +137,6 @@ int exibir_registro(int rrn, char com_desconto);
 Produto recuperar_registro(int rrn);
  
 /* (Re)faz o índice respectivo */
-//todo: ordenar os índices
 void criar_iprimary(Ip *indice_primario, int* nregistros);
 void criar_iproduct(Is *indice_produto, int* nregistros);
 void criar_ibrand(Is *indice_marca, int* nregistros);
@@ -165,7 +164,6 @@ void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice,
 void inserir_lista(ll **primeiro, char *pk);
  
 // (2) ALTERAÇÃO
-//todo
 void alterar(int rrn, char *novoDesconto, Isf *iprice);
  
 // (3) REMOÇÃO
@@ -227,7 +225,7 @@ int main(){
     refaz_iprimary(iprimary, &nregistros);
  
  
-    /* Alocar e criar índices secundários */ //todo
+    /* Alocar e criar índices secundários */
  
     /****** iproduct ******/
     Is *iproduct = (Is*) malloc(MAX_REGISTROS * sizeof(Is));
@@ -251,7 +249,7 @@ int main(){
         perror(MEMORIA_INSUFICIENTE);
         exit(1);
     }
-    refaz_icategory(icategory, &nregistros); //todo
+    refaz_icategory(icategory, &nregistros);
  
     /****** iprice ******/
     Isf *iprice = (Isf*) malloc(MAX_REGISTROS * sizeof(Isf));
@@ -276,7 +274,7 @@ int main(){
             break;
  
             
-            case MODIFICAR_DESCONTO: // 2 //todo
+            case MODIFICAR_DESCONTO: // 2
                 /*alterar desconto*/
                 printf(INICIO_ALTERACAO);
                 
@@ -343,7 +341,7 @@ int main(){
                 printf("%s\n", ARQUIVO);
             break;
             
-            case IMPRIMIR_INDICES_SECUNDARIOS: // 8 //todo
+            case IMPRIMIR_INDICES_SECUNDARIOS: // 8
                 /*imprime os índices secundários*/
                 ncat = NCAT;
                 imprimirSecundario(iproduct, ibrand, icategory, iprice, nregistros, ncat);
@@ -883,7 +881,7 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand, int n
         break;
  
         // Busca por categoria e marca
-        case 3: //todo
+        case 3:
  
             // Busca pelo Produto de uma marca que está em uma categoria
  
