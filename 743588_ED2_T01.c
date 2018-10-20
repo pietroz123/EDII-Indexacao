@@ -547,12 +547,12 @@ int comparacao_iprice_PRECO(const void *a, const void *b) {
  
 void criar_iprimary(Ip *indice_primario, int* nregistros) {
  
-    if (NREGISTROS == 0)
+    if (*nregistros == 0)
         return;
  
-    Produto J = recuperar_registro(NREGISTROS-1);
-    strcpy(indice_primario[NREGISTROS-1].pk, J.pk);
-    indice_primario[NREGISTROS-1].rrn = NREGISTROS-1;
+    Produto J = recuperar_registro(*nregistros-1);
+    strcpy(indice_primario[*nregistros-1].pk, J.pk);
+    indice_primario[*nregistros-1].rrn = *nregistros-1;
  
  
     /* Ordenado pela chave primária */
@@ -562,12 +562,12 @@ void criar_iprimary(Ip *indice_primario, int* nregistros) {
  
 void criar_iproduct(Is *indice_produto, int* nregistros) {
  
-    if (NREGISTROS == 0)
+    if (*nregistros == 0)
         return;
  
-    Produto J = recuperar_registro(NREGISTROS-1);
-    strcpy(indice_produto[NREGISTROS-1].pk, J.pk);
-    strcpy(indice_produto[NREGISTROS-1].string, J.nome);
+    Produto J = recuperar_registro(*nregistros-1);
+    strcpy(indice_produto[*nregistros-1].pk, J.pk);
+    strcpy(indice_produto[*nregistros-1].string, J.nome);
  
  
     /* Ordenado pelo nome do produto ou modelo e, em caso de empate, pelo código */
@@ -577,12 +577,12 @@ void criar_iproduct(Is *indice_produto, int* nregistros) {
  
 void criar_ibrand(Is *indice_marca, int* nregistros) {
  
-    if (NREGISTROS == 0)
+    if (*nregistros == 0)
         return;
  
-    Produto J = recuperar_registro(NREGISTROS-1);
-    strcpy(indice_marca[NREGISTROS-1].string, J.marca);
-    strcpy(indice_marca[NREGISTROS-1].pk, J.pk);
+    Produto J = recuperar_registro(*nregistros-1);
+    strcpy(indice_marca[*nregistros-1].string, J.marca);
+    strcpy(indice_marca[*nregistros-1].pk, J.pk);
  
  
     /* Ordenado pela marca e, em caso empate, pelo código */
@@ -592,13 +592,13 @@ void criar_ibrand(Is *indice_marca, int* nregistros) {
  
 void criar_icategory(Ir *indice_categoria, int* nregistros) {
  
-    if (NREGISTROS == 0)
+    if (*nregistros == 0)
         return;
  
     // Cada indice_categoria[i] tem uma categoria: indice_categoria[i].cat
     // E uma lista ligada para todos as chaves primárias que contém aquela categoria: indice_categoria[i].lista
     
-    Produto J = recuperar_registro(NREGISTROS-1);
+    Produto J = recuperar_registro(*nregistros-1);
     
     
     char *cat;
@@ -634,15 +634,15 @@ void criar_icategory(Ir *indice_categoria, int* nregistros) {
  
 void criar_iprice(Isf *indice_preco, int* nregistros) {
  
-    if (NREGISTROS == 0)
+    if (*nregistros == 0)
         return;
  
-    Produto J = recuperar_registro(NREGISTROS-1);
+    Produto J = recuperar_registro(*nregistros-1);
     
     float preco;
     int desconto;
  
-    strcpy(indice_preco[NREGISTROS-1].pk, J.pk);
+    strcpy(indice_preco[*nregistros-1].pk, J.pk);
  
     sscanf(J.desconto, "%d", &desconto);
     sscanf(J.preco, "%f", &preco);
@@ -651,7 +651,7 @@ void criar_iprice(Isf *indice_preco, int* nregistros) {
     preco = preco * (100 - desconto);
     preco = ((int) preco) / (float) 100;
  
-    indice_preco[NREGISTROS-1].price = preco;
+    indice_preco[*nregistros-1].price = preco;
  
  
     /* Ordenado pelo primeiramente pelo preço em ordem ascendente e, em seguida, pelo código */
