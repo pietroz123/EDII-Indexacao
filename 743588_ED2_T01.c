@@ -969,9 +969,11 @@ void listarProdutos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nr
  
             for (int i = 0; i < nregistros; i++) {
                 int RRN = iprimary[i].rrn;
-                exibir_registro(RRN, 0);
-                if (i != nregistros-1)
-                    printf("\n");
+                if (RRN != -1) {
+                    exibir_registro(RRN, 0);
+                    if (i != nregistros-1)
+                        printf("\n");
+                }
             }
  
         break;
@@ -986,9 +988,11 @@ void listarProdutos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nr
                 ll *aux = indiceCat->lista;
                 while (aux) {
                     indicePri = (Ip*) bsearch(aux->pk, iprimary, nregistros, sizeof(Ip), comparacao_iprimary_PK);
-                    exibir_registro(indicePri->rrn, 0);
-                    if (aux->prox)
-                        printf("\n");
+                    if (indicePri->rrn != -1) {
+                        exibir_registro(indicePri->rrn, 0);
+                        if (aux->prox)
+                            printf("\n");
+                    }
                     aux = aux->prox;
                 }
             }
