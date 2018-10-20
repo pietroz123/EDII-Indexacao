@@ -881,6 +881,7 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand, int n
  
             // printf("inferior: %d\nsuperior: %d\n", indiceInferior, indiceSuperior); //!
  
+            int Rem = 0;
  
             // Busca pelo RRN correspondente a partir da chave primária
             for (int i = indiceInferior; i <= indiceSuperior; i++) {
@@ -891,6 +892,12 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand, int n
                         exibir_registro(RRN, 0);
                         if (i != indiceSuperior)
                             printf("\n");
+                    } else {
+                        Rem++;
+                        if (Rem == indiceSuperior - indiceInferior + 1) {
+                            printf(REGISTRO_N_ENCONTRADO);
+                            return;
+                        }
                     }
                 }
             }
