@@ -325,7 +325,6 @@ int main(){
             case BUSCAR_PRODUTOS: // 4
                 /*busca*/
                 printf(INICIO_BUSCA);
-                nregistros = NREGISTROS;
                 buscarProdutos(iprimary, iproduct, icategory, ibrand, nregistros);
                 
             break;
