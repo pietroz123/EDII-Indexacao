@@ -916,10 +916,10 @@ void listarProdutos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nr
         // Listagem por código
         case 1:
  
-            for (int i = 0; i < nregistros; i++) {
+            for (int i = 0; i < NREGISTROS; i++) {
                 int RRN = iprimary[i].rrn;
                 exibir_registro(RRN, 0);
-                if (i != nregistros-1)
+                if (i != NREGISTROS-1)
                     printf("\n");
             }
  
@@ -934,7 +934,7 @@ void listarProdutos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nr
             if (indiceCat) {
                 ll *aux = indiceCat->lista;
                 while (aux) {
-                    indicePri = (Ip*) bsearch(aux->pk, iprimary, nregistros, sizeof(Ip), comparacao_iprimary_PK);
+                    indicePri = (Ip*) bsearch(aux->pk, iprimary, NREGISTROS, sizeof(Ip), comparacao_iprimary_PK);
                     exibir_registro(indicePri->rrn, 0);
                     if (aux->prox)
                         printf("\n");
@@ -947,12 +947,12 @@ void listarProdutos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nr
         // Listagem por marca
         case 3:
  
-            for (int i = 0; i < nregistros; i++) {
+            for (int i = 0; i < NREGISTROS; i++) {
  
-                indicePri = (Ip*) bsearch(ibrand[i].pk, iprimary, nregistros, sizeof(Ip), comparacao_iprimary_PK);
+                indicePri = (Ip*) bsearch(ibrand[i].pk, iprimary, NREGISTROS, sizeof(Ip), comparacao_iprimary_PK);
                 int RRN = indicePri->rrn;
                 exibir_registro(RRN, 0);
-                if (i != nregistros-1)
+                if (i != NREGISTROS-1)
                     printf("\n");
  
             }
@@ -962,12 +962,12 @@ void listarProdutos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nr
         // Listagem por preço com desconto aplicado
         case 4:
  
-            for (int i = 0; i < nregistros; i++) {
+            for (int i = 0; i < NREGISTROS; i++) {
  
-                indicePri = (Ip*) bsearch(iprice[i].pk, iprimary, nregistros, sizeof(Ip), comparacao_iprimary_PK);
+                indicePri = (Ip*) bsearch(iprice[i].pk, iprimary, NREGISTROS, sizeof(Ip), comparacao_iprimary_PK);
                 int RRN = indicePri->rrn;
                 exibir_registro(RRN, 1);
-                if (i != nregistros-1)
+                if (i != NREGISTROS-1)
                     printf("\n");
  
             }
