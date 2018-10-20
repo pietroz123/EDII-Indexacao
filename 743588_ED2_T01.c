@@ -322,10 +322,9 @@ int main(){
                     break;
                 }
 
-                printf("ACHOU REGISTRO A REMOVER\n");
-
                 remover(indicePri, iprimary);
-                
+                printf(SUCESSO);
+
                 // if(remover([args]))
                 //     printf(SUCESSO);
                 // else
@@ -1092,7 +1091,15 @@ void alterar(int rrn, char *novoDesconto, Isf *iprice) {
 
 void remover(Ip *indicePri, Ip *iprimary) {
 
-    printf("rrn do produto: %d\n", indicePri->rrn);
+    char *p = ARQUIVO + 192 * (indicePri->rrn);
+
+    // Coloca o marcador "*|" nas primeiras duas posições
+    *p = '*';
+    p++;
+    *p = '|';
+
+    // Modifica o RRN para -1
+    indicePri->rrn = -1;
 
 }
  
