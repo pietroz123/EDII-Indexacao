@@ -316,7 +316,7 @@ int main(){
 
                 // Busca se existe a chave primária
                 indicePri = (Ip*) bsearch(pk, iprimary, NREGISTROS, sizeof(Ip), comparacao_iprimary_PK);
-                if (indicePri == NULL) {
+                if (indicePri == NULL || indicePri->rrn == -1) {
                     printf(REGISTRO_N_ENCONTRADO);
                     printf(FALHA);
                     break;
