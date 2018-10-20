@@ -354,13 +354,13 @@ int main(){
                 return 0;
             break;
  
-            // //!DELETAR
-            // // Imprime indice primario 
-            // case 10: 
-            //     printf("%d\n", NREGISTROS);
-            //     for (int i = 0; i < NREGISTROS; i++)
-            //         printf("%s %d\n", iprimary[i].pk, iprimary[i].rrn);
-            // break;
+            //!DELETAR
+            // Imprime indice primario 
+            case 10: 
+                printf("%d\n", NREGISTROS);
+                for (int i = 0; i < NREGISTROS; i++)
+                    printf("%s %d\n", iprimary[i].pk, iprimary[i].rrn);
+            break;
             
             default:
                 printf(OPCAO_INVALIDA);
@@ -1024,6 +1024,9 @@ void alterar(int rrn, char *novoDesconto, Isf *iprice) {
             break;
         }
     }
+
+    /* Re-ordena o índice de preços (iprice) */
+    qsort(iprice, NREGISTROS, sizeof(Isf), comparacao_iprice_PRECO);
  
 }
  
