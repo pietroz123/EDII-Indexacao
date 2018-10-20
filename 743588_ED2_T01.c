@@ -748,7 +748,7 @@ int bSearch(Is *a, int inicio, int fim, char chave[]) {
  
 int bSearchInferior(Is *a, int inicio, int fim, char chave[]) {
  
-    if (inicio > fim)
+    if (fim < inicio)
         return inicio;
  
     int meio = (inicio + fim) / 2;
@@ -764,7 +764,7 @@ int bSearchInferior(Is *a, int inicio, int fim, char chave[]) {
 }
 int bSearchSuperior(Is *a, int inicio, int fim, char chave[]) {
  
-    if (inicio > fim)
+    if (fim < inicio)
         return fim;
  
     int meio = (inicio + fim) / 2;
@@ -814,23 +814,27 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand) {
  
             scanf("%[^\n]s", nomeProduto);
  
-            int indiceInferior = bSearchInferior(iproduct, 0, NREGISTROS, nomeProduto);
-            int indiceSuperior = bSearchSuperior(iproduct, 0, NREGISTROS, nomeProduto);
- 
+            int indiceInferior = bSearchInferior(iproduct, 0, NREGISTROS-1, nomeProduto);
+            int indiceSuperior = bSearchSuperior(iproduct, 0, NREGISTROS-1, nomeProduto);
+
             // printf("inferior: %d\nsuperior: %d\n", indiceInferior, indiceSuperior); //!
+
  
             if (indiceInferior == indiceSuperior) {
-                printf(REGISTRO_N_ENCONTRADO);
-                return;
+				indicePri = (Ip*) bsearch(iprimary[indiceInferior].pk, iprimary, NREGISTROS, sizeof(Ip), comparacao_iprimary_PK);
+				if (indicePri == NULL) {
+					printf(REGISTRO_N_ENCONTRADO);
+					return;
+				}
             }
  
             // Busca pelo RRN correspondente a partir da chave primária
-            for (int i = indiceInferior; i < indiceSuperior; i++) {
+            for (int i = indiceInferior; i <= indiceSuperior; i++) {
                 indicePri = (Ip*) bsearch(iproduct[i].pk, iprimary, NREGISTROS, sizeof(Ip), comparacao_iprimary_PK);
                 if (indicePri) {
                     int RRN = indicePri->rrn;
                     exibir_registro(RRN, 0);
-                    if (i < indiceSuperior-1)
+                    if (i != indiceSuperior)
                         printf("\n");
                 }
             }
