@@ -933,20 +933,27 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand, int n
                 return;
             }
 
- 
+            int contadorPK = 0; // Controla o número de PKs encontradas
+
             for (int i = indiceInferior; i <= indiceSuperior; i++) {
  
                 strcpy(chavePrimaria, ibrand[i].pk);
                 indicePri = (Ip*) bsearch(chavePrimaria, iprimary, nregistros, sizeof(Ip), comparacao_iprimary_PK);
                 int resBuscaLista = buscar_lista(&(indiceCat->lista), chavePrimaria);
                 if (resBuscaLista != -1) {
+                    contadorPK++;
                     exibir_registro(indicePri->rrn, 0);
                     if (i != indiceSuperior)
                         printf("\n");
                 }
  
             }
- 
+
+            if (contadorPK == 0) {
+                printf(REGISTRO_N_ENCONTRADO);
+                return;
+            }
+
         break;
  
     }
