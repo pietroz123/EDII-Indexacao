@@ -131,17 +131,17 @@ int exibir_registro(int rrn, char com_desconto);
 Produto recuperar_registro(int rrn);
  
 /* (Re)faz o índice respectivo */
+void insere_iprimary(Ip *indice_primario, int* nregistros);
+void insere_iproduct(Is *indice_produto, int* nregistros);
+void insere_ibrand(Is *indice_marca, int* nregistros);
+void insere_icategory(Ir *indice_categoria, int* nregistros);
+void insere_iprice(Isf *indice_preco, int* nregistros);
+ 
 void criar_iprimary(Ip *indice_primario, int* nregistros);
 void criar_iproduct(Is *indice_produto, int* nregistros);
 void criar_ibrand(Is *indice_marca, int* nregistros);
 void criar_icategory(Ir *indice_categoria, int* nregistros);
-void criar_iprice(Isf *indice_preco, int* nregistros);
- 
-void refaz_iprimary(Ip *indice_primario, int* nregistros);
-void refaz_iproduct(Is *indice_produto, int* nregistros);
-void refaz_ibrand(Is *indice_marca, int* nregistros);
-void refaz_icategory(Ir *indice_categoria, int* nregistros);
-void refaz_iprice(Isf *indice_preco, int* nregistros);   
+void criar_iprice(Isf *indice_preco, int* nregistros);   
  
  
 /* Realiza os scanfs na struct Produto */
@@ -217,7 +217,7 @@ int main(){
         perror(MEMORIA_INSUFICIENTE);
         exit(1);
     }
-    refaz_iprimary(iprimary, &nregistros);
+    criar_iprimary(iprimary, &nregistros);
  
  
     /* Alocar e criar índices secundários */
@@ -228,7 +228,7 @@ int main(){
         perror(MEMORIA_INSUFICIENTE);
         exit(1);
     }
-    refaz_iproduct(iproduct, &nregistros);
+    criar_iproduct(iproduct, &nregistros);
  
     /****** ibrand ******/
     Is *ibrand = (Is*) malloc(MAX_REGISTROS * sizeof(Is));
@@ -236,7 +236,7 @@ int main(){
         perror(MEMORIA_INSUFICIENTE);
         exit(1);
     }
-    refaz_ibrand(ibrand, &nregistros);
+    criar_ibrand(ibrand, &nregistros);
  
     /****** icategory ******/
     Ir *icategory = (Ir*) malloc(MAX_REGISTROS * sizeof(Ir));
@@ -244,7 +244,7 @@ int main(){
         perror(MEMORIA_INSUFICIENTE);
         exit(1);
     }
-    refaz_icategory(icategory, &nregistros);
+    criar_icategory(icategory, &nregistros);
  
     /****** iprice ******/
     Isf *iprice = (Isf*) malloc(MAX_REGISTROS * sizeof(Isf));
@@ -252,7 +252,7 @@ int main(){
         perror(MEMORIA_INSUFICIENTE);
         exit(1);
     }
-    refaz_iprice(iprice, &nregistros);
+    criar_iprice(iprice, &nregistros);
  
  
     /* Execução do programa */
@@ -584,7 +584,7 @@ int comparacao_iprice_PRECO(const void *a, const void *b) {
         return 0;
 }
  
-void criar_iprimary(Ip *indice_primario, int* nregistros) {
+void insere_iprimary(Ip *indice_primario, int* nregistros) {
  
     if (*nregistros == 0)
         return;
@@ -599,7 +599,7 @@ void criar_iprimary(Ip *indice_primario, int* nregistros) {
  
 }
  
-void criar_iproduct(Is *indice_produto, int* nregistros) {
+void insere_iproduct(Is *indice_produto, int* nregistros) {
  
     if (*nregistros == 0)
         return;
@@ -614,7 +614,7 @@ void criar_iproduct(Is *indice_produto, int* nregistros) {
  
 }
  
-void criar_ibrand(Is *indice_marca, int* nregistros) {
+void insere_ibrand(Is *indice_marca, int* nregistros) {
  
     if (*nregistros == 0)
         return;
@@ -629,7 +629,7 @@ void criar_ibrand(Is *indice_marca, int* nregistros) {
  
 }
  
-void criar_icategory(Ir *indice_categoria, int* nregistros) {
+void insere_icategory(Ir *indice_categoria, int* nregistros) {
  
     if (*nregistros == 0)
         return;
@@ -671,7 +671,7 @@ void criar_icategory(Ir *indice_categoria, int* nregistros) {
  
 }
  
-void criar_iprice(Isf *indice_preco, int* nregistros) {
+void insere_iprice(Isf *indice_preco, int* nregistros) {
  
     if (*nregistros == 0)
         return;
@@ -710,19 +710,19 @@ void criar_iprice(Isf *indice_preco, int* nregistros) {
 /**** INSERCAO ****/
  
 void ler_entrada(char* registro, Produto *novo) {
-    scanf("%[^\n]s", novo->nome);
+    fscanf(stdin, "%[^\n]s", novo->nome);
     getchar();
-    scanf("%[^\n]s", novo->marca);
+    fscanf(stdin, "%[^\n]s", novo->marca);
     getchar();
-    scanf("%[^\n]s", novo->data);
+    fscanf(stdin, "%[^\n]s", novo->data);
     getchar();
-    scanf("%[^\n]s", novo->ano);
+    fscanf(stdin, "%[^\n]s", novo->ano);
     getchar();
-    scanf("%[^\n]s", novo->preco);
+    fscanf(stdin, "%[^\n]s", novo->preco);
     getchar();
-    scanf("%[^\n]s", novo->desconto);
+    fscanf(stdin, "%[^\n]s", novo->desconto);
     getchar();
-    scanf("%[^\n]s", novo->categoria);
+    fscanf(stdin, "%[^\n]s", novo->categoria);
     getchar();
     
     sprintf(registro, "%s@%s@%s@%s@%s@%s@%s@", novo->nome, novo->marca, novo->data, novo->ano, novo->preco, novo->desconto, novo->categoria);
@@ -755,19 +755,19 @@ void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice,
  
  
     // Cria o índice primário
-    criar_iprimary(iprimary, &nregistros);
+    insere_iprimary(iprimary, &nregistros);
  
     // Cria o índice do produto
-    criar_iproduct(iproduct, &nregistros);
+    insere_iproduct(iproduct, &nregistros);
  
     // Cria o indice da marca
-    criar_ibrand(ibrand, &nregistros);
+    insere_ibrand(ibrand, &nregistros);
  
     // Cria o indice da categoria
-    criar_icategory(icategory, &nregistros);
+    insere_icategory(icategory, &nregistros);
  
     // Cria o indice do preco
-    criar_iprice(iprice, &nregistros);
+    insere_iprice(iprice, &nregistros);
  
 }
  
@@ -1122,7 +1122,7 @@ void remover(Ip *indicePri, Ip *iprimary) {
  
 /**** REFAZ TODOS OS INDICES ****/
  
-void refaz_iprimary(Ip *indice_primario, int* nregistros) {
+void criar_iprimary(Ip *indice_primario, int* nregistros) {
  
     for (int i = 0; i < *nregistros; i++) {
         indice_primario[i].rrn = i;
@@ -1135,7 +1135,7 @@ void refaz_iprimary(Ip *indice_primario, int* nregistros) {
  
 }
  
-void refaz_iproduct(Is *indice_produto, int* nregistros) {
+void criar_iproduct(Is *indice_produto, int* nregistros) {
  
     for (int i = 0; i < *nregistros; i++) {
         Produto J = recuperar_registro(i);
@@ -1148,7 +1148,7 @@ void refaz_iproduct(Is *indice_produto, int* nregistros) {
  
 }
  
-void refaz_ibrand(Is *indice_marca, int* nregistros) {
+void criar_ibrand(Is *indice_marca, int* nregistros) {
  
     for (int i = 0; i < *nregistros; i++) {
         Produto J = recuperar_registro(i);
@@ -1161,7 +1161,7 @@ void refaz_ibrand(Is *indice_marca, int* nregistros) {
  
 }
  
-void refaz_icategory(Ir *indice_categoria, int* nregistros) {
+void criar_icategory(Ir *indice_categoria, int* nregistros) {
  
     for (int i = 0; i < *nregistros; i++) {
  
@@ -1202,7 +1202,7 @@ void refaz_icategory(Ir *indice_categoria, int* nregistros) {
  
 }
  
-void refaz_iprice(Isf *indice_preco, int* nregistros) {
+void criar_iprice(Isf *indice_preco, int* nregistros) {
  
     for (int i = 0; i < *nregistros; i++) {
  
