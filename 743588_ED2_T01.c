@@ -9,13 +9,7 @@
  * Aluno: Pietro Zuntini Bonfim
  * ========================================================================== */
  
-//todo: INSERIR_NOVO_PRODUTO            1
-//todo: REMOVER_PRODUTO                 2
-//todo: MODIFICAR_DESCONTO              3
-//todo: BUSCAR_PRODUTOS                 4
-//todo: LISTAR_PRODUTOS                 5
 //todo: LIBERAR_ESPACO                  6
-//todo: IMPRIMIR_INDICES_SECUNDARIOS    8
 //todo: FINALIZAR                       9
  
 #define NREGISTROS (strlen(ARQUIVO) / TAM_REGISTRO)
@@ -140,8 +134,8 @@ Produto recuperar_registro(int rrn);
 void criar_iprimary(Ip *indice_primario, int* nregistros);
 void criar_iproduct(Is *indice_produto, int* nregistros);
 void criar_ibrand(Is *indice_marca, int* nregistros);
-void criar_icategory(Ir *indice_categoria, int* nregistros); //todo
-void criar_iprice(Isf *indice_preco, int* nregistros);       //todo
+void criar_icategory(Ir *indice_categoria, int* nregistros);
+void criar_iprice(Isf *indice_preco, int* nregistros);
  
 void refaz_iprimary(Ip *indice_primario, int* nregistros);
 void refaz_iproduct(Is *indice_produto, int* nregistros);
@@ -167,7 +161,6 @@ void inserir_lista(ll **primeiro, char *pk);
 void alterar(int rrn, char *novoDesconto, Isf *iprice);
  
 // (3) REMOÇÃO
-//todo
 void remover(Ip *indicePri, Ip *iprimary);
  
 // (4) BUSCAR PRODUTOS - Busca pelo produto e retorna o RRN
@@ -307,7 +300,7 @@ int main(){
                 
             break;
             
-            case REMOVER_PRODUTO: // 3 //todo
+            case REMOVER_PRODUTO: // 3
                 /*excluir produto*/
                 printf(INICIO_EXCLUSAO);
 
