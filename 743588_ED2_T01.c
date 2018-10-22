@@ -140,7 +140,7 @@ void insere_iprice(Isf *indice_preco, int* nregistros);
 void criar_iprimary(Ip *indice_primario, int* nregistros);
 void criar_iproduct(Is *indice_produto, int* nregistros);
 void criar_ibrand(Is *indice_marca, int* nregistros);
-void criar_icategory(Ir *indice_categoria, int* nregistros);
+void criar_icategory(Ir *indice_categoria, int* nregistros, int *ncat);
 void criar_iprice(Isf *indice_preco, int* nregistros);   
  
  
@@ -244,7 +244,7 @@ int main(){
         perror(MEMORIA_INSUFICIENTE);
         exit(1);
     }
-    criar_icategory(icategory, &nregistros);
+    criar_icategory(icategory, &nregistros, &ncat);
  
     /****** iprice ******/
     Isf *iprice = (Isf*) malloc(MAX_REGISTROS * sizeof(Isf));
@@ -1166,7 +1166,7 @@ void criar_ibrand(Is *indice_marca, int* nregistros) {
  
 }
  
-void criar_icategory(Ir *indice_categoria, int* nregistros) {
+void criar_icategory(Ir *indice_categoria, int* nregistros, int *ncat) {
  
     for (int i = 0; i < *nregistros; i++) {
  
