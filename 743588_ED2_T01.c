@@ -134,7 +134,7 @@ Produto recuperar_registro(int rrn);
 void insere_iprimary(Ip *indice_primario, int* nregistros);
 void insere_iproduct(Is *indice_produto, int* nregistros);
 void insere_ibrand(Is *indice_marca, int* nregistros);
-void insere_icategory(Ir *indice_categoria, int* nregistros);
+void insere_icategory(Ir *indice_categoria, int* nregistros, int *ncat);
 void insere_iprice(Isf *indice_preco, int* nregistros);
  
 void criar_iprimary(Ip *indice_primario, int* nregistros);
@@ -629,7 +629,7 @@ void insere_ibrand(Is *indice_marca, int* nregistros) {
  
 }
  
-void insere_icategory(Ir *indice_categoria, int* nregistros) {
+void insere_icategory(Ir *indice_categoria, int* nregistros, int *ncat) {
  
     if (*nregistros == 0)
         return;
@@ -764,7 +764,7 @@ void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice,
     insere_ibrand(ibrand, &nregistros);
  
     // Cria o indice da categoria
-    insere_icategory(icategory, &nregistros);
+    insere_icategory(icategory, &nregistros, ncat);
  
     // Cria o indice do preco
     insere_iprice(iprice, &nregistros);
