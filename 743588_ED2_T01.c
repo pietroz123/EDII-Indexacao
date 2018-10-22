@@ -1162,11 +1162,15 @@ void criar_ibrand(Is *indice_marca, int* nregistros) {
  
 void criar_icategory(Ir *indice_categoria, int* nregistros, int *ncat) {
 
+    if (*nregistros == 0)
+        return;
+
     int ncategorias = *ncat;
  
     for (int i = 0; i < *nregistros; i++) {
  
         Produto J = recuperar_registro(i);
+
     
         char *cat;
         cat = strtok(J.categoria, "|");
