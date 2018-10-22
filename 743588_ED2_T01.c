@@ -959,8 +959,13 @@ void listarProdutos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nr
  
     char categoriaProduto[TAM_CATEGORIA];
  
+    /* Apontadores das buscas */
     Ip *indicePri;
     Ir *indiceCat;
+
+    /* Vetor de índices primários */
+    Ip vetorIp[MAX_REGISTROS];
+    int j = 0; // Controla o índice do vetor de índices primários
  
     int opcaoListagem;
     scanf("%d%*c", &opcaoListagem);
@@ -974,14 +979,22 @@ void listarProdutos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nr
  
         // Listagem por código
         case 1:
+
  
             for (int i = 0; i < nregistros; i++) {
                 int RRN = iprimary[i].rrn;
                 if (RRN != -1) {
-                    exibir_registro(RRN, 0);
-                    if (i != nregistros-1)
-                        printf("\n");
+                    vetorIp[j] = iprimary[i]; // insere no vetor de índices primários
+                    j++;
                 }
+            }
+
+            // Lista o vetor de índices primários
+            for (int i = 0; i < j; i++) {
+                int rrn = vetorIp[i].rrn;
+                exibir_registro(rrn, 0);
+                if (i != j-1)
+                    printf("\n");
             }
  
         break;
@@ -996,13 +1009,21 @@ void listarProdutos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nr
                 ll *aux = indiceCat->lista;
                 while (aux) {
                     indicePri = (Ip*) bsearch(aux->pk, iprimary, nregistros, sizeof(Ip), comparacao_iprimary_PK);
+                    int indice = indicePri - iprimary;
                     if (indicePri->rrn != -1) {
-                        exibir_registro(indicePri->rrn, 0);
-                        if (aux->prox)
-                            printf("\n");
+                        vetorIp[j] = iprimary[indice]; // insere no vetor de índices primários
+                        j++;                      
                     }
                     aux = aux->prox;
                 }
+            }
+
+            // Lista o vetor de índices primários
+            for (int i = 0; i < j; i++) {
+                int rrn = vetorIp[i].rrn;
+                exibir_registro(rrn, 0);
+                if (i != j-1)
+                    printf("\n");
             }
  
         break;
@@ -1015,11 +1036,19 @@ void listarProdutos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nr
                 indicePri = (Ip*) bsearch(ibrand[i].pk, iprimary, nregistros, sizeof(Ip), comparacao_iprimary_PK);
                 int RRN = indicePri->rrn;
                 if (RRN != -1) {
-                    exibir_registro(RRN, 0);
-                    if (i != nregistros-1)
-                        printf("\n");
+                    int indice = indicePri - iprimary;
+                    vetorIp[j] = iprimary[indice]; // insere no vetor de índices primários
+                    j++;
                 }
  
+            }
+
+            // Lista o vetor de índices primários
+            for (int i = 0; i < j; i++) {
+                int rrn = vetorIp[i].rrn;
+                exibir_registro(rrn, 0);
+                if (i != j-1)
+                    printf("\n");
             }
  
         break;
@@ -1032,10 +1061,18 @@ void listarProdutos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nr
                 indicePri = (Ip*) bsearch(iprice[i].pk, iprimary, nregistros, sizeof(Ip), comparacao_iprimary_PK);
                 int RRN = indicePri->rrn;
                 if (RRN != -1) {
-                    exibir_registro(RRN, 1);
-                    if (i != nregistros-1)
-                        printf("\n");
+                    int indice = indicePri - iprimary;
+                    vetorIp[j] = iprimary[indice]; // insere no vetor de índices primários
+                    j++;
                 }
+            }
+
+            // Lista o vetor de índices primários
+            for (int i = 0; i < j; i++) {
+                int rrn = vetorIp[i].rrn;
+                exibir_registro(rrn, 1);
+                if (i != j-1)
+                    printf("\n");
             }
  
         break;
