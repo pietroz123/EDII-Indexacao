@@ -1225,46 +1225,11 @@ void criar_icategory(Ir *indice_categoria, int* nregistros, int *ncat) {
     if (*nregistros == 0)
         return;
 
-    int ncategorias = *ncat;
+    for (int i = 1; i <= *nregistros; i++) {
  
-    for (int i = 0; i < *nregistros; i++) {
- 
-        Produto J = recuperar_registro(i);
-
-    
-        char *cat;
-        cat = strtok(J.categoria, "|");
-        while (cat != NULL) {
-    
-            char categoria[TAM_CATEGORIA];
-            strcpy(categoria, cat);
-    
-            // Verifica se a categoria já existe
-            Ir *indiceCat = (Ir*) bsearch(categoria, indice_categoria, ncategorias, sizeof(Ir), comparacao_icategory_CAT);
-            if (indiceCat != NULL) {
-                // Achou categoria
-                int indiceBusca = indiceCat - indice_categoria;
-                inserir_lista(&(indice_categoria[indiceBusca].lista), J.pk);
-            } else {
-                // Não achou categoria
-                strcpy(indice_categoria[ncategorias].cat, categoria);
-                ncategorias++;
-                inserir_lista(&(indice_categoria[ncategorias-1].lista), J.pk);
-    
-    
-                /* Ordenado pelos nomes das categorias e em seguida pelo código */
-                qsort(indice_categoria, ncategorias, sizeof(Ir), comparacao_icategory_CAT);
-            }
-    
-    
-            // Vai para a proxima categoria
-            cat = strtok(NULL, "|");
-        }
- 
+        insere_icategory(indice_categoria, &i, ncat);
  
     }
-
-    *ncat = ncategorias;
  
  
 }
