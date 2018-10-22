@@ -836,6 +836,9 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand, int n
     Is *indiceProd;
     Is *indiceMarca;
     Ir *indiceCat;
+
+    Ip vetorIp[MAX_REGISTROS];
+    int j = 0;
  
     int indiceInferior, indiceSuperior, indiceBsearch;
  
@@ -872,26 +875,33 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand, int n
             }
  
             // printf("inferior: %d\nsuperior: %d\n", indiceInferior, indiceSuperior); //!
- 
-            int Rem = 0;
- 
+
+
             // Busca pelo RRN correspondente a partir da chave primária
             for (int i = indiceInferior; i <= indiceSuperior; i++) {
                 indicePri = (Ip*) bsearch(iproduct[i].pk, iprimary, nregistros, sizeof(Ip), comparacao_iprimary_PK);
                 if (indicePri) {
                     int RRN = indicePri->rrn;
                     if (RRN != -1) {
-                        exibir_registro(RRN, 0);
-                        if (i != indiceSuperior)
-                            printf("\n");
-                    } else {
-                        Rem++;
-                        if (Rem == indiceSuperior - indiceInferior + 1) {
-                            printf(REGISTRO_N_ENCONTRADO);
-                            return;
-                        }
+                        int indice = indicePri - iprimary;
+                        vetorIp[j] = iprimary[indice]; // Insere no vetor de indices primarios
+                        j++;
                     }
                 }
+            }
+
+            // Se não inseriu nenhum valor no vetor, retorna
+            if (j == 0) {
+                printf(REGISTRO_N_ENCONTRADO);
+                return;
+            }
+
+            // Lista o vetor de índices primários
+            for (int i = 0; i < j; i++) {
+                int rrn = vetorIp[i].rrn;
+                exibir_registro(rrn, 0);
+                if (i != j-1)
+                    printf("\n");
             }
  
         break;
@@ -919,31 +929,45 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand, int n
                 indiceSuperior--;
             // printf("indiceInferior: %d\nindiceSuperior: %d\n", indiceInferior, indiceSuperior); //!
  
+            // Verifica se existe a categoria requisitada
             indiceCat = (Ir*) bsearch(categoriaProduto, icategory, ncat, sizeof(Ir), comparacao_icategory_CAT);
             if (indiceCat == NULL) {
                 printf(REGISTRO_N_ENCONTRADO);
                 return;
             }
- 
-            int contadorPK = 0; // Controla o número de PKs encontradas
+
  
             for (int i = indiceInferior; i <= indiceSuperior; i++) {
  
                 strcpy(chavePrimaria, ibrand[i].pk);
                 indicePri = (Ip*) bsearch(chavePrimaria, iprimary, nregistros, sizeof(Ip), comparacao_iprimary_PK);
+                
+                // Se estiver marcado como removido, vai para a próxima iteração
+                if (indicePri->rrn == -1)
+                    continue;
+                
                 int resBuscaLista = buscar_lista(&(indiceCat->lista), chavePrimaria);
                 if (resBuscaLista != -1) {
-                    contadorPK++;
-                    exibir_registro(indicePri->rrn, 0);
-                    if (i != indiceSuperior)
-                        printf("\n");
+                    // Adiciona ao vetor de índices primários
+                    int indice = indicePri - iprimary;
+                    vetorIp[j] = iprimary[indice];
+                    j++;
                 }
  
             }
  
-            if (contadorPK == 0) {
+            // Se não adicionou nada ao vetor, retorna
+            if (j == 0) {
                 printf(REGISTRO_N_ENCONTRADO);
                 return;
+            }
+
+            // Lista o vetor de índices primários
+            for (int i = 0; i < j; i++) {
+                int rrn = vetorIp[i].rrn;
+                exibir_registro(rrn, 0);
+                if (i != j-1)
+                    printf("\n");
             }
  
         break;
@@ -980,7 +1004,6 @@ void listarProdutos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nr
         // Listagem por código
         case 1:
 
- 
             for (int i = 0; i < nregistros; i++) {
                 int RRN = iprimary[i].rrn;
                 if (RRN != -1) {

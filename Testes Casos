@@ -28,5 +28,5 @@ diff A.out Casos\ Abertos/22.out
 diff A.out Casos\ Abertos/23.out
 (./A < Casos\ Abertos/24.in) > A.out
 diff A.out Casos\ Abertos/24.out
-(./A < Casos\ Abertos/25.in) > A.out -- Tem um \n a mais
+(./A < Casos\ Abertos/25.in) > A.out
 diff A.out Casos\ Abertos/25.out
