@@ -264,8 +264,9 @@ int main(){
         {
             case INSERIR_NOVO_PRODUTO: // 1
                 /*cadastro*/
+                // printf("ncat antes: %d\n", ncat);
                 inserir(iprimary, iproduct, ibrand, icategory, iprice, &nregistros, &ncat);
- 
+                // printf("ncat depois: %d\n", ncat);
             break;
  
             
@@ -351,7 +352,7 @@ int main(){
             
             case IMPRIMIR_INDICES_SECUNDARIOS: // 8
                 /*imprime os índices secundários*/
-                ncat = NCAT;
+                // ncat = NCAT;
                 imprimirSecundario(iproduct, ibrand, icategory, iprice, nregistros, ncat);
             break;
             
@@ -633,6 +634,8 @@ void insere_icategory(Ir *indice_categoria, int* nregistros, int *ncat) {
  
     if (*nregistros == 0)
         return;
+
+    int ncategorias = *ncat;
  
     // Cada indice_categoria[i] tem uma categoria: indice_categoria[i].cat
     // E uma lista ligada para todos as chaves primárias que contém aquela categoria: indice_categoria[i].lista
@@ -648,26 +651,28 @@ void insere_icategory(Ir *indice_categoria, int* nregistros, int *ncat) {
         strcpy(categoria, cat);
  
         // Verifica se a categoria já existe
-        Ir *indiceCat = (Ir*) bsearch(categoria, indice_categoria, NCAT, sizeof(Ir), comparacao_icategory_CAT);
+        Ir *indiceCat = (Ir*) bsearch(categoria, indice_categoria, ncategorias, sizeof(Ir), comparacao_icategory_CAT);
         if (indiceCat != NULL) {
             // Achou categoria
             int indiceBusca = indiceCat - indice_categoria;
             inserir_lista(&(indice_categoria[indiceBusca].lista), J.pk);
         } else {
             // Não achou categoria
-            strcpy(indice_categoria[NCAT].cat, categoria);
-            NCAT++;
-            inserir_lista(&(indice_categoria[NCAT-1].lista), J.pk);
+            strcpy(indice_categoria[ncategorias].cat, categoria);
+            ncategorias++;
+            inserir_lista(&(indice_categoria[ncategorias-1].lista), J.pk);
  
  
             /* Ordenado pelos nomes das categorias e em seguida pelo código */
-            qsort(indice_categoria, NCAT, sizeof(Ir), comparacao_icategory_CAT);
+            qsort(indice_categoria, ncategorias, sizeof(Ir), comparacao_icategory_CAT);
         }
  
  
         // Vai para a proxima categoria
         cat = strtok(NULL, "|");
     }
+
+    *ncat = ncategorias;
  
 }
  
@@ -920,7 +925,7 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand, int n
                 indiceSuperior--;
             // printf("indiceInferior: %d\nindiceSuperior: %d\n", indiceInferior, indiceSuperior); //!
  
-            indiceCat = (Ir*) bsearch(categoriaProduto, icategory, NCAT, sizeof(Ir), comparacao_icategory_CAT);
+            indiceCat = (Ir*) bsearch(categoriaProduto, icategory, ncat, sizeof(Ir), comparacao_icategory_CAT);
             if (indiceCat == NULL) {
                 printf(REGISTRO_N_ENCONTRADO);
                 return;
@@ -992,7 +997,7 @@ void listarProdutos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nr
  
             scanf("%[^\n]s", categoriaProduto);
  
-            indiceCat = (Ir*) bsearch(categoriaProduto, icategory, NCAT, sizeof(Ir), comparacao_icategory_CAT);
+            indiceCat = (Ir*) bsearch(categoriaProduto, icategory, ncat, sizeof(Ir), comparacao_icategory_CAT);
             if (indiceCat) {
                 ll *aux = indiceCat->lista;
                 while (aux) {
