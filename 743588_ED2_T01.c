@@ -629,7 +629,6 @@ void insere_icategory(Ir *indice_categoria, int* nregistros, int *ncat) {
     if (*nregistros == 0)
         return;
 
-    int ncategorias = *ncat;
  
     // Cada indice_categoria[i] tem uma categoria: indice_categoria[i].cat
     // E uma lista ligada para todos as chaves primárias que contém aquela categoria: indice_categoria[i].lista
@@ -645,20 +644,20 @@ void insere_icategory(Ir *indice_categoria, int* nregistros, int *ncat) {
         strcpy(categoria, cat);
  
         // Verifica se a categoria já existe
-        Ir *indiceCat = (Ir*) bsearch(categoria, indice_categoria, ncategorias, sizeof(Ir), comparacao_icategory_CAT);
+        Ir *indiceCat = (Ir*) bsearch(categoria, indice_categoria, *ncat, sizeof(Ir), comparacao_icategory_CAT);
         if (indiceCat != NULL) {
             // Achou categoria
             int indiceBusca = indiceCat - indice_categoria;
             inserir_lista(&(indice_categoria[indiceBusca].lista), J.pk);
         } else {
             // Não achou categoria
-            strcpy(indice_categoria[ncategorias].cat, categoria);
-            ncategorias++;
-            inserir_lista(&(indice_categoria[ncategorias-1].lista), J.pk);
+            strcpy(indice_categoria[*ncat].cat, categoria);
+            *ncat += 1;
+            inserir_lista(&(indice_categoria[*ncat-1].lista), J.pk);
  
  
             /* Ordenado pelos nomes das categorias e em seguida pelo código */
-            qsort(indice_categoria, ncategorias, sizeof(Ir), comparacao_icategory_CAT);
+            qsort(indice_categoria, *ncat, sizeof(Ir), comparacao_icategory_CAT);
         }
  
  
@@ -666,7 +665,6 @@ void insere_icategory(Ir *indice_categoria, int* nregistros, int *ncat) {
         cat = strtok(NULL, "|");
     }
 
-    *ncat = ncategorias;
  
 }
  
@@ -735,38 +733,36 @@ void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice,
  
     char temp[193];
     Produto I;
-    int nregistros = *nreg;
- 
+    
     // Lê os dados e os coloca na string temp
     ler_entrada(temp, &I);
     gerarChave(&I);
  
  
     // Verifica se existe chave primária igual
-    if (bsearch(I.pk, iprimary, nregistros, sizeof(Ip), comparacao_iprimary_PK)) {
+    if (bsearch(I.pk, iprimary, *nreg, sizeof(Ip), comparacao_iprimary_PK)) {
         printf(ERRO_PK_REPETIDA, I.pk);
         return;
     } else
         strcat(ARQUIVO, temp);
     
-    nregistros++;
-    *nreg = nregistros;
- 
+    // Incrementa o número de registros
+    *nreg += 1;
  
     // Cria o índice primário
-    insere_iprimary(iprimary, &nregistros);
+    insere_iprimary(iprimary, nreg);
  
     // Cria o índice do produto
-    insere_iproduct(iproduct, &nregistros);
+    insere_iproduct(iproduct, nreg);
  
     // Cria o indice da marca
-    insere_ibrand(ibrand, &nregistros);
+    insere_ibrand(ibrand, nreg);
  
     // Cria o indice da categoria
-    insere_icategory(icategory, &nregistros, ncat);
+    insere_icategory(icategory, nreg, ncat);
  
     // Cria o indice do preco
-    insere_iprice(iprice, &nregistros);
+    insere_iprice(iprice, nreg);
  
 }
  
