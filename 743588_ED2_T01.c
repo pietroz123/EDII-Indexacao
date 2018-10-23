@@ -1269,11 +1269,18 @@ void liberar_espaco(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand, Isf *
 
     char ARQUIVOaux[TAM_ARQUIVO];
 
-    char *rem = strstr(ARQUIVO, "*|");
-    printf("rem: %s\n", rem);
+    for (int i = 0; i < *nregistros; i++) {
 
-    char temp[193];
+        char temp[193];
+        strncpy(temp, ARQUIVO + ((i)*192), 192);
+        temp[192] = '\0';
 
+        printf("temp '%d': %s\n", i, temp);
+
+        if (strncmp(temp, "*|", 2))
+            printf("SIM\n");
+
+    }
 
 }
 
@@ -1302,7 +1309,7 @@ void inserir_lista(ll **primeiro, char *pk) {
     // Se for igual, não insere repetido
     if (aux->prox != NULL && strcmp(aux->prox->pk, pk) == 0)
         return;
- 
+
     ll *novo = (ll*) malloc(sizeof(ll));
     strcpy(novo->pk, pk);
     novo->prox = aux->prox;
