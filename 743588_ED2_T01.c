@@ -1279,6 +1279,8 @@ void liberar_espaco(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand, Isf *
 
         if (strncmp(temp, "*|", 2))
             printf("SIM\n");
+        else
+            printf("NAO\n");
 
     }
 
@@ -1294,10 +1296,12 @@ void inserir_lista(ll **primeiro, char *pk) {
     /* CASO LISTA VAZIA */
     if (*primeiro == NULL || strcmp((*primeiro)->pk, pk) > 0) {
         ll *novo = (ll*) malloc(sizeof(ll));
-        strcpy(novo->pk, pk);
-        novo->prox = *primeiro;
-        *primeiro = novo;
-        return;
+        if (novo) {
+            strcpy(novo->pk, pk);
+            novo->prox = *primeiro;
+            *primeiro = novo;
+            return;
+        }
     }
  
     ll *aux = *primeiro;
@@ -1307,16 +1311,21 @@ void inserir_lista(ll **primeiro, char *pk) {
         aux = aux->prox;
  
     // Se for igual, não insere repetido
-    if (aux->prox != NULL && strcmp(aux->prox->pk, pk) == 0)
-        return;
+    // if (aux->prox != NULL && strcmp(aux->prox->pk, pk) == 0)
+    //     return;
 
     ll *novo = (ll*) malloc(sizeof(ll));
-    strcpy(novo->pk, pk);
-    novo->prox = aux->prox;
-    aux->prox = novo;
+    if (novo) {
+        strcpy(novo->pk, pk);
+        if (aux->prox == NULL)
+            novo->prox = NULL;
+        else
+            novo->prox = aux->prox;
+        aux->prox = novo;
+    }
  
 }
- 
+
 // Busca por uma chave na lista
 int buscar_lista(ll **primeiro, char *pk) {
  
