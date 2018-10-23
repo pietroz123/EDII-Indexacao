@@ -1309,10 +1309,7 @@ void inserir_lista(ll **primeiro, char *pk) {
     // Percorre a lista até achar um valor maior
     while (aux->prox && strcmp(aux->prox->pk, pk) < 0)
         aux = aux->prox;
- 
-    // Se for igual, não insere repetido
-    // if (aux->prox != NULL && strcmp(aux->prox->pk, pk) == 0)
-    //     return;
+        
 
     ll *novo = (ll*) malloc(sizeof(ll));
     if (novo) {
