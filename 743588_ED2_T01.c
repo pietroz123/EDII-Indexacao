@@ -175,6 +175,7 @@ void listarProdutos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nr
  
 // (6) LIBERAR ESPAÇO
 //todo
+void liberar_espaco(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand, Isf *iprice);
  
 // (7) IMPRIMIR ARQUIVO DE DADOS
 //!Já implementado
@@ -335,6 +336,8 @@ int main(){
             
             case LIBERAR_ESPACO: // 6 //todo
                 /*libera espaço*/
+                liberar_espaco(iprimary, iproduct, icategory, ibrand, iprice);
+
             break;
             
             case IMPRIMIR_DADOS: // 7
@@ -1259,7 +1262,20 @@ void criar_iprice(Isf *indice_preco, int* nregistros) {
     qsort(indice_preco, *nregistros, sizeof(Isf), comparacao_iprice_PRECO);
  
 }
+
+/**** LIBERAR ESPAÇO ****/
  
+void liberar_espaco(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand, Isf *iprice) {
+
+    char *rem = strstr(ARQUIVO, "*|");
+    printf("rem: %s\n", rem);
+
+    char temp[193];
+    
+
+}
+
+
  
 /**** FUNÇÕES DA LISTA ENCADEADA ****/
  
