@@ -374,7 +374,7 @@ int main(){
  
 int carregar_arquivo()
 {
-    scanf("%[^\n]s", ARQUIVO);
+    scanf("%[^\n]%*c", ARQUIVO);
     return strlen(ARQUIVO) / TAM_REGISTRO;
 }
  
