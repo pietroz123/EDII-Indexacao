@@ -358,7 +358,7 @@ int main(){
             //!DELETAR
             // Imprime indice primario 
             case 10: 
-                printf("%d\n", NREGISTROS);
+                printf("%lu\n", NREGISTROS);
                 for (int i = 0; i < NREGISTROS; i++)
                     printf("%s %d\n", iprimary[i].pk, iprimary[i].rrn);
             break;
