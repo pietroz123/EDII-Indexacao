@@ -786,9 +786,15 @@ void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice,
  
  
     // Verifica se existe chave primária igual
-    if (bsearch(I.pk, iprimary, *nreg, sizeof(Ip), comparacao_iprimary_PK)) {
+    Ip *indicePri = (Ip*) bsearch(I.pk, iprimary, *nreg, sizeof(Ip), comparacao_iprimary_PK);
+    if (indicePri != NULL) {
         printf(ERRO_PK_REPETIDA, I.pk);
         return;
+    } else if (indicePri->rrn == -1) {
+        // char *p = ARQUIVO + (indicePri->rrn)*192;
+        // *p = I.nome[0];
+        // p++;
+        // *p = I.nome[1];
     } else
         strcat(ARQUIVO, temp);
     
