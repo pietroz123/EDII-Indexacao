@@ -24,8 +24,6 @@ diff A.out Casos\ Abertos/13.out
 diff A.out Casos\ Abertos/14.out
 (./A < Casos\ Abertos/15.in) > A.out
 diff A.out Casos\ Abertos/15.out
-(./A < Casos\ Abertos/16.in) > A.out -- NAO FUNCIONA AINDA (caso remover e inserir em seguida (?))
-diff A.out Casos\ Abertos/16.out
 (./A < Casos\ Abertos/21.in) > A.out
 diff A.out Casos\ Abertos/21.out
 (./A < Casos\ Abertos/22.in) > A.out
@@ -36,3 +34,5 @@ diff A.out Casos\ Abertos/23.out
 diff A.out Casos\ Abertos/24.out
 (./A < Casos\ Abertos/25.in) > A.out
 diff A.out Casos\ Abertos/25.out
+(./A < Casos\ Abertos/16.in) > A.out -- NAO FUNCIONA AINDA (caso remover e inserir em seguida (?))
+diff A.out Casos\ Abertos/16.out

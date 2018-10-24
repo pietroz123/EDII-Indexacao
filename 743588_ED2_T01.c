@@ -699,7 +699,12 @@ void insere_icategory(Ir *indice_categoria, int* nregistros, int *ncat) {
             // Não achou categoria
             strcpy(indice_categoria[*ncat].cat, categoria);
             *ncat += 1;
-            inserir_lista(&(indice_categoria[*ncat-1].lista), J.pk);
+            // inserir_lista(&(indice_categoria[*ncat-1].lista), J.pk);
+
+            ll *novo = (ll*) malloc(sizeof(ll));
+            strcpy(novo->pk, J.pk);
+            novo->prox = NULL;
+            indice_categoria[*ncat-1].lista = novo;
  
  
             /* Ordenado pelos nomes das categorias e em seguida pelo código */
@@ -790,13 +795,10 @@ void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice,
     if (indicePri != NULL) {
         printf(ERRO_PK_REPETIDA, I.pk);
         return;
-    } else if (indicePri->rrn == -1) {
-        // char *p = ARQUIVO + (indicePri->rrn)*192;
-        // *p = I.nome[0];
-        // p++;
-        // *p = I.nome[1];
-    } else
-        strcat(ARQUIVO, temp);
+    }
+
+    // Insere no ARQUIVO de dados
+    strcat(ARQUIVO, temp);
     
     // Incrementa o número de registros
     *nreg += 1;
@@ -1359,7 +1361,7 @@ void desalocar_estruturas(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory,
 void inserir_lista(ll **primeiro, char *pk) {
  
     /* CASO LISTA VAZIA */
-    if (*primeiro == NULL || strcmp((*primeiro)->pk, pk) > 0) {
+    if (strcmp((*primeiro)->pk, pk) > 0) {
         ll *novo = (ll*) malloc(sizeof(ll));
         if (novo) {
             strcpy(novo->pk, pk);
@@ -1385,6 +1387,26 @@ void inserir_lista(ll **primeiro, char *pk) {
             novo->prox = aux->prox;
         aux->prox = novo;
     }
+
+    // ll *atual = *primeiro;
+    // ll *anterior = NULL;
+
+    // ll *novo = (ll*) malloc(sizeof(ll));
+    // strcpy(novo->pk, pk);
+    // novo->prox = NULL;
+
+    // while (atual != NULL && strcmp(atual->pk, pk) < 0) {
+    //     anterior = atual;
+    //     atual = atual->prox;
+    // }
+
+    // if (*primeiro == atual) {
+    //     *primeiro = novo;
+    //     novo->prox = atual;
+    // } else if (atual == NULL || strcmp(atual->pk, pk) != 0) {
+    //     anterior->prox = novo;
+    //     novo->prox = atual;
+    // }
  
 }
 
