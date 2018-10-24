@@ -163,15 +163,15 @@ void alterar(int rrn, char *novoDesconto, Isf *iprice);
 void remover(Ip *indicePri, Ip *iprimary);
  
 // (4) BUSCAR PRODUTOS - Busca pelo produto e retorna o RRN
-void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand, int nregistros, int ncat);
+void buscar_produtos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand, int nregistros, int ncat);
 int bSearch(Is *a, int inicio, int fim, char chave[]);
-int bSearchInferior(Is *a, int inicio, int fim, char chave[]);
-int bSearchSuperior(Is *a, int inicio, int fim, char chave[]);
+int bsearch_inferior(Is *a, int inicio, int fim, char chave[]);
+int bsearch_superior(Is *a, int inicio, int fim, char chave[]);
 int buscar_lista(ll **primeiro, char *pk);
  
  
 // (5) LISTAGEM
-void listarProdutos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nregistros, int ncat);
+void listar_produtos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nregistros, int ncat);
  
 // (6) LIBERAR ESPAÇO
 //todo
@@ -324,14 +324,14 @@ int main(){
             case BUSCAR_PRODUTOS: // 4
                 /*busca*/
                 printf(INICIO_BUSCA);
-                buscarProdutos(iprimary, iproduct, icategory, ibrand, nregistros, ncat);
+                buscar_produtos(iprimary, iproduct, icategory, ibrand, nregistros, ncat);
                 
             break;
             
             case LISTAR_PRODUTOS: // 5
                 /*listagens*/
                 printf(INICIO_LISTAGEM);
-                listarProdutos(iprimary, icategory, ibrand, iprice, nregistros, ncat);
+                listar_produtos(iprimary, icategory, ibrand, iprice, nregistros, ncat);
  
             break;
             
@@ -833,7 +833,7 @@ int bSearch(Is *a, int inicio, int fim, char chave[]) {
     
 }
  
-int bSearchInferior(Is *a, int inicio, int fim, char chave[]) {
+int bsearch_inferior(Is *a, int inicio, int fim, char chave[]) {
  
     if (fim < inicio)
         return inicio;
@@ -842,14 +842,14 @@ int bSearchInferior(Is *a, int inicio, int fim, char chave[]) {
     
     
     if (strcmp(a[meio].string, chave) >= 0)
-        meio = bSearchInferior(a, inicio, meio-1, chave);
+        meio = bsearch_inferior(a, inicio, meio-1, chave);
     else
-        meio = bSearchInferior(a, meio+1, fim, chave);
+        meio = bsearch_inferior(a, meio+1, fim, chave);
     
     return meio;
  
 }
-int bSearchSuperior(Is *a, int inicio, int fim, char chave[]) {
+int bsearch_superior(Is *a, int inicio, int fim, char chave[]) {
  
     if (fim < inicio)
         return fim;
@@ -858,16 +858,16 @@ int bSearchSuperior(Is *a, int inicio, int fim, char chave[]) {
     
     
     if (strcmp(a[meio].string, chave) > 0)
-        meio = bSearchSuperior(a, inicio, meio-1, chave);
+        meio = bsearch_superior(a, inicio, meio-1, chave);
     else
-        meio = bSearchSuperior(a, meio+1, fim, chave);
+        meio = bsearch_superior(a, meio+1, fim, chave);
     
     return meio;
  
 }
  
  
-void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand, int nregistros, int ncat) {
+void buscar_produtos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand, int nregistros, int ncat) {
  
     int opcaoBusca;
     char chavePrimaria[TAM_PRIMARY_KEY];
@@ -909,8 +909,8 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand, int n
  
             indiceBsearch = bSearch(iproduct, 0, nregistros-1, nomeProduto);
             if (indiceBsearch != -1) {
-                indiceInferior = bSearchInferior(iproduct, 0, nregistros-1, nomeProduto);
-                indiceSuperior = bSearchSuperior(iproduct, 0, nregistros-1, nomeProduto);
+                indiceInferior = bsearch_inferior(iproduct, 0, nregistros-1, nomeProduto);
+                indiceSuperior = bsearch_superior(iproduct, 0, nregistros-1, nomeProduto);
             } else {
                 printf(REGISTRO_N_ENCONTRADO);
                 return;
@@ -960,8 +960,8 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand, int n
  
             int indiceBsearch = bSearch(ibrand, 0, nregistros-1, marcaProduto);
             if (indiceBsearch != -1) {
-                indiceInferior = bSearchInferior(ibrand, 0, nregistros, marcaProduto);
-                indiceSuperior = bSearchSuperior(ibrand, 0, nregistros, marcaProduto);
+                indiceInferior = bsearch_inferior(ibrand, 0, nregistros, marcaProduto);
+                indiceSuperior = bsearch_superior(ibrand, 0, nregistros, marcaProduto);
             } else {
                 printf(REGISTRO_N_ENCONTRADO);
                 return;
@@ -1021,7 +1021,7 @@ void buscarProdutos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand, int n
  
 /**** LISTAGEM ****/
  
-void listarProdutos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nregistros, int ncat) {
+void listar_produtos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nregistros, int ncat) {
  
     char categoriaProduto[TAM_CATEGORIA];
  
@@ -1307,7 +1307,8 @@ void criar_iprice(Isf *indice_preco, int* nregistros) {
 }
 
 /**** LIBERAR ESPAÇO ****/
- 
+
+// Retorna o novo numero de registros
 int liberar_espaco(int *nregistros) {
 
     char *aux = (char*) malloc(TAM_ARQUIVO * sizeof(char));
