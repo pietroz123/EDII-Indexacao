@@ -10,6 +10,10 @@ diff A.out Casos\ Abertos/3.out
 diff A.out Casos\ Abertos/4.out
 (./A < Casos\ Abertos/5.in) > A.out
 diff A.out Casos\ Abertos/5.out
+(./A < Casos\ Abertos/6.in) > A.out
+diff A.out Casos\ Abertos/6.out
+(./A < Casos\ Abertos/7.in) > A.out
+diff A.out Casos\ Abertos/7.out
 (./A < Casos\ Abertos/11.in) > A.out
 diff A.out Casos\ Abertos/11.out
 (./A < Casos\ Abertos/12.in) > A.out
@@ -20,6 +24,8 @@ diff A.out Casos\ Abertos/13.out
 diff A.out Casos\ Abertos/14.out
 (./A < Casos\ Abertos/15.in) > A.out
 diff A.out Casos\ Abertos/15.out
+(./A < Casos\ Abertos/16.in) > A.out
+diff A.out Casos\ Abertos/16.out
 (./A < Casos\ Abertos/21.in) > A.out
 diff A.out Casos\ Abertos/21.out
 (./A < Casos\ Abertos/22.in) > A.out
