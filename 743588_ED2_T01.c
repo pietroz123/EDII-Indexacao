@@ -107,7 +107,7 @@ typedef struct linked_list{
   struct linked_list *prox;
 } ll;
  
-/* Struct para lista invertida */   //? Apenas para icategory
+/* Struct para lista invertida */
 typedef struct reverse_index{
   char cat[TAM_CATEGORIA];
   ll* lista;
@@ -175,7 +175,7 @@ void listarProdutos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nr
  
 // (6) LIBERAR ESPAÇO
 //todo
-void liberar_espaco(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand, Isf *iprice, int *nregistros);
+int liberar_espaco(int *nregistros);
  
 // (7) IMPRIMIR ARQUIVO DE DADOS
 //!Já implementado
@@ -185,7 +185,8 @@ void liberar_espaco(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand, Isf *
  
 // (9) FINALIZAR
 //todo
- 
+void desalocar_estruturas(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice, int *ncat);
+void liberar_lista(ll **primeiro);
  
  
 /****** FUNÇÕES AUXILIARES ******/
@@ -212,7 +213,7 @@ int main(){
  
  
     /* Índice primário */
-    Ip *iprimary = (Ip *) malloc (MAX_REGISTROS * sizeof(Ip));  //? Aloca-se 1000 espaços na memória para 1000 registros de Ip
+    Ip *iprimary = (Ip *) malloc (MAX_REGISTROS * sizeof(Ip));
       if (!iprimary) {
         perror(MEMORIA_INSUFICIENTE);
         exit(1);
@@ -239,7 +240,7 @@ int main(){
     criar_ibrand(ibrand, &nregistros);
  
     /****** icategory ******/
-    Ir *icategory = (Ir*) malloc(MAX_REGISTROS * sizeof(Ir));
+    Ir *icategory = (Ir*) malloc(MAX_CATEGORIAS * sizeof(Ir));
     if (!icategory) {
         perror(MEMORIA_INSUFICIENTE);
         exit(1);
@@ -336,7 +337,47 @@ int main(){
             
             case LIBERAR_ESPACO: // 6 //todo
                 /*libera espaço*/
-                liberar_espaco(iprimary, iproduct, icategory, ibrand, iprice, &nregistros);
+                nregistros = liberar_espaco(&nregistros);
+                desalocar_estruturas(iprimary, iproduct, ibrand, icategory, iprice, &ncat);
+
+                ncat = 0;
+
+                iprimary = (Ip *) malloc (MAX_REGISTROS * sizeof(Ip));
+                if (!iprimary) {
+                    perror(MEMORIA_INSUFICIENTE);
+                    exit(1);
+                }
+                criar_iprimary(iprimary, &nregistros);
+            
+                iproduct = (Is*) malloc(MAX_REGISTROS * sizeof(Is));
+                if (!iproduct) {
+                    perror(MEMORIA_INSUFICIENTE);
+                    exit(1);
+                }
+                criar_iproduct(iproduct, &nregistros);
+            
+                ibrand = (Is*) malloc(MAX_REGISTROS * sizeof(Is));
+                if (!ibrand) {
+                    perror(MEMORIA_INSUFICIENTE);
+                    exit(1);
+                }
+                criar_ibrand(ibrand, &nregistros);
+            
+                icategory = (Ir*) malloc(MAX_CATEGORIAS * sizeof(Ir));
+                if (!icategory) {
+                    perror(MEMORIA_INSUFICIENTE);
+                    exit(1);
+                }
+                criar_icategory(icategory, &nregistros, &ncat);
+            
+                iprice = (Isf*) malloc(MAX_REGISTROS * sizeof(Isf));
+                if (!iprice) {
+                    perror(MEMORIA_INSUFICIENTE);
+                    exit(1);
+                }
+                criar_iprice(iprice, &nregistros);
+
+
 
             break;
             
@@ -354,7 +395,9 @@ int main(){
             break;
             
             case FINALIZAR: // 9 //todo
-                  /*Liberar memória e finalizar o programa */
+                /*Liberar memória e finalizar o programa */
+                desalocar_estruturas(iprimary, iproduct, ibrand, icategory, iprice, &ncat);
+
                 return 0;
             break;
  
@@ -1265,9 +1308,9 @@ void criar_iprice(Isf *indice_preco, int* nregistros) {
 
 /**** LIBERAR ESPAÇO ****/
  
-void liberar_espaco(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand, Isf *iprice, int *nregistros) {
+int liberar_espaco(int *nregistros) {
 
-    char ARQUIVOaux[TAM_ARQUIVO];
+    char *aux = (char*) malloc(TAM_ARQUIVO * sizeof(char));
 
     for (int i = 0; i < *nregistros; i++) {
 
@@ -1275,17 +1318,32 @@ void liberar_espaco(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand, Isf *
         strncpy(temp, ARQUIVO + ((i)*192), 192);
         temp[192] = '\0';
 
-        printf("temp '%d': %s\n", i, temp);
-
-        if (strncmp(temp, "*|", 2))
-            printf("SIM\n");
-        else
-            printf("NAO\n");
+        if (strncmp(temp, "*|", 2) != 0)
+            strcat(aux, temp);
 
     }
 
+    strcpy(ARQUIVO, aux);
+    free(aux);
+
+    return strlen(ARQUIVO) / TAM_REGISTRO;
 }
 
+
+/**** DASALOCAR ESTRUTURAS E LIBERAR MEMORIA ****/
+
+void desalocar_estruturas(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice, int *ncat) {
+
+    free(iprimary);
+    free(iproduct);
+    free(ibrand);
+    free(iprice);
+
+    for (int i = 0; i < *ncat; i++) {
+        liberar_lista(&(icategory[i].lista));
+    }
+
+}
 
  
 /**** FUNÇÕES DA LISTA ENCADEADA ****/
@@ -1335,4 +1393,20 @@ int buscar_lista(ll **primeiro, char *pk) {
     return -1;
  
  
+}
+
+// Libera a memoria das listas ligadas
+void liberar_lista(ll **primeiro) {
+
+    ll *atual = *primeiro;
+    ll *temp;
+
+    while (atual) {
+        temp = atual;
+        atual = atual->prox;
+        free(temp);
+    }
+
+    *primeiro = NULL;
+
 }
