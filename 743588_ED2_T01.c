@@ -147,7 +147,7 @@ void criar_iprice(Isf *indice_preco, int* nregistros);
 void ler_entrada(char* registro, Produto *novo);
  
 /* Rotina para impressao de indice secundario */
-void imprimirSecundario(Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice, int nregistros, int ncat);
+void imprimir_secundario(Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice, int nregistros, int ncat);
  
  
 /****** INTERAÇÃO COM O USUÁRIO ******/
@@ -383,14 +383,18 @@ int main(){
             
             case IMPRIMIR_DADOS: // 7
                 /*imprime o arquivo de dados*/
-                printf(INICIO_ARQUIVO);
-                printf("%s\n", ARQUIVO);
+                if (strlen(ARQUIVO) == 0)
+                    printf(ARQUIVO_VAZIO);
+                else {
+                    printf(INICIO_ARQUIVO);
+                    printf("%s\n", ARQUIVO);
+                }
 
             break;
             
             case IMPRIMIR_INDICES_SECUNDARIOS: // 8
                 /*imprime os índices secundários*/
-                imprimirSecundario(iproduct, ibrand, icategory, iprice, nregistros, ncat);
+                imprimir_secundario(iproduct, ibrand, icategory, iprice, nregistros, ncat);
 
             break;
             
@@ -512,7 +516,7 @@ Produto recuperar_registro(int rrn)
  
  
 /* Imprimir indices secundarios */
-void imprimirSecundario(Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice, int nregistros, int ncat){
+void imprimir_secundario(Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice, int nregistros, int ncat){
     int opPrint = 0;
     ll *aux;
     printf(INICIO_ARQUIVO_SECUNDARIO);
