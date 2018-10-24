@@ -9,8 +9,6 @@
  * Aluno: Pietro Zuntini Bonfim
  * ========================================================================== */
  
-//todo: LIBERAR_ESPACO                  6
-//todo: FINALIZAR                       9
  
 #define NREGISTROS (strlen(ARQUIVO) / TAM_REGISTRO)
  
@@ -174,7 +172,6 @@ int buscar_lista(ll **primeiro, char *pk);
 void listar_produtos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nregistros, int ncat);
  
 // (6) LIBERAR ESPAÇO
-//todo
 int liberar_espaco(int *nregistros);
  
 // (7) IMPRIMIR ARQUIVO DE DADOS
@@ -184,7 +181,6 @@ int liberar_espaco(int *nregistros);
 //!Já implementado
  
 // (9) FINALIZAR
-//todo
 void desalocar_estruturas(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice, int *ncat);
 void liberar_lista(ll **primeiro);
  
@@ -335,7 +331,7 @@ int main(){
  
             break;
             
-            case LIBERAR_ESPACO: // 6 //todo
+            case LIBERAR_ESPACO: // 6
                 /*libera espaço*/
                 nregistros = liberar_espaco(&nregistros);
                 desalocar_estruturas(iprimary, iproduct, ibrand, icategory, iprice, &ncat);
@@ -398,7 +394,7 @@ int main(){
 
             break;
             
-            case FINALIZAR: // 9 //todo
+            case FINALIZAR: // 9
                 /*Liberar memória e finalizar o programa */
                 desalocar_estruturas(iprimary, iproduct, ibrand, icategory, iprice, &ncat);
 
@@ -703,13 +699,12 @@ void insere_icategory(Ir *indice_categoria, int* nregistros, int *ncat) {
             // Não achou categoria
             strcpy(indice_categoria[*ncat].cat, categoria);
             *ncat += 1;
-            // inserir_lista(&(indice_categoria[*ncat-1].lista), J.pk);
 
+            // Insere no começo da lista
             ll *novo = (ll*) malloc(sizeof(ll));
             strcpy(novo->pk, J.pk);
             novo->prox = NULL;
             indice_categoria[*ncat-1].lista = novo;
- 
  
             /* Ordenado pelos nomes das categorias e em seguida pelo código */
             qsort(indice_categoria, *ncat, sizeof(Ir), comparacao_icategory_CAT);
@@ -739,8 +734,6 @@ void insere_iprice(Isf *indice_preco, int* nregistros) {
     sscanf(J.preco, "%f", &preco);
  
     // Calculo do preço COM DESCONTO
-    // preco = preco * (100 - desconto);
-    // preco = ((int) preco) / (float) 100;
     preco = (preco * (100-desconto)) / 100.0;
     preco = preco * 100;
     preco = ((int) preco / (float) 100);
@@ -1164,19 +1157,16 @@ void listar_produtos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int n
 void alterar(int rrn, char *novoDesconto, Isf *iprice) {
  
     char *p = ARQUIVO + 192*rrn;
-    // printf("*p: %s\n", p); //!
  
- 
+
     int i = 0; 
     int arr = 0;
     while (*p && arr < 5) {
-        // printf("valor de p: %c\n", *p); //!
         if (*p == '@')
             arr++;
         p++;
     }
  
-    // printf("valor final de p: %c\n", *p); //!
     
     // Altera no ARQUIVO de dados
     *p = novoDesconto[0];
@@ -1198,8 +1188,6 @@ void alterar(int rrn, char *novoDesconto, Isf *iprice) {
             sscanf(J.preco, "%f", &preco);
     
             // Calculo do preço COM DESCONTO
-            // preco = preco * (100 - desconto);
-            // preco = ((int) preco) / (float) 100;
             preco = (preco * (100-desconto)) / 100.0;
             preco = preco * 100;
             preco = ((int) preco / (float) 100);
@@ -1303,8 +1291,6 @@ void criar_iprice(Isf *indice_preco, int* nregistros) {
         sscanf(J.preco, "%f", &preco);
  
         // Calculo do preço COM DESCONTO
-        // preco = preco * (100 - desconto);
-        // preco = ((int) preco) / (float) 100;
         preco = (preco * (100-desconto)) / 100.0;
         preco = preco * 100;
         preco = ((int) preco / (float) 100);
@@ -1391,26 +1377,6 @@ void inserir_lista(ll **primeiro, char *pk) {
             novo->prox = aux->prox;
         aux->prox = novo;
     }
-
-    // ll *atual = *primeiro;
-    // ll *anterior = NULL;
-
-    // ll *novo = (ll*) malloc(sizeof(ll));
-    // strcpy(novo->pk, pk);
-    // novo->prox = NULL;
-
-    // while (atual != NULL && strcmp(atual->pk, pk) < 0) {
-    //     anterior = atual;
-    //     atual = atual->prox;
-    // }
-
-    // if (*primeiro == atual) {
-    //     *primeiro = novo;
-    //     novo->prox = atual;
-    // } else if (atual == NULL || strcmp(atual->pk, pk) != 0) {
-    //     anterior->prox = novo;
-    //     novo->prox = atual;
-    // }
  
 }
 
