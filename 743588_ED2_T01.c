@@ -790,8 +790,37 @@ void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice,
     // Verifica se existe chave primária igual
     Ip *indicePri = (Ip*) bsearch(I.pk, iprimary, *nreg, sizeof(Ip), comparacao_iprimary_PK);
     if (indicePri != NULL) {
-        printf(ERRO_PK_REPETIDA, I.pk);
-        return;
+        // Achou a chave
+
+        /* Caso a chave a inserir esteja no ARQUIVO porém esteja marcada como removida */
+        /* Achei que era assim */
+        // if (indicePri->rrn == -1) {
+            
+        //     // Marca o registro como removido
+        //     temp[0] = '*';
+        //     temp[1] = '|';
+            
+        //     // Busca pelo registro no ARQUIVO
+        //     char *pos = strstr(ARQUIVO, temp);
+
+        //     // A posicao do registro no ARQUIVO é calculada por:
+        //     int posicao = strlen(ARQUIVO) - strlen(pos);
+
+        //     // O rrn anterior a remoção é dado por:
+        //     int rrn = posicao / TAM_REGISTRO;
+
+        //     // Modifica o ARQUIVO para o estado pré-remoção
+        //     ARQUIVO[posicao] = I.nome[0];
+        //     ARQUIVO[posicao+1] = I.nome[1];
+        //     indicePri->rrn = rrn;
+
+        //     return;
+        
+        // }
+        if (indicePri->rrn != -1) {
+            printf(ERRO_PK_REPETIDA, I.pk);
+            return;
+        }
     }
 
     // Insere no ARQUIVO de dados
@@ -1366,6 +1395,9 @@ void inserir_lista(ll **primeiro, char *pk) {
     // Percorre a lista até achar um valor maior
     while (aux->prox && strcmp(aux->prox->pk, pk) < 0)
         aux = aux->prox;
+
+    if (aux->prox && strcmp(aux->pk, pk) == 0)
+        return;
         
 
     ll *novo = (ll*) malloc(sizeof(ll));
