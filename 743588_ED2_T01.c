@@ -404,7 +404,7 @@ int main(){
             //!DELETAR
             // Imprime indice primario 
             case 11: 
-                printf("%lu\n", nregistros);
+                printf("%d\n", nregistros);
                 for (int i = 0; i < nregistros; i++)
                     printf("%s %d\n", iprimary[i].pk, iprimary[i].rrn);
             break;
@@ -616,13 +616,13 @@ int comparacao_iprice_PRECO(const void *a, const void *b) {
         else
             return -1;
     }
- 
-    if ((*(Isf*)a).price < (*(Isf*)b).price)
-        return -1;
+    
+    if ((*(Isf*)a).price == (*(Isf*)b).price)
+        return 0;
     else if ((*(Isf*)a).price > (*(Isf*)b).price)
         return 1;
-    else if ((*(Isf*)a).price == (*(Isf*)b).price)
-        return 0;
+    else
+        return -1;
 }
  
 void insere_iprimary(Ip *indice_primario, int* nregistros) {
