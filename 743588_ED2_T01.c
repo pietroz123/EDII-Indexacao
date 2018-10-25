@@ -1340,7 +1340,7 @@ int liberar_espaco(int *nregistros) {
     *aux = '\0';
     // printf("aux inicial: '%s'", aux); //!
 
-    for (int i = 0; i < *nregistros; i++) {
+    for (int i = 0; i < NREGISTROS; i++) {
 
         char temp[193];
         strncpy(temp, ARQUIVO + ((i)*192), 192);
