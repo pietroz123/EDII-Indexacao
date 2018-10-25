@@ -16,6 +16,10 @@ diff A.out Casos\ Abertos/6.out
 diff A.out Casos\ Abertos/7.out
 (./A < Casos\ Abertos/8.in) > A.out
 diff A.out Casos\ Abertos/8.out
+(./A < Casos\ Abertos/9.in) > A.out
+diff A.out Casos\ Abertos/9.out
+(./A < Casos\ Abertos/10.in) > A.out
+diff A.out Casos\ Abertos/10.out
 (./A < Casos\ Abertos/11.in) > A.out
 diff A.out Casos\ Abertos/11.out
 (./A < Casos\ Abertos/12.in) > A.out
