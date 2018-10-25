@@ -1109,6 +1109,11 @@ void listar_produtos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int n
                 }
             }
 
+            if (j == 0) {
+                printf(REGISTRO_N_ENCONTRADO);
+                return;
+            }
+
             // Lista o vetor de índices primários
             for (int i = 0; i < j; i++) {
                 int rrn = vetorIp[i].rrn;
