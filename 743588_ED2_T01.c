@@ -44,7 +44,7 @@
 #define REGISTRO_N_ENCONTRADO         "Registro(s) nao encontrado!\n"
 #define CAMPO_INVALIDO                 "Campo invalido! Informe novamente.\n"
 #define ERRO_PK_REPETIDA            "ERRO: Ja existe um registro com a chave primaria: %s.\n"
-#define ARQUIVO_VAZIO                 "Arquivo vazio!"
+#define ARQUIVO_VAZIO                 "Arquivo vazio!\n"
 #define INICIO_BUSCA                  "**********************BUSCAR**********************\n"
 #define INICIO_LISTAGEM              "**********************LISTAR**********************\n"
 #define INICIO_ALTERACAO             "**********************ALTERAR*********************\n"
@@ -155,7 +155,7 @@ void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice,
 void inserir_lista(ll **primeiro, char *pk);
  
 // (2) ALTERAÇÃO
-void alterar(int rrn, char *novoDesconto, Isf *iprice);
+void alterar(int rrn, char *novoDesconto, Isf *iprice, int nregistros);
  
 // (3) REMOÇÃO
 void remover(Ip *indicePri, Ip *iprimary);
@@ -292,7 +292,7 @@ int main(){
                 }
  
  
-                alterar(indicePri->rrn, novoDesconto, iprice);
+                alterar(indicePri->rrn, novoDesconto, iprice, nregistros);
                 printf(SUCESSO);
                 
             break;
@@ -401,13 +401,13 @@ int main(){
                 return 0;
             break;
  
-            // //!DELETAR
-            // // Imprime indice primario 
-            // case 10: 
-            //     printf("%lu\n", NREGISTROS);
-            //     for (int i = 0; i < NREGISTROS; i++)
-            //         printf("%s %d\n", iprimary[i].pk, iprimary[i].rrn);
-            // break;
+            //!DELETAR
+            // Imprime indice primario 
+            case 11: 
+                printf("%lu\n", nregistros);
+                for (int i = 0; i < nregistros; i++)
+                    printf("%s %d\n", iprimary[i].pk, iprimary[i].rrn);
+            break;
             
             default:
                 printf(OPCAO_INVALIDA);
@@ -791,7 +791,40 @@ void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice,
     Ip *indicePri = (Ip*) bsearch(I.pk, iprimary, *nreg, sizeof(Ip), comparacao_iprimary_PK);
     if (indicePri != NULL) {
         // Achou a chave
-        if (indicePri->rrn != -1) {
+        /* Caso a chave a inserir esteja no ARQUIVO porém esteja marcada como removida */
+        /* Achei que era assim */
+        if (indicePri->rrn == -1) {
+            
+            // // Marca o registro como removido
+            // temp[0] = '*';
+            // temp[1] = '|';
+            
+            // Busca pelo registro no ARQUIVO
+            // char *pos = strstr(ARQUIVO, temp);
+
+            // A posicao do registro no ARQUIVO é calculada por:
+            // int posicao = strlen(ARQUIVO) - strlen(pos);
+
+            // O rrn anterior a remoção é dado por:
+            // int rrn = posicao / TAM_REGISTRO;
+
+            // Modifica o ARQUIVO para o estado pré-remoção
+            // ARQUIVO[posicao] = I.nome[0];
+            // ARQUIVO[posicao+1] = I.nome[1];
+            // indicePri->rrn = rrn;
+
+
+            strcat(ARQUIVO, temp);
+            // Produto J = recuperar_registro(*nreg-1);
+            // strcpy(iprimary[*nreg-1].pk, J.pk);
+            // iprimary[*nreg-1].rrn = *nreg - 1;
+            indicePri->rrn = *nreg;
+
+
+            return;
+        
+        }
+        else {
             printf(ERRO_PK_REPETIDA, I.pk);
             return;
         }
@@ -1162,7 +1195,7 @@ void listar_produtos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int n
  
 /**** ALTERAÇÃO DO DESCONTO ****/
  
-void alterar(int rrn, char *novoDesconto, Isf *iprice) {
+void alterar(int rrn, char *novoDesconto, Isf *iprice, int nregistros) {
  
     char *p = ARQUIVO + 192*rrn;
  
@@ -1187,7 +1220,7 @@ void alterar(int rrn, char *novoDesconto, Isf *iprice) {
     // Altera em iprice
     Produto J = recuperar_registro(rrn);
  
-    for (int i = 0; i < NREGISTROS; i++) {
+    for (int i = 0; i < nregistros; i++) {
         if (strcmp(J.pk, iprice[i].pk) == 0) {
             float preco;
             int desconto;
@@ -1207,7 +1240,7 @@ void alterar(int rrn, char *novoDesconto, Isf *iprice) {
     }
  
     /* Re-ordena o índice de preços (iprice) */
-    qsort(iprice, NREGISTROS, sizeof(Isf), comparacao_iprice_PRECO);
+    qsort(iprice, nregistros, sizeof(Isf), comparacao_iprice_PRECO);
  
 }
  
@@ -1317,6 +1350,7 @@ void criar_iprice(Isf *indice_preco, int* nregistros) {
 // Retorna o novo numero de registros
 int liberar_espaco(int *nregistros) {
 
+    int tam = 0;
     char *aux = (char*) malloc(TAM_ARQUIVO * sizeof(char));
 
     for (int i = 0; i < *nregistros; i++) {
@@ -1325,13 +1359,19 @@ int liberar_espaco(int *nregistros) {
         strncpy(temp, ARQUIVO + ((i)*192), 192);
         temp[192] = '\0';
 
-        if (strncmp(temp, "*|", 2) != 0)
+        if (strncmp(temp, "*|", 2) != 0) {
             strcat(aux, temp);
+            tam += 192;
+        }
 
     }
 
     strcpy(ARQUIVO, aux);
     free(aux);
+
+    ARQUIVO[tam] = '\0';
+
+    // printf("strlen(ARQUIVO): %lu\n", strlen(ARQUIVO));
 
     return strlen(ARQUIVO) / TAM_REGISTRO;
 }
