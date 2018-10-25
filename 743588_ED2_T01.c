@@ -616,7 +616,7 @@ int comparacao_iprice_PRECO(const void *a, const void *b) {
         else
             return -1;
     }
-    
+
     if ((*(Isf*)a).price == (*(Isf*)b).price)
         return 0;
     else if ((*(Isf*)a).price > (*(Isf*)b).price)
@@ -1332,6 +1332,8 @@ int liberar_espaco(int *nregistros) {
 
     int tam = 0;
     char *aux = (char*) malloc(TAM_ARQUIVO * sizeof(char));
+    *aux = '\0';
+    // printf("aux inicial: '%s'", aux); //!
 
     for (int i = 0; i < *nregistros; i++) {
 
@@ -1339,12 +1341,23 @@ int liberar_espaco(int *nregistros) {
         strncpy(temp, ARQUIVO + ((i)*192), 192);
         temp[192] = '\0';
 
+        // printf("temp: '%s'\n\n", temp); //!
+
         if (strncmp(temp, "*|", 2) != 0) {
+            // printf("NAO\n"); //!
             strcat(aux, temp);
+            // printf("aux = '%s'", aux); //!
             tam += 192;
+            // printf("tam: '%d'\n", tam); //!
+
         }
 
     }
+
+    // printf("aux final: '%s'\n", aux); //!
+
+
+    ARQUIVO[0] = '\0';
 
     strcpy(ARQUIVO, aux);
     free(aux);
