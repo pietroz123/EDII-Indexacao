@@ -794,32 +794,12 @@ void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice,
         /* Caso a chave a inserir esteja no ARQUIVO porém esteja marcada como removida */
         /* Achei que era assim */
         if (indicePri->rrn == -1) {
-            
-            // // Marca o registro como removido
-            // temp[0] = '*';
-            // temp[1] = '|';
-            
-            // Busca pelo registro no ARQUIVO
-            // char *pos = strstr(ARQUIVO, temp);
 
-            // A posicao do registro no ARQUIVO é calculada por:
-            // int posicao = strlen(ARQUIVO) - strlen(pos);
-
-            // O rrn anterior a remoção é dado por:
-            // int rrn = posicao / TAM_REGISTRO;
-
-            // Modifica o ARQUIVO para o estado pré-remoção
-            // ARQUIVO[posicao] = I.nome[0];
-            // ARQUIVO[posicao+1] = I.nome[1];
-            // indicePri->rrn = rrn;
-
-
+            // Coloca no final do ARQUIVO
             strcat(ARQUIVO, temp);
-            // Produto J = recuperar_registro(*nreg-1);
-            // strcpy(iprimary[*nreg-1].pk, J.pk);
-            // iprimary[*nreg-1].rrn = *nreg - 1;
-            indicePri->rrn = *nreg;
 
+            // Atualiza o RRN
+            indicePri->rrn = *nreg;
 
             return;
         
