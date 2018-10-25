@@ -379,10 +379,10 @@ int main(){
             
             case IMPRIMIR_DADOS: // 7
                 /*imprime o arquivo de dados*/
+                printf(INICIO_ARQUIVO);
                 if (strlen(ARQUIVO) == 0)
                     printf(ARQUIVO_VAZIO);
                 else {
-                    printf(INICIO_ARQUIVO);
                     printf("%s\n", ARQUIVO);
                 }
 
