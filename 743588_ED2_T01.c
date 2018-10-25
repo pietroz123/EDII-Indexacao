@@ -401,13 +401,13 @@ int main(){
                 return 0;
             break;
  
-            //!DELETAR
-            // Imprime indice primario 
-            case 10: 
-                printf("%lu\n", NREGISTROS);
-                for (int i = 0; i < NREGISTROS; i++)
-                    printf("%s %d\n", iprimary[i].pk, iprimary[i].rrn);
-            break;
+            // //!DELETAR
+            // // Imprime indice primario 
+            // case 10: 
+            //     printf("%lu\n", NREGISTROS);
+            //     for (int i = 0; i < NREGISTROS; i++)
+            //         printf("%s %d\n", iprimary[i].pk, iprimary[i].rrn);
+            // break;
             
             default:
                 printf(OPCAO_INVALIDA);
@@ -1060,6 +1060,11 @@ void listar_produtos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int n
                     vetorIp[j] = iprimary[i]; // insere no vetor de índices primários
                     j++;
                 }
+            }
+
+            if (j == 0) {
+                printf(REGISTRO_N_ENCONTRADO);
+                return;
             }
 
             // Lista o vetor de índices primários
