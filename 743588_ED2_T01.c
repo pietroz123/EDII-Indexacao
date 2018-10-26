@@ -1387,6 +1387,7 @@ void desalocar_estruturas(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory,
     for (int i = 0; i < *ncat; i++) {
         liberar_lista(&(icategory[i].lista));
     }
+    free(icategory);
 
 }
 
