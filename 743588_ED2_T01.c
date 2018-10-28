@@ -22,37 +22,37 @@
  
  
 /* Tamanho dos campos dos registros */
-#define TAM_PRIMARY_KEY    11
-#define TAM_NOME         51
-#define TAM_MARCA         51
-#define TAM_DATA         11
-#define TAM_ANO         3
-#define TAM_PRECO         8
-#define TAM_DESCONTO     4
-#define TAM_CATEGORIA     51
+#define TAM_PRIMARY_KEY         11
+#define TAM_NOME                51
+#define TAM_MARCA               51
+#define TAM_DATA                11
+#define TAM_ANO                 3
+#define TAM_PRECO               8
+#define TAM_DESCONTO            4
+#define TAM_CATEGORIA           51
  
  
-#define TAM_REGISTRO     192
-#define MAX_REGISTROS     1000
-#define MAX_CATEGORIAS     30
-#define TAM_ARQUIVO (MAX_REGISTROS * TAM_REGISTRO + 1)
+#define TAM_REGISTRO            192
+#define MAX_REGISTROS           1000
+#define MAX_CATEGORIAS          30
+#define TAM_ARQUIVO             (MAX_REGISTROS * TAM_REGISTRO + 1)
  
  
 /* Saídas para o usuario */
-#define OPCAO_INVALIDA                 "Opcao invalida!\n"
-#define MEMORIA_INSUFICIENTE         "Memoria insuficiente!"
-#define REGISTRO_N_ENCONTRADO         "Registro(s) nao encontrado!\n"
-#define CAMPO_INVALIDO                 "Campo invalido! Informe novamente.\n"
+#define OPCAO_INVALIDA              "Opcao invalida!\n"
+#define MEMORIA_INSUFICIENTE        "Memoria insuficiente!"
+#define REGISTRO_N_ENCONTRADO       "Registro(s) nao encontrado!\n"
+#define CAMPO_INVALIDO              "Campo invalido! Informe novamente.\n"
 #define ERRO_PK_REPETIDA            "ERRO: Ja existe um registro com a chave primaria: %s.\n"
-#define ARQUIVO_VAZIO                 "Arquivo vazio!\n"
-#define INICIO_BUSCA                  "**********************BUSCAR**********************\n"
-#define INICIO_LISTAGEM              "**********************LISTAR**********************\n"
-#define INICIO_ALTERACAO             "**********************ALTERAR*********************\n"
-#define INICIO_EXCLUSAO              "**********************EXCLUIR*********************\n"
+#define ARQUIVO_VAZIO               "Arquivo vazio!\n"
+#define INICIO_BUSCA                "**********************BUSCAR**********************\n"
+#define INICIO_LISTAGEM             "**********************LISTAR**********************\n"
+#define INICIO_ALTERACAO            "**********************ALTERAR*********************\n"
+#define INICIO_EXCLUSAO             "**********************EXCLUIR*********************\n"
 #define INICIO_ARQUIVO              "**********************ARQUIVO*********************\n"
-#define INICIO_ARQUIVO_SECUNDARIO    "*****************ARQUIVO SECUNDARIO****************\n"
-#define SUCESSO                       "OPERACAO REALIZADA COM SUCESSO!\n"
-#define FALHA                          "FALHA AO REALIZAR OPERACAO!\n"
+#define INICIO_ARQUIVO_SECUNDARIO   "*****************ARQUIVO SECUNDARIO****************\n"
+#define SUCESSO                     "OPERACAO REALIZADA COM SUCESSO!\n"
+#define FALHA                       "FALHA AO REALIZAR OPERACAO!\n"
  
 /* Opções Menu */
 #define INSERIR_NOVO_PRODUTO            1
@@ -160,13 +160,12 @@ void alterar(int rrn, char *novoDesconto, Isf *iprice, int nregistros);
 // (3) REMOÇÃO
 void remover(Ip *indicePri, Ip *iprimary);
  
-// (4) BUSCAR PRODUTOS - Busca pelo produto e retorna o RRN
+// (4) BUSCAR PRODUTOS
 void buscar_produtos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand, int nregistros, int ncat);
 int bSearch(Is *a, int inicio, int fim, char chave[]);
 int bsearch_inferior(Is *a, int inicio, int fim, char chave[]);
 int bsearch_superior(Is *a, int inicio, int fim, char chave[]);
 int buscar_lista(ll **primeiro, char *pk);
- 
  
 // (5) LISTAGEM
 void listar_produtos(Ip *iprimary, Ir *icategory, Is *ibrand, Isf *iprice, int nregistros, int ncat);
@@ -185,7 +184,7 @@ void desalocar_estruturas(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory,
 void liberar_lista(ll **primeiro);
  
  
-/****** FUNÇÕES AUXILIARES ******/
+/****** FUNÇÕES AUXILIARES DE COMPARAÇÃO ******/
 int comparacao_iprimary_PK(const void *a, const void *b);
 int comparacao_iproduct_NOME(const void *a, const void *b);
 int comparacao_ibrand_MARCA(const void *a, const void *b);
@@ -270,6 +269,7 @@ int main(){
                 /*alterar desconto*/
                 printf(INICIO_ALTERACAO);
                 
+                // Recebe a chave primária
                 scanf("%[^\n]s", pk);
  
                 // Busca se existe a chave primária
@@ -280,11 +280,12 @@ int main(){
                     break;
                 }
  
+                // Recebe o novo desconto
                 char novoDesconto[TAM_DESCONTO];
                 getchar();
                 scanf("%[^\n]s", novoDesconto);
  
-                // Verificar se o novo desconto é válido    
+                // Verificar se o novo desconto é válido (se não, pede novamente)   
                 while (strcmp(novoDesconto, "100") > 0 || strcmp(novoDesconto, "000") <= 0) {
                     printf(CAMPO_INVALIDO);
                     getchar();
@@ -333,10 +334,13 @@ int main(){
             
             case LIBERAR_ESPACO: // 6
                 /*libera espaço*/
-                nregistros = liberar_espaco(&nregistros);
+                nregistros = liberar_espaco(&nregistros); // Libera o ARQUIVO de dados e recebe o novo número de registros
                 desalocar_estruturas(iprimary, iproduct, ibrand, icategory, iprice, &ncat);
 
+                // Reseta o número de categorias
                 ncat = 0;
+
+                // Realoca as estruturas e refaz os índices
 
                 iprimary = (Ip *) malloc (MAX_REGISTROS * sizeof(Ip));
                 if (!iprimary) {
@@ -399,14 +403,6 @@ int main(){
                 desalocar_estruturas(iprimary, iproduct, ibrand, icategory, iprice, &ncat);
 
                 return 0;
-            break;
- 
-            //!DELETAR
-            // Imprime indice primario 
-            case 11: 
-                printf("%d\n", nregistros);
-                for (int i = 0; i < nregistros; i++)
-                    printf("%s %d\n", iprimary[i].pk, iprimary[i].rrn);
             break;
             
             default:
@@ -792,7 +788,6 @@ void inserir(Ip *iprimary, Is* iproduct, Is* ibrand, Ir* icategory, Isf *iprice,
     if (indicePri != NULL) {
         // Achou a chave
         /* Caso a chave a inserir esteja no ARQUIVO porém esteja marcada como removida */
-        /* Achei que era assim */
         if (indicePri->rrn == -1) {
 
             // Coloca no final do ARQUIVO
@@ -936,8 +931,6 @@ void buscar_produtos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand, int 
                 printf(REGISTRO_N_ENCONTRADO);
                 return;
             }
- 
-            // printf("inferior: %d\nsuperior: %d\n", indiceInferior, indiceSuperior); //!
 
 
             // Busca pelo RRN correspondente a partir da chave primária
@@ -990,7 +983,6 @@ void buscar_produtos(Ip *iprimary, Is *iproduct, Ir *icategory, Is *ibrand, int 
  
             if (indiceSuperior == nregistros)
                 indiceSuperior--;
-            // printf("indiceInferior: %d\nindiceSuperior: %d\n", indiceInferior, indiceSuperior); //!
  
             // Verifica se existe a categoria requisitada
             indiceCat = (Ir*) bsearch(categoriaProduto, icategory, ncat, sizeof(Ir), comparacao_icategory_CAT);
@@ -1338,7 +1330,6 @@ int liberar_espaco(int *nregistros) {
     int tam = 0;
     char *aux = (char*) malloc(TAM_ARQUIVO * sizeof(char));
     *aux = '\0';
-    // printf("aux inicial: '%s'", aux); //!
 
     for (int i = 0; i < NREGISTROS; i++) {
 
@@ -1346,20 +1337,13 @@ int liberar_espaco(int *nregistros) {
         strncpy(temp, ARQUIVO + ((i)*192), 192);
         temp[192] = '\0';
 
-        // printf("temp: '%s'\n\n", temp); //!
 
         if (strncmp(temp, "*|", 2) != 0) {
-            // printf("NAO\n"); //!
             strcat(aux, temp);
-            // printf("aux = '%s'", aux); //!
             tam += 192;
-            // printf("tam: '%d'\n", tam); //!
-
         }
 
     }
-
-    // printf("aux final: '%s'\n", aux); //!
 
 
     ARQUIVO[0] = '\0';
@@ -1368,8 +1352,6 @@ int liberar_espaco(int *nregistros) {
     free(aux);
 
     ARQUIVO[tam] = '\0';
-
-    // printf("strlen(ARQUIVO): %lu\n", strlen(ARQUIVO));
 
     return strlen(ARQUIVO) / TAM_REGISTRO;
 }
